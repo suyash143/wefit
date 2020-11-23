@@ -25,7 +25,7 @@ SECRET_KEY = 'i1d4j-2k7yv25$qjbz!ty=tlv&i0!yr-=nhd(%ink&)a$*4o@j'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['wefitcrm.herokuapp.com','suyash143.pythonanywhere.com','127.0.0.1']
 
 
 # Application definition
