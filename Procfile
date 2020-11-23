@@ -1,0 +1,1 @@
+web: gunicorn wefit.wsgi --log-file -
