@@ -308,7 +308,8 @@ tbody tr:hover {
   </style>
 
   <script src="https://unpkg.com/boxicons@latest/dist/boxicons.js"></script>
-<title>Table V01</title>
+  <link rel="shortcut icon" href="https://www.creativefuel.io/title.png" type="image/x-icon">
+<title>Table {{user.username}}</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -327,30 +328,56 @@ tbody tr:hover {
 <link rel="stylesheet" type="text/css" href="css/util.css">
 <link rel="stylesheet" type="text/css" href="css/main.css">
   <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          ['Fresh',     {{fresh}}],
+          ['Pending',      {{pending}}],
+          ['Closed',  {{closed}}],
+          ['Correct Option', {{other}}],
 
+        ]);
+
+        var options = {
+          title: 'My Daily Activities',
+          pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+        chart.draw(data, options);
+      }
+    </script>
 </head>
 <body>
-
+{%if user.is_authenticated%}
 <div class="limiter">
 <div class="container-table100">
 <div class="wrap-table100">
 <div class="table100">
-<b class="column1">Hello{{user.username}}</b>
+  <div style="padding-left:9%;back">
+  <b class="column1" >Hello{{user.username}}</b>
   Fresh:{{fresh}}
 Pending:{{pending}}
 closed:{{closed}}
-Please Correct the Status:{{other}}
-  <table>
+  Please Correct the Status:{{other}}</div>
+
+   <div id="donutchart" style="width: 1350px; height: 500px;border-style: solid;"></div>
+
+  <table id="main">
 <thead>
 <tr class="table100-head">
-<th class="column1">Date</th>
-<th class="column2">Rescheduled</th>
-<th class="column3">Name</th>
+<th class="column1" onclick="sortTable(0)">Date <i class='bx bxs-caret-down-circle' ></i></th>
+<th class="column2" >Go To</th>
+<th class="column3" onclick="sortTable(1)">Name <i class='bx bxs-caret-down-circle' ></i></th>
 <th class="column4">Number</th>
 <th class="column5">BMI</th>
 <th class="column5">Contact</th>
-  <th class="column1">Type</th>
-  <th class="column6">Go To</th>
+  <th class="column1" >Type</th>
+  <th class="column6"  onclick="sortTable(3)">Reschedules<i class='bx bxs-caret-down-circle' ></i></th>
 </tr>
 </thead>
 <tbody>
@@ -375,6 +402,62 @@ Please Correct the Status:{{other}}
 </div>
 </div>
 
+<script>
+function sortTable(n) {
+  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  table = document.getElementById("main");
+  switching = true;
+  // Set the sorting direction to ascending:
+  dir = "asc";
+  /* Make a loop that will continue until
+  no switching has been done: */
+  while (switching) {
+    // Start by saying: no switching is done:
+    switching = false;
+    rows = table.rows;
+    /* Loop through all table rows (except the
+    first, which contains table headers): */
+    for (i = 1; i < (rows.length - 1); i++) {
+      // Start by saying there should be no switching:
+      shouldSwitch = false;
+      /* Get the two elements you want to compare,
+      one from current row and one from the next: */
+      x = rows[i].getElementsByTagName("TD")[n];
+      y = rows[i + 1].getElementsByTagName("TD")[n];
+      /* Check if the two rows should switch place,
+      based on the direction, asc or desc: */
+      if (dir == "asc") {
+        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+          // If so, mark as a switch and break the loop:
+          shouldSwitch = true;
+          break;
+        }
+      } else if (dir == "desc") {
+        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+          // If so, mark as a switch and break the loop:
+          shouldSwitch = true;
+          break;
+        }
+      }
+    }
+    if (shouldSwitch) {
+      /* If a switch has been marked, make the switch
+      and mark that a switch has been done: */
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      // Each time a switch is done, increase this count by 1:
+      switchcount ++;
+    } else {
+      /* If no switching has been done AND the direction is "asc",
+      set the direction to "desc" and run the while loop again. */
+      if (switchcount == 0 && dir == "asc") {
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
+}
+</script>
 <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
 
 <script src="vendor/bootstrap/js/popper.js"></script>
@@ -392,5 +475,10 @@ Please Correct the Status:{{other}}
 
 	  gtag('config', 'UA-23581568-13');
 	</script>
+{%else %}
+<h1>Forbidden</h1>
+<h2>403</h2>
+<h2 >Please Log In to view Your data</h2>
+{%endif %}
 </body>
 </html>

@@ -47,11 +47,11 @@ def register(request):
                                                               created=datetime.datetime.now(), status='fresh')
         lead2.save()
 
-        return render(request, 'register.html')
+        return redirect("/token")
 
 
     else:
-        return render(request, 'register.html')
+        return render(request,'register.html')
         # ("allname=Saurabh.objects.all()\n"
         # "        return render(request,'login.html',{'allname':allname})")
 
@@ -94,3 +94,88 @@ def show_saurabh(request):
             other += 1
     return render(request, 'main_lead_display.html',
                   {'name': name, "fresh": fresh, "pending": pending, "closed": closed, "other": other})
+
+
+def token(request):
+    return render(request,'token.html')
+
+
+def show_vikas(request):
+    name = models.Vikas.objects.all()
+    fresh = 0
+    pending = 0
+    closed = 0
+    other = 0
+
+    for item in models.Vikas.objects.all():
+        if item.status == 'fresh':
+            fresh += 1
+        elif item.status == 'pending':
+            pending += 1
+        elif item.status == 'closed':
+            closed += 1
+        else:
+            other += 1
+    return render(request, 'main_lead_display.html',
+                  {'name': name, "fresh": fresh, "pending": pending, "closed": closed, "other": other})
+
+
+def show_userone(request):
+    name = models.UserOne.objects.all()
+    fresh = 0
+    pending = 0
+    closed = 0
+    other = 0
+
+    for item in models.UserOne.objects.all():
+        if item.status == 'fresh':
+            fresh += 1
+        elif item.status == 'pending':
+            pending += 1
+        elif item.status == 'closed':
+            closed += 1
+        else:
+            other += 1
+    return render(request, 'main_lead_display.html',
+                  {'name': name, "fresh": fresh, "pending": pending, "closed": closed, "other": other})
+
+
+def show_usertwo(request):
+    name = models.UserTwo.objects.all()
+    fresh = 0
+    pending = 0
+    closed = 0
+    other = 0
+
+    for item in models.UserTwo.objects.all():
+        if item.status == 'fresh':
+            fresh += 1
+        elif item.status == 'pending':
+            pending += 1
+        elif item.status == 'closed':
+            closed += 1
+        else:
+            other += 1
+    return render(request, 'main_lead_display.html',
+                  {'name': name, "fresh": fresh, "pending": pending, "closed": closed, "other": other})
+
+
+def show_userthree(request):
+    name = models.UserThree.objects.all()
+    fresh = 0
+    pending = 0
+    closed = 0
+    other = 0
+
+    for item in models.UserThree.objects.all():
+        if item.status == 'fresh':
+            fresh += 1
+        elif item.status == 'pending':
+            pending += 1
+        elif item.status == 'closed':
+            closed += 1
+        else:
+            other += 1
+    return render(request, 'main_lead_display.html',
+                  {'name': name, "fresh": fresh, "pending": pending, "closed": closed, "other": other})
+
