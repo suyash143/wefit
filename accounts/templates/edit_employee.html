@@ -8,7 +8,7 @@
 .page-content {
 	width: 100%;
 	margin:  0 auto;
-	background: #252427;
+	background: #75e2e9;
 	display: flex;
 	display: -webkit-flex;
 	justify-content: center;
@@ -22,9 +22,8 @@
 	-moz-align-items: center;
 	-webkit-align-items: center;
 	background-image: -moz-linear-gradient( 136deg, rgb(149,153,226) 0%, rgb(139,198,236) 100%);
-    background-image: -webkit-linear-gradient( 136deg, #252427 0%, #19191b 100%)
+    background-image: -webkit-linear-gradient( 136deg, rgb(16 16 19) 0%, rgb(20 54 76) 100%);
     background-image: -ms-linear-gradient( 136deg, rgb(149,153,226) 0%, rgb(139,198,236) 100%);
-    background-image: url(https://www.creativefuel.io/bg2.jpg);
     background-size: 100%;
     background-position: center;
     background-size:cover;
@@ -393,7 +392,6 @@
 }
     </style>
     <meta charset="utf-8">
-    <link rel="shortcut icon" href="https://www.creativefuel.io/title.png" type="image/x-icon">
     <title>WeFit Form</title>
     <!-- Mobile Specific Metas -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -404,34 +402,37 @@
 
 <body class="form-v10">
 
+    <h1>Assigned: {{name.assigned}}   Status: {{name.status}}    Substatus: {{name.substatus}}</h1>
 
 <div class="page-content">
+
     <div class="form-v10-content">
-        <form class="form-detail" action="register" method="POST" id="myform">{% csrf_token %}
+        <form class="form-detail" method="POST" id="updateform">{% csrf_token %}
 
             <div class="form-left">
                 <h2>General Infomation</h2>
                 <div class="form-group">
                     <div class="form-row form-row-1">
-                        <input type="text" name="first_name" id="first_name" class="input-text" placeholder="First Name"
+                        <input type="text" name="first_name" value="{{first_name}} " id="first_name" class="input-text" placeholder="First Name"
                                required>
                     </div>
+                     <script type="text/javascript">document.getElementById('last_name').defaultValue="{{user.name}}";</script>
                     <div class="form-row form-row-2">
-                        <input type="text" name="last_name" id="last_name" class="input-text" placeholder="Last Name"
+                        <input type="text" name="last_name" value="{{last_name}} " id="last_name" class="input-text" placeholder="Last Name"
                                required>
                     </div>
                 </div>
 
                 <div class="form-row">
-                    <input type="email" name="email" class="email" id="email" placeholder="Email" required>
+                    <input type="email" name="email" class="email" value="{{name.email}} " id="email" placeholder="Email" required>
                 </div>
                 <div class="form-group">
                     <div class="form-row form-row-1">
-                        <input type="number" name="number" class="number" id="number" placeholder="Contact Number"
+                        <input type="number" name="number" class="number" value="{{name.number}}" id="number" placeholder="Contact Number"
                                required>
                     </div>
                     <div class="form-row form-row-2">
-                        <select name="gender">
+                        <select name="gender" value="{{name.gender}}">
                             <option value="male">Male</option>
                             <option value="female">Female</option>
                             <option value="other">Other</option>
@@ -441,12 +442,13 @@
 							  <i class='bx bx-chevron-down-circle'></i>
 							</span>
                     </div>
-                </div><div class="form-group">
+                </div>
+                <div class="form-group">
                 <div class="form-row form-row-1">
-                    <input type="text" name="city" class="city" id="city" placeholder="City" required>
+                    <input type="text" name="city" value="{{name.city}}" class="city" id="city" placeholder="City" required>
                 </div>
                 <div class="form-row form-row-2">
-                        <input type="text" name="state" placeholder="State" required>
+                        <input type="text" name="state" value="{{name.state}}" placeholder="State" required>
                     </div>
                 </div>
             </div>
@@ -456,20 +458,17 @@
 
                 <div class="form-group">
                     <div class="form-row form-row-1">
-                        <input type="number" name="feet" class="zip" id="zip" placeholder="Height(Feet)" required>
-                    </div>
-                    <div class="form-row form-row-2">
-                        <input type="number" name="inch" class="zip" id="zip" placeholder="Inches" required>
+                        <input type="number" name="feet" class="zip" id="zip" value="{{name.height}}" placeholder="Height(Feet)" required>
                     </div>
 
                 </div>
                 <div class="form-group">
                     <div class="form-row form-row-1">
-                        <input type="number" name="weight" class="zip" id="zip" placeholder="Weight (Kg)" required>
+                        <input type="number" value="{{name.weight}}" name="weight" class="zip" id="zip" placeholder="Weight (Kg)" required>
                     </div>
                     <div class="form-row form-row-2">
-                        <select name="goal">
-                            <option value="" DISABLED selected>Select your Goal</option>
+                        <select name="goal" value="{{name.type}}">
+                            <option value="" DISABLED selected>{{user.type}}</option>
                             <option value="Muscle_Gain">Muscle Gain</option>
                             <option value="Weight_loss">Weight Loss</option>
 
@@ -491,7 +490,7 @@ function checkvalue(val)
 }
                     </script>
                     <select name="mode" onchange="checkvalue(this.value);">
-                        <option value="" disabled selected>Preferred Mode of Contact</option>
+                        <option value="" disabled selected>{{name.contact}}</option>
                         <option value="WhatsApp">WhatsApp</option>
                         <option value="Instagram">Instagram</option>
                         <option value="Call">Call</option>
@@ -502,22 +501,129 @@ function checkvalue(val)
                 </div>
                 <div class="form-row">
                     <input type="text" name="instauser" id="mode" class="input-text"
-                           placeholder="Instagram UserName" style="display:none;">
+                           placeholder="Instagram UserName" style="display:none;" value="{{name.instauser}}">
                 </div>
 
+                <div class="form-group">
+                <div class="form-row form-row-1">
+                    <input type="text" name="created" value="{{name.created}}" class="city" id="Created" placeholder="City" required>
+                </div>
+                <div class="form-row form-row-1">
+                        <input type="datetime-local" name="rescheduled" value="{{name.rescheduled}}" placeholder="Rescheduled" required>
+                    </div>
+                </div>
+
+
+
+                <div class="form-row">
+
+
+                    <select name="status" onchange="checkstatus(this.value);">
+                        <option value="" disabled selected>{{name.status}}</option>
+                        <option value="fresh">Fresh</option>
+                        <option value="closed">Closed</option>
+                        <option value="cancelled">Cancelled </option>
+                        <option value="rescheduled">Reschedule </option>
+                        <option value="follow_up">Follow up</option>
+
+                    </select>
+                    <span class="select-btn">
+							  	<i class='bx bx-chevron-down-circle'></i>
+							</span>
+                <script type="text/javascript">
+function checkstatus(val)
+{
+    if(val==="cancelled"){
+        document.getElementById('closed').style.display='none';
+        document.getElementById('rescheduled').style.display='none';
+       document.getElementById('cancelled').style.display='block';
+       document.getElementById('follow_up').style.display='none';
+       }
+    else if(val=="closed"){
+        document.getElementById('closed').style.display='block';
+        document.getElementById('rescheduled').style.display='none';
+       document.getElementById('cancelled').style.display='none';
+       document.getElementById('follow_up').style.display='none';
+       }
+    else if(val=="rescheduled"){
+        document.getElementById('closed').style.display='none';
+        document.getElementById('rescheduled').style.display='block';
+       document.getElementById('cancelled').style.display='none';
+       document.getElementById('follow_up').style.display='none';
+       }
+    else if(val=="follow_up"){
+        document.getElementById('closed').style.display='none';
+        document.getElementById('rescheduled').style.display='none';
+       document.getElementById('cancelled').style.display='none';
+       document.getElementById('follow_up').style.display='block';
+       }
+    else
+       document.getElementById('mode').style.display='none';
+}
+                    </script>
+
+                 <select name="substatus" onchange="checkvalue(this.value);" id="closed" style="display:none;">
+                        <option value="" disabled selected>{{name.substatus}}</option>
+                        <option value="partially_paid">Partiall Paid</option>
+                        <option value="fully_paid">Fully Paid</option>
+
+                    </select>
+                    <span class="select-btn">
+							  	<i class='bx bx-chevron-down-circle'></i>
+							</span>
+
+                <select name="substatus" onchange="checkvalue(this.value);" id="cancelled" style="display:none;">
+                        <option value="" disabled selected>{{name.substatus}}</option>
+                        <option value="not_responding">Not Responding</option>
+                        <option value="switch_off">Switch Off </option>
+                    <option value="wrong_no">Wrong No</option>
+                    <option value="not_interested">Not Interested</option>
+
+
+                    </select>
+                    <span class="select-btn">
+							  	<i class='bx bx-chevron-down-circle'></i>
+                    </span>
+
+                <select name="substatus" onchange="checkvalue(this.value);" id="rescheduled" style="display:none;">
+                        <option value="" disabled selected>{{name.substatus}}</option>
+                        <option value="not_responding">Not Responding</option>
+                        <option value="switch_off">Switch Off </option>
+                    <option value="call_back">Call Back</option>
+
+                    </select>
+                    <span class="select-btn">
+							  	<i class='bx bx-chevron-down-circle'></i>
+                    </span>
+
+                <select name="substatus" onchange="checkvalue(this.value);" id="follow_up" style="display:none;">
+                        <option value="" disabled selected>{{name.substatus}}</option>
+                        <option value="follow_up_1">Follow Up 1</option>
+                        <option value="follow_up_2">Follow Up 2</option>
+                    <option value="follow_up_3">Follow Up 3</option>
+
+                    </select>
+                    <span class="select-btn">
+							  	<i class='bx bx-chevron-down-circle'></i>
+                    </span>
+
+                    <div class="form-row">
+                    <input type="text" name="comment"  id="comment" placeholder="comment" required>
+                </div>
+<label for="comment">{{name.comment}}</label>
                 <div class="form-row-last">
-                    <input type="submit" class="register" onclick="myFunction()" id="subform">
+                    <input type="submit" onclick="myFunction()">
                 </div>
             </div>
         </form>
     </div>
 </div>
 <script>
-var form = document.getElementById('subform');
+var form = document.getElementById('updateform');
 
 function myFunction() {
   if (form.checkValidity()) {
-    alert("Adding Successful");
+    alert("Edited Successfully");
   }
 }
 </script>

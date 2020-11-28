@@ -24,9 +24,9 @@ def register(request):
         foot = request.POST.get('foot', 5)
         inch = request.POST.get('inch', 8)
         gender = request.POST['gender']
-        mode = request.POST['mode']
-        goal = request.POST['goal']
-        instauser = request.POST['instauser']
+        mode = request.POST.get('mode', 'whatsapp')
+        goal = request.POST.get('goal', 'weight_loss')
+        instauser = request.POST.get('instauser', None)
 
         height = (((float(foot) * 12) + float(inch)) * 2.54) / 100
         bmi = float(weight) / (height * height)
@@ -37,17 +37,19 @@ def register(request):
 
                                                              contact=mode, type=goal, insta_user=instauser, bmi=bmi,
                                                              created=datetime.datetime.now(), status='fresh')
-        lead.save()
 
-        lead2, created = models.Manager.objects.get_or_create(name=name, email=email, number=number, city=city,
+
+        lead3, created = models.Final.objects.get_or_create(name=name, email=email, number=number, city=city,
                                                               state=state, weight=weight,
                                                               height=height, gender=gender,
 
                                                               contact=mode, type=goal, insta_user=instauser, bmi=bmi,
                                                               created=datetime.datetime.now(), status='fresh')
-        lead2.save()
+        lead3.save()
 
         return redirect("/token")
+
+
 
 
     else:
@@ -56,126 +58,65 @@ def register(request):
         # "        return render(request,'login.html',{'allname':allname})")
 
 
-def show(request):
-    name = models.Manager.objects.all()
-    fresh = 0
-    pending = 0
-    closed = 0
-    other = 0
-
-    for item in models.Manager.objects.all():
-        if item.status == 'fresh':
-            fresh += 1
-        elif item.status == 'pending':
-            pending += 1
-        elif item.status == 'closed':
-            closed += 1
-        else:
-            other += 1
-    return render(request, 'main_lead_display.html',
-                  {'name': name, "fresh": fresh, "pending": pending, "closed": closed, "other": other})
-
-
-def show_saurabh(request):
-    name = models.Saurabh.objects.all()
-    fresh = 0
-    pending = 0
-    closed = 0
-    other = 0
-
-    for item in models.Saurabh.objects.all():
-        if item.status == 'fresh':
-            fresh += 1
-        elif item.status == 'pending':
-            pending += 1
-        elif item.status == 'closed':
-            closed += 1
-        else:
-            other += 1
-    return render(request, 'main_lead_display.html',
-                  {'name': name, "fresh": fresh, "pending": pending, "closed": closed, "other": other})
-
-
 def token(request):
     return render(request,'token.html')
 
 
-def show_vikas(request):
-    name = models.Vikas.objects.all()
+
+def all(request):
     fresh = 0
-    pending = 0
+    cancelled = 0
     closed = 0
     other = 0
-
-    for item in models.Vikas.objects.all():
+    rescheduled=0
+    follow_up=0
+    user=request.user
+    if request.user.is_staff:
+        name=models.Final.objects.all()
+    else:
+        name=models.Final.objects.all().filter(assigned=user)
+    for item in name:
         if item.status == 'fresh':
             fresh += 1
-        elif item.status == 'pending':
-            pending += 1
+        elif item.status == 'cancelled':
+            cancelled += 1
         elif item.status == 'closed':
             closed += 1
+        elif item.status=='rescheduled':
+            rescheduled +=1
+        elif item.status=='follow_up':
+            follow_up +=1
+
         else:
             other += 1
-    return render(request, 'main_lead_display.html',
-                  {'name': name, "fresh": fresh, "pending": pending, "closed": closed, "other": other})
+
+    if request.method=="POST":
+        id=request.POST.get('id')
+
+        request.session['id'] = id
+
+        return redirect('edit_employee')
+    context={'name':name, "fresh": fresh, "cancelled": cancelled, "closed": closed, "other": other,'rescheduled':rescheduled,'follow_up':follow_up}
+    return render(request,'main_lead_display.html',context)
 
 
-def show_userone(request):
-    name = models.UserOne.objects.all()
-    fresh = 0
-    pending = 0
-    closed = 0
-    other = 0
+def edit_employee(request):
+    id = request.session.get('id')
+    name = models.Final.objects.get(id=id)
+    first_name = name.name.split()[0]
+    last_name = name.name.split()[1]
+    request.session['id'] = id
+    if request.method == "POST":
+        updater = models.Final.objects.get(id=id)
+        status = request.POST.get('status', None)
+        substatus = request.POST.get('substatus', None)
+        comment=f'{name.comment},  {request.POST.get("comment",None)}'
+        rescheduled=request.POST.get('rescheduled', None)
+        updater.status = status
+        updater.substatus = substatus
+        updater.comment=comment
+        updater.rescheduled=rescheduled
 
-    for item in models.UserOne.objects.all():
-        if item.status == 'fresh':
-            fresh += 1
-        elif item.status == 'pending':
-            pending += 1
-        elif item.status == 'closed':
-            closed += 1
-        else:
-            other += 1
-    return render(request, 'main_lead_display.html',
-                  {'name': name, "fresh": fresh, "pending": pending, "closed": closed, "other": other})
-
-
-def show_usertwo(request):
-    name = models.UserTwo.objects.all()
-    fresh = 0
-    pending = 0
-    closed = 0
-    other = 0
-
-    for item in models.UserTwo.objects.all():
-        if item.status == 'fresh':
-            fresh += 1
-        elif item.status == 'pending':
-            pending += 1
-        elif item.status == 'closed':
-            closed += 1
-        else:
-            other += 1
-    return render(request, 'main_lead_display.html',
-                  {'name': name, "fresh": fresh, "pending": pending, "closed": closed, "other": other})
-
-
-def show_userthree(request):
-    name = models.UserThree.objects.all()
-    fresh = 0
-    pending = 0
-    closed = 0
-    other = 0
-
-    for item in models.UserThree.objects.all():
-        if item.status == 'fresh':
-            fresh += 1
-        elif item.status == 'pending':
-            pending += 1
-        elif item.status == 'closed':
-            closed += 1
-        else:
-            other += 1
-    return render(request, 'main_lead_display.html',
-                  {'name': name, "fresh": fresh, "pending": pending, "closed": closed, "other": other})
-
+        updater.save()
+        return redirect('all')
+    return render(request, 'edit_employee.html',{'id': id,'first_name':first_name,'last_name':last_name,'name':name})

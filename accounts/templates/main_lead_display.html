@@ -336,8 +336,10 @@ tbody tr:hover {
         var data = google.visualization.arrayToDataTable([
           ['Task', 'Hours per Day'],
           ['Fresh',     {{fresh}}],
-          ['Pending',      {{pending}}],
+          ['Cancelled',      {{cancelled}}],
           ['Closed',  {{closed}}],
+          ['Rescheduled',  {{rescheduled}}],
+          ['Follow Up',  {{follow_up}}],
           ['Correct Option', {{other}}],
 
         ]);
@@ -359,10 +361,12 @@ tbody tr:hover {
 <div class="wrap-table100">
 <div class="table100">
   <div style="padding-left:9%;back">
-  <b class="column1" >Hello{{user.username}}</b>
+  <b class="column1" >Hello {{user.username}}</b>
   Fresh:{{fresh}}
-Pending:{{pending}}
-closed:{{closed}}
+Cancelled:{{cancelled}}
+Closed:{{closed}}
+    Rescheduled:{{rescheduled}}
+    Follow Up:{{follow_up}}
   Please Correct the Status:{{other}}</div>
 
    <div id="donutchart" style="width: 1350px; height: 500px;border-style: solid;"></div>
@@ -372,26 +376,34 @@ closed:{{closed}}
 <tr class="table100-head">
 <th class="column1" onclick="sortTable(0)">Date <i class='bx bxs-caret-down-circle' ></i></th>
 <th class="column2" >Go To</th>
+  <th class="column1">status</th>
+  <th class="column1">substatus</th>
 <th class="column3" onclick="sortTable(1)">Name <i class='bx bxs-caret-down-circle' ></i></th>
 <th class="column4">Number</th>
 <th class="column5">BMI</th>
 <th class="column5">Contact</th>
   <th class="column1" >Type</th>
   <th class="column6"  onclick="sortTable(3)">Reschedules<i class='bx bxs-caret-down-circle' ></i></th>
+
+  <th classs="column1">Comment</th>
 </tr>
 </thead>
 <tbody>
 {%for object in name%}
 <tr>
 <td class="column1">{{object.created}}</td>
-  <td class="column5" style="text-align:center;"><a href="admin/accounts/{{user.username}}/{{object.id}}/change/"><i class="bx bx-user"></i></a></button></td>
 
+<td class="column5" style="text-align:center;"><form method="POST"> {% csrf_token %}<i class="bx bxs-user"><input type="submit" value="{{object.id}}" name="id" ></i></form></td>
+  <td class="column1">{{object.status}}</td>
+  <td class="column1">{{object.substatus}}</td>
 <td class="column3">{{object.name}}</td>
 <td class="column4">{{object.number}}</td>
 <td class="column5">{{object.bmi}}</td>
 <td class="column5">{{object.contact}}</td>
   <td class="column1">{{object.type}}</td>
   <td class="column6">{{object.rescheduled}}</td>
+
+  <td class="column1">{{object.comment}}</td>
 
 </tr>
 {%endfor%}
