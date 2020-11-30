@@ -1,3 +1,4 @@
+import os, sys
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User,auth
 from accounts.models import Final
@@ -7,6 +8,8 @@ from django.contrib.auth.forms import PasswordChangeForm
 from accounts import add_admin_use
 
 
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(CURRENT_DIR))
 
 def employee_add(request):
     if request.method=='POST':
@@ -68,4 +71,9 @@ def login(request):
             return redirect('login')
     else:
         return render(request,'login.html')
+
+def logout(request):
+    auth.logout(request)
+    return redirect('login')
+
 
