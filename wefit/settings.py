@@ -24,9 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'i1d4j-2k7yv25$qjbz!ty=tlv&i0!yr-=nhd(%ink&)a$*4o@j'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
 DEBUG = True
 
-ALLOWED_HOSTS = ['wefitcrm.herokuapp.com','suyash143.pythonanywhere.com','127.0.0.1']
+
+ALLOWED_HOSTS = ['www.wefitnutrition.in','suyash143.pythonanywhere.com','127.0.0.1','suyas143.pythonanywhere.com']
 
 
 # Application definition
@@ -120,5 +122,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 PROJECT_ROOT = os.path.normpath(os.path.dirname(__file__))
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
+

@@ -64,40 +64,44 @@ def token(request):
 
 
 def all(request):
-    fresh = 0
-    cancelled = 0
-    closed = 0
-    other = 0
-    rescheduled=0
-    follow_up=0
-    user=request.user
-    if request.user.is_staff:
-        name=models.Final.objects.all()
-    else:
-        name=models.Final.objects.all().filter(assigned=user)
-    for item in name:
-        if item.status == 'fresh':
-            fresh += 1
-        elif item.status == 'cancelled':
-            cancelled += 1
-        elif item.status == 'closed':
-            closed += 1
-        elif item.status=='rescheduled':
-            rescheduled +=1
-        elif item.status=='follow_up':
-            follow_up +=1
-
+    if request.user.is_authenticated:
+        fresh = 0
+        cancelled = 0
+        closed = 0
+        other = 0
+        rescheduled=0
+        follow_up=0
+        user=request.user
+        if request.user.is_staff:
+            name=models.Final.objects.all()
         else:
-            other += 1
+            name=models.Final.objects.all().filter(assigned=user)
+        for item in name:
+            if item.status == 'fresh':
+                fresh += 1
+            elif item.status == 'cancelled':
+                cancelled += 1
+            elif item.status == 'closed':
+                closed += 1
+            elif item.status=='rescheduled':
+                rescheduled +=1
+            elif item.status=='follow_up':
+                follow_up +=1
 
-    if request.method=="POST":
-        id=request.POST.get('id')
+            else:
+                other += 1
 
-        request.session['id'] = id
+        if request.method=="POST":
+            id=request.POST.get('id')
 
-        return redirect('edit_employee')
-    context={'name':name, "fresh": fresh, "cancelled": cancelled, "closed": closed, "other": other,'rescheduled':rescheduled,'follow_up':follow_up}
-    return render(request,'main_lead_display.html',context)
+            request.session['id'] = id
+
+            return redirect('edit_employee')
+        context={'name':name, "fresh": fresh, "cancelled": cancelled, "closed": closed, "other": other,'rescheduled':rescheduled,'follow_up':follow_up}
+        return render(request,'main_lead_display.html',context)
+    else:
+        return HttpResponse('<h1>Forbidden</h1><h2>Please Log in to view your data</h2>')
+
 
 
 def edit_employee(request):

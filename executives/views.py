@@ -31,7 +31,7 @@ def employee_add(request):
                 else:
                     user = User.objects.create_user(username=username,password=password1,email=email,first_name=first_name,last_name=last_name)
                     user.save()
-                    count= 0
+                    count= 3
                     all_users=User.objects.all()
                     for users in all_users:
                         count+=1
@@ -68,4 +68,13 @@ def login(request):
             return redirect('login')
     else:
         return render(request,'login.html')
+
+
+
+
+
+
+def logout(request):
+    auth.logout(request)
+    return redirect('login')
 
