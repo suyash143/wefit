@@ -8,5 +8,6 @@ urlpatterns = [
 	path('token',views.token,name="token"),
 
 	path('all',views.all,name='all'),
-	path('edit_employee',views.edit_employee,name='edit_employee')
+	path('edit_employee',views.edit_employee,name='edit_employee'),
+	path('report',views.report,name='Report')
 ]

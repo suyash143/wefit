@@ -374,18 +374,19 @@ Closed:{{closed}}
   <table id="main">
 <thead>
 <tr class="table100-head">
-<th class="column1" onclick="sortTable(0)">Date <i class='bx bxs-caret-down-circle' ></i></th>
+<th class="column1" onclick="sortTable(0)" style="width:10%">Date <i class='bx bxs-caret-down-circle' ></i></th>
 <th class="column2" >Go To</th>
-  <th class="column1">status</th>
-  <th class="column1">substatus</th>
-<th class="column3" onclick="sortTable(1)">Name <i class='bx bxs-caret-down-circle' ></i></th>
+  <th class="column3">status</th>
+  <th class="column3">substatus</th>
+    <th class="column3">Assigned</th>
+<th class="column1" onclick="sortTable(1)">Name <i class='bx bxs-caret-down-circle' ></i></th>
 <th class="column4">Number</th>
 <th class="column5">BMI</th>
 <th class="column5">Contact</th>
   <th class="column1" >Type</th>
   <th class="column6"  onclick="sortTable(3)">Reschedules<i class='bx bxs-caret-down-circle' ></i></th>
 
-  <th classs="column1">Comment</th>
+  <th class="column1" style="width:30%">Comment</th>
 </tr>
 </thead>
 <tbody>
@@ -394,9 +395,10 @@ Closed:{{closed}}
 <td class="column1">{{object.created}}</td>
 
 <td class="column5" style="text-align:center;"><form method="POST"> {% csrf_token %}<i class="bx bxs-user"><input type="submit" value="{{object.id}}" name="id" ></i></form></td>
-  <td class="column1">{{object.status}}</td>
-  <td class="column1">{{object.substatus}}</td>
-<td class="column3">{{object.name}}</td>
+  <td class="column3">{{object.status}}</td>
+  <td class="column3">{{object.substatus}}</td>
+    <td class="column3">{{object.assigned}}</td>
+<td class="column1">{{object.name}}</td>
 <td class="column4">{{object.number}}</td>
 <td class="column5">{{object.bmi}}</td>
 <td class="column5">{{object.contact}}</td>

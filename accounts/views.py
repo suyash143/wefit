@@ -3,6 +3,7 @@ from django.contrib import messages
 from . import models
 from django.http import HttpResponse
 import os
+import pytz
 import datetime
 
 BASE = os.path.dirname(os.path.abspath(__file__))
@@ -31,6 +32,7 @@ def register(request):
         height = (((float(foot) * 12) + float(inch)) * 2.54) / 100
         bmi = float(weight) / (height * height)
         name = first_name + ' ' + last_name
+        IST = pytz.timezone('Asia/Kolkata')
         lead, created = models.AllLead.objects.get_or_create(name=name, email=email, number=number, city=city,
                                                              state=state, weight=weight,
                                                              height=height, gender=gender,
@@ -110,6 +112,7 @@ def edit_employee(request):
     first_name = name.name.split()[0]
     last_name = name.name.split()[1]
     request.session['id'] = id
+    current_user=request.user.get_short_name()
     if request.method == "POST":
         updater = models.Final.objects.get(id=id)
         status = request.POST.get('status', None)
@@ -123,4 +126,9 @@ def edit_employee(request):
 
         updater.save()
         return redirect('all')
-    return render(request, 'edit_employee.html',{'id': id,'first_name':first_name,'last_name':last_name,'name':name})
+    return render(request, 'edit_employee.html',{'id': id,'first_name':first_name,'last_name':last_name,'name':name,'current_user':current_user})
+
+
+def report(request):
+    all_data = models.Final.objects.filter(date__range=["2020-01-01", "2020-12-31"])
+    return render(request,'report.html',{'all_data':all_data})
