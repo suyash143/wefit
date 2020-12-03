@@ -341,6 +341,7 @@ tbody tr:hover {
           ['Rescheduled',  {{rescheduled}}],
           ['Follow Up',  {{follow_up}}],
           ['Correct Option', {{other}}],
+          ['Acknowledged', {{acknowledged}}],
 
         ]);
 
@@ -367,10 +368,28 @@ Cancelled:{{cancelled}}
 Closed:{{closed}}
     Rescheduled:{{rescheduled}}
     Follow Up:{{follow_up}}
-  Please Correct the Status:{{other}}  {{request.user.id}}  <a href="{%url 'logout'%}"class="btn btn-warning"><strong>Logout</strong></a></div></div>
+  Please Correct the Status:{{other}}  {{request.user.id}}{%if request.user.is_staff%}
+  <a href="{%url 'report'%}" style="    padding-left: 5%;">Open Report<i class='bx bxs-credit-card-front' style="" ></i> </a>
+  {%endif%}
+    <a href="{%url 'logout'%}"class="btn btn-warning" style="    padding-left: 5%;"><strong >Logout<i class='bx bx-log-out'></i></strong></a></div></div>
 
    <div id="donutchart" style="width: 1350px; height: 500px;border-style: solid;"></div>
+<form method="POST">
+    {% csrf_token%}
+    <center>
+  <select name="filter_value"  style="padding:10px;">
+                        <option value="" disabled selected>{{name.status}}</option>
+                        <option value="fresh">Fresh</option>
+                        <option value="closed">Closed</option>
+                        <option value="cancelled">Cancelled </option>
+                        <option value="rescheduled">Reschedule </option>
+                        <option value="follow_up">Follow up</option>
+                        <option value="acknowledged">Acknowledged</option>
 
+                    </select>
+  <input type="submit" name="filter">
+</center>
+</form>
   <table id="main">
 <thead>
 <tr class="table100-head">

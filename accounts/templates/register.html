@@ -538,7 +538,7 @@ function checkvalue(val)
                     <select name="mode" onchange="checkvalue(this.value);">
                         <option value="" disabled selected>Preferred Mode of Contact</option>
                         <option value="WhatsApp">WhatsApp</option>
-                        <option value="Instagram">Instagram</option>
+
                         <option value="Call">Call</option>
                     </select>
                     <span class="select-btn">
@@ -547,12 +547,21 @@ function checkvalue(val)
                 </div>
                 <div class="form-row">
                     <input type="text" name="instauser" id="instauser" class="input-text"
-                           placeholder="Instagram UserName" style="display:none;" re>
+                           placeholder="Instagram UserName" style="display:none;" minlength="8">
                 </div>
 
                 <div class="form-row-last">
                     <input type="submit" class="register" onclick="myFunction()" id="subform">
                 </div>
+                <script type="text/javascript">
+                    $(function() {
+                    $('$subform').click(function(){
+                    $(this).attr("disable",true);
+                    $(this).val("submitted");
+                    });
+
+
+                </script>
             </div>
         </form>
     </div>

@@ -710,7 +710,8 @@ p {
 
     </style>
 </head>
-<body>abbbbb
+<body>
+{%if request.user.is_staff %}
 <form method="POST">
     {%csrf_token%}
   <input type="date" name="startdate" required>
@@ -825,6 +826,24 @@ p {
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">acknowledged</h5>
+                      <span class="h2 font-weight-bold mb-0">{{all.all_acknowledged}}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
+                        <i class="fas fa-clock" style="background-color:"></i>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-lg-6">
+              <div class="card card-stats mb-4 mb-xl-0">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
                       <h5 class="card-title text-uppercase text-muted mb-0">Closed</h5>
                       <span class="h2 font-weight-bold mb-0">{{all.all_closed}}</span>
                     </div>
@@ -849,7 +868,7 @@ p {
                   <div class="row">
                     <div class="col">
                       <h5 class="card-title text-uppercase text-muted mb-0">All Leads </h5>
-                      <span class="h2 font-weight-bold mb-0">{{item.all}}</span>
+                      <span class="h2 font-weight-bold mb-0">{{item.tot}}</span>
                     </div>
                     <div class="col-auto">
                       <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
@@ -916,6 +935,24 @@ p {
                 </div>
               </div>
             </div>
+            <div class="col-xl-3 col-lg-6" >
+              <div class="card card-stats mb-4 mb-xl-0">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Acknowledged</h5>
+                      <span class="h2 font-weight-bold mb-0">{{item.acknowledged}}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
+                        <i class="fas fa-users"></i>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
             <div class="col-xl-3 col-lg-6">
               <div class="card card-stats mb-4 mb-xl-0">
                 <div class="card-body">
@@ -958,15 +995,11 @@ p {
       </div>
     </div>
 
-<br>
 
-
-{{final}}<br><br>
-    {%for key,item in final.items%}
-    {{key}}
-    {{item.fresh}}
-    {{item.follow_up}}
-    {%endfor%}
-
+{{final}}<br>
+{%else%}
+<h1> Forbidden </h1>
+<h2>You do not have permission</h2>
+{%endif%}
 </body>
 </html>
