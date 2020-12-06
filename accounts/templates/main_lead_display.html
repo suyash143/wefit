@@ -169,7 +169,7 @@ table td.c, table th.c {
 table td.r, table th.r {
   text-align: center;
 }
-
+.button-click{}
 
 .table100-head th{
   font-family: OpenSans-Regular;
@@ -278,6 +278,14 @@ tbody tr:hover {
     content: "Total";
   }
 
+
+
+
+.button:hover {
+  background-color: #4CAF50; /* Green */
+  color: white;
+}
+
   .column4,
   .column5,
   .column6 {
@@ -304,6 +312,40 @@ tbody tr:hover {
     padding-right: 15px;
   }
 }
+
+
+
+
+.button-click{
+color: white;
+text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  background-color: #555555;
+  font-size: 12px;
+  padding: 10px 24px;
+  border-radius: 8px;}
+
+  .button-click-a{
+color: white;
+text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  background-color: #555555;
+  font-size: 12px;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight:600}
+
+  .button-click-a:hover{
+   background-color: #3e3939; /* Green */
+  color: white;
+  }
+
+  .button-click:hover{
+   background-color: #3e3939; /* Green */
+  color: white;
+  }
 
   </style>
 
@@ -335,13 +377,15 @@ tbody tr:hover {
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
           ['Task', 'Hours per Day'],
-          ['Fresh',     {{fresh}}],
-          ['Cancelled',      {{cancelled}}],
-          ['Closed',  {{closed}}],
-          ['Rescheduled',  {{rescheduled}}],
-          ['Follow Up',  {{follow_up}}],
-          ['Correct Option', {{other}}],
-          ['Acknowledged', {{acknowledged}}],
+          ['Fresh ({{fresh}})',     {{fresh}}],
+          ['Cancelled ({{cancelled}})',      {{cancelled}}],
+          ['Closed ({{closed}})',  {{closed}}],
+          ['Rescheduled ({{rescheduled}})',  {{rescheduled}}],
+          ['Follow Up ({{follow_up}})',  {{follow_up}}],
+          ['Correct Option ({{other}})', {{other}}],
+          ['Pending To be Cancelled {{pending_cancelled}}', {{pending_cancelled}}],
+          ['Acknowledged ({{acknowledged}})', {{acknowledged}}],
+
 
         ]);
 
@@ -363,31 +407,129 @@ tbody tr:hover {
 <div class="table100">
   <div style="padding-left:9%;back">
   <b class="column1" >Hello {{user.username}}</b>
+      All:{{al}}
   Fresh:{{fresh}}
 Cancelled:{{cancelled}}
 Closed:{{closed}}
     Rescheduled:{{rescheduled}}
     Follow Up:{{follow_up}}
-  Please Correct the Status:{{other}}  {{request.user.id}}{%if request.user.is_staff%}
-  <a href="{%url 'report'%}" style="    padding-left: 5%;">Open Report<i class='bx bxs-credit-card-front' style="" ></i> </a>
+  Please Correct the Status:{{other}}  {{request.user.id}}{%if request.user.is_staff%}<br>
+  <a href="{%url 'report'%}" class="button-click-a  ">Open Report<i class='bx bxs-credit-card-front' style="" ></i> </a>
   {%endif%}
-    <a href="{%url 'logout'%}"class="btn btn-warning" style="    padding-left: 5%;"><strong >Logout<i class='bx bx-log-out'></i></strong></a></div></div>
 
+<a href="{%url 'download'%}" class="button-click-a">download csv</a>
+
+  <a href="{%url 'logout'%}" class="button-click-a"><strong >Logout<i class='bx bx-log-out'></i></strong></a>
+      <a href="{%url 'admin:index'%}" class="button-click-a" style="background-color: #ff0000;">Assign Users</a>
+  </div></div>
    <div id="donutchart" style="width: 1350px; height: 500px;border-style: solid;"></div>
-<form method="POST">
+<form method="POST" id="filter">
     {% csrf_token%}
     <center>
-  <select name="filter_value"  style="padding:10px;">
-                        <option value="" disabled selected>{{name.status}}</option>
+  <select name="filter_value"  style="padding:10px;" id="filter_value"  >
+                        <option value="all" disabled selected>Please Select Option</option>
                         <option value="fresh">Fresh</option>
                         <option value="closed">Closed</option>
                         <option value="cancelled">Cancelled </option>
                         <option value="rescheduled">Reschedule </option>
                         <option value="follow_up">Follow up</option>
                         <option value="acknowledged">Acknowledged</option>
+                        <option value="pending_cancelled">Pending To be Cancelled</option>
 
                     </select>
-  <input type="submit" name="filter">
+        <input type="date" name="startdate" id="startdate" class="button-click-a">
+    <input type="date" name="todate" id="todate" class="button-click-a">
+        <button class="button-click" type="button" form="filter_value" onclick=
+          '{
+  var myDate = new Date();
+
+var year = myDate.getFullYear();
+
+var month = myDate.getMonth() + 1;
+if(month <= 9)
+    month = "0"+month;
+
+var day= myDate.getDate();
+if(day<=6){
+    month=month-1;
+    day = day+24;}
+else if(day<=9)
+    {day="0"+day}
+
+var curDate = new Date();
+
+var curyear = curDate.getFullYear();
+
+var curmonth = curDate.getMonth() + 1;
+if(curmonth <= 9)
+    curmonth = "0"+curmonth;
+
+var curday= curDate.getDate()+1;
+if(curday <= 9)
+    curday = "0"+curday;
+
+var pDate = curyear +"-"+ curmonth +"-"+ curday;
+
+var prettyDate = year +"-"+ month +"-"+ day;
+document.getElementById("startdate").defaultValue =prettyDate
+document.getElementById("todate").defaultValue =pDate;
+document.getElementById("loginSubmit").click();
+}'
+  >Previous 7 Day</button>
+
+
+
+  <button class="button-click" type="button" form="filter_value" onclick=
+          '{
+var curDate = new Date();
+
+var curyear = curDate.getFullYear();
+
+var curmonth = curDate.getMonth() + 1;
+if(curmonth <= 9)
+    curmonth = "0"+curmonth;
+
+var curday= curDate.getDate()+1;
+if(curday <= 9)
+    curday = "0"+curday;
+
+var pDate = curyear +"-"+ curmonth +"-"+ curday;
+
+
+document.getElementById("startdate").defaultValue =new Date().toISOString().slice(0, 10)
+document.getElementById("todate").defaultValue =pDate;
+document.getElementById("loginSubmit").click();
+}'
+  >today Day</button>
+
+
+
+
+  <button class="button-click" type="button" form="filter_value"
+          onclick='{
+var curDate = new Date();
+
+var curyear = curDate.getFullYear();
+
+var curmonth = curDate.getMonth() + 1;
+if(curmonth <= 9)
+    curmonth = "0"+curmonth;
+
+var curday= curDate.getDate()+1;
+if(curday <= 9)
+    curday = "0"+curday;
+
+var pDate = curyear +"-"+ curmonth +"-"+ curday;
+
+
+document.getElementById("startdate").defaultValue ="2010-01-01"
+document.getElementById("todate").defaultValue =pDate;
+document.getElementById("loginSubmit").click();
+}'
+  >All Leads</button>
+
+
+  <input type="submit" name="filter" id="loginSubmit" class="button-click" style="background-color: #ff0000;">
 </center>
 </form>
   <table id="main">

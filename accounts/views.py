@@ -1,3 +1,4 @@
+import csv
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from . import models
@@ -6,8 +7,11 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 import os
 import pytz
+from datetime import date
+from django.utils import timezone
 from django.db import connection
 import datetime
+from. import utils
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 
@@ -38,7 +42,7 @@ def register(request):
         IST = pytz.timezone('Asia/Kolkata')
 
         if models.Final.objects.filter(number=number).order_by('-id')[:100]:
-            return HttpResponse('/token')
+            return redirect('/token')
         lead, created = models.AllLead.objects.get_or_create(name=name, email=email, number=number, city=city,
                                                              state=state, weight=weight,
                                                              height=height, gender=gender,
@@ -57,14 +61,8 @@ def register(request):
 
         return redirect("/token")
 
-
-
-
-
     else:
         return render(request,'register.html')
-        # ("allname=Saurabh.objects.all()\n"
-        # "        return render(request,'login.html',{'allname':allname})")
 
 
 def token(request):
@@ -75,18 +73,27 @@ def token(request):
 def all(request):
     if request.user.is_authenticated:
         fresh = 0
+        al=0
         cancelled = 0
         closed = 0
         other = 0
         rescheduled=0
         follow_up=0
         acknowledged=0
+        pending_cancelled=0
         user=request.user
+
         if request.user.is_staff:
+
             name=models.Final.objects.all()
+
         else:
             name=models.Final.objects.all().filter(assigned=user)
+
+
+
         for item in name:
+            al+=1
             if item.status == 'fresh':
                 fresh += 1
             elif item.status == 'cancelled':
@@ -99,6 +106,8 @@ def all(request):
                 follow_up +=1
             elif item.status=='acknowledged':
                 acknowledged +=1
+            elif item.status=='pending_cancelled':
+                pending_cancelled+=1
 
             else:
                 other += 1
@@ -115,81 +124,98 @@ def all(request):
             return redirect('edit_employee')
 
         elif request.method == 'POST' and 'filter' in request.POST:
-            filter_value = request.POST.get('filter_value', 'fresh')
+            filter_value = request.POST.get('filter_value', 'all')
+            startdate = request.POST.get('startdate','2015-01-02')
+            todate = request.POST.get('todate',datetime.date.today())
+            user_id=request.user.pk
             if request.user.is_staff:
                 if filter_value == "fresh":
-                    name = models.Final.objects.all().filter(status='fresh')
+                    name = models.Final.objects.raw('select * from accounts_final where (created between "'+startdate+'" and "'+todate+'") and status ="'+filter_value+'" ')
+
                     return render(request, 'main_lead_display.html',
                                   {'name': name, "fresh": fresh, "cancelled": 0, "closed": 0, "other": other,
-                                   'rescheduled': 0, 'follow_up': 0,'acknowledged':0})
+                                   'rescheduled': 0, 'follow_up': 0,'acknowledged':0,'pending_cancelled':0})
 
                 elif filter_value == "closed":
-                    name = models.Final.objects.all().filter(status='closed')
+                    name = models.Final.objects.raw('select * from accounts_final where (created between "'+startdate+'" and "'+todate+'") and status ="'+filter_value+'" ')
                     return render(request, 'main_lead_display.html',
                                   {'name': name, "fresh": 0, "cancelled": 0, "closed": closed, "other": other,
-                                   'rescheduled': 0, 'follow_up': 0,'acknowledged':0})
+                                   'rescheduled': 0, 'follow_up': 0,'acknowledged':0,'pending_cancelled':0})
                 elif filter_value == "rescheduled":
-                    name = models.Final.objects.all().filter(status='rescheduled')
+                    name = models.Final.objects.raw('select * from accounts_final where (created between "'+startdate+'" and "'+todate+'") and status ="'+filter_value+'" ')
                     return render(request, 'main_lead_display.html',
                                   {'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
-                                   'rescheduled': rescheduled, 'follow_up': 0,'acknowledged':0})
+                                   'rescheduled': rescheduled, 'follow_up': 0,'acknowledged':0,'pending_cancelled':0})
                 elif filter_value == "cancelled":
-                    name = models.Final.objects.all().filter(status='cancelled')
+                    name = models.Final.objects.raw('select * from accounts_final where (created between "'+startdate+'" and "'+todate+'") and status ="'+filter_value+'" ')
                     return render(request, 'main_lead_display.html',
                                   {'name': name, "fresh": 0, "cancelled": cancelled, "closed": 0, "other": other,
-                                   'rescheduled': 0, 'follow_up': 0,'acknowledged':0})
+                                   'rescheduled': 0, 'follow_up': 0,'acknowledged':0,'pending_cancelled':0})
                 elif filter_value == "follow_up":
-                    name = models.Final.objects.all().filter(status='follow_up')
+                    name = models.Final.objects.raw('select * from accounts_final where (created between "'+startdate+'" and "'+todate+'") and status ="'+filter_value+'" ')
                     return render(request, 'main_lead_display.html',
                                   {'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
-                                   'rescheduled': 0, 'follow_up': follow_up,'acknowledged':0})
+                                   'rescheduled': 0, 'follow_up': follow_up,'acknowledged':0,'pending_cancelled':0})
 
                 elif filter_value == "acknowledged":
-                    name = models.Final.objects.all().filter(status='acknowledged')
+                    name = models.Final.objects.raw('select * from accounts_final where (created between "'+startdate+'" and "'+todate+'") and status ="'+filter_value+'" ')
                     return render(request, 'main_lead_display.html',
                                   {'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
-                                   'rescheduled': 0, 'follow_up': 0,'acknowledged':acknowledged})
+                                   'rescheduled': 0, 'follow_up': 0,'acknowledged':acknowledged,'pending_cancelled':0})
+
+                elif filter_value == "pending_cancelled":
+                    name = models.Final.objects.raw('select * from accounts_final where (created between "'+startdate+'" and "'+todate+'") and status ="'+filter_value+'" ')
+                    return render(request, 'main_lead_display.html',
+                                  {'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
+                                   'rescheduled': 0, 'follow_up': 0,'acknowledged':0,'pending_cancelled':pending_cancelled})
                 else:
-                    name = models.Final.objects.all()
+                    name = models.Final.objects.raw('select * from accounts_final where created between "'+startdate+'" and "'+todate+'"')
                     context = {'name': name, "fresh": fresh, "cancelled": cancelled, "closed": closed, "other": other,
-                               'rescheduled': rescheduled, 'follow_up': follow_up,'acknowledged':0}
+                               'rescheduled': rescheduled, 'follow_up': follow_up,'acknowledged':acknowledged,'pending_cancelled':pending_cancelled}
                     return render(request, 'main_lead_display.html', context)
             else:
                 if filter_value == "fresh":
-                    name = models.Final.objects.all().filter(assigned=user).filter(status='fresh')
+                    name = models.Final.objects.raw('select * from accounts_final where (created between "'+startdate+'" and "'+todate+'") and status ="'+filter_value+'" and assigned_id="'+str(user_id)+'" ')
                     return render(request, 'main_lead_display.html', {'name':name,"fresh": fresh, "cancelled": 0, "closed": 0, "other": other,
-                               'rescheduled': 0, 'follow_up': 0,'acknowledged':0})
+                               'rescheduled': 0, 'follow_up': 0,'acknowledged':0,'pending_cancelled':0})
 
                 elif filter_value == "closed":
-                    name = models.Final.objects.all().filter(assigned=user).filter(status='closed')
+                    name = models.Final.objects.raw('select * from accounts_final where (created between "'+startdate+'" and "'+todate+'") and status ="'+filter_value+'" and assigned_id="'+str(user_id)+'" ')
                     return render(request, 'main_lead_display.html', {'name': name,"fresh": 0, "cancelled": 0, "closed": closed, "other": other,
-                               'rescheduled': 0, 'follow_up': 0,'acknowledged':0})
+                               'rescheduled': 0, 'follow_up': 0,'acknowledged':0,'pending_cancelled':0})
                 elif filter_value == "rescheduled":
-                    name = models.Final.objects.all().filter(assigned=user).filter(status='rescheduled')
+                    name = models.Final.objects.raw('select * from accounts_final where (created between "'+startdate+'" and "'+todate+'") and status ="'+filter_value+'" and assigned_id="'+str(user_id)+'" ')
                     return render(request, 'main_lead_display.html', {'name': name,"fresh": 0, "cancelled": 0, "closed": 0, "other": other,
-                               'rescheduled': rescheduled, 'follow_up': 0,'acknowledged':0})
+                               'rescheduled': rescheduled, 'follow_up': 0,'acknowledged':0,'pending_cancelled':0})
                 elif filter_value == "cancelled":
-                    name = models.Final.objects.all().filter(assigned=user).filter(status='cancelled')
+                    name = models.Final.objects.raw('select * from accounts_final where (created between "'+startdate+'" and "'+todate+'") and status ="'+filter_value+'" and assigned_id="'+str(user_id)+'" ')
                     return render(request, 'main_lead_display.html', {'name': name,"fresh": 0, "cancelled": cancelled, "closed": 0, "other": other,
-                               'rescheduled': 0, 'follow_up': 0,'acknowledged':0})
+                               'rescheduled': 0, 'follow_up': 0,'acknowledged':0,'pending_cancelled':0})
                 elif filter_value == "follow_up":
-                    name = models.Final.objects.all().filter(assigned=user).filter(status='follow_up')
+                    name = models.Final.objects.raw('select * from accounts_final where (created between "'+startdate+'" and "'+todate+'") and status ="'+filter_value+'" and assigned_id="'+str(user_id)+'" ')
                     return render(request, 'main_lead_display.html', {'name': name,"fresh": 0, "cancelled": 0, "closed": 0, "other": other,
-                               'rescheduled': 0, 'follow_up': follow_up,'acknowledged':0})
+                               'rescheduled': 0, 'follow_up': follow_up,'acknowledged':0,'pending_cancelled':0})
 
                 elif filter_value == "acknowledged":
-                    name = models.Final.objects.all().filter(assigned=user).filter(status='acknowledged')
+                    name = models.Final.objects.raw('select * from accounts_final where (created between "'+startdate+'" and "'+todate+'") and status ="'+filter_value+'" and assigned_id="'+str(user_id)+'" ')
                     return render(request, 'main_lead_display.html',
                                   {'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
-                                   'rescheduled': 0, 'follow_up': 0,'acknowledged':acknowledged})
+                                   'rescheduled': 0, 'follow_up': 0,'acknowledged':acknowledged,'pending_cancelled':0})
+
+                elif filter_value == "pending_cancelled":
+                    name = models.Final.objects.raw('select * from accounts_final where (created between "'+startdate+'" and "'+todate+'") and status ="'+filter_value+'" and assigned_id="'+str(user_id)+'" ')
+                    return render(request, 'main_lead_display.html',
+                                  {'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
+                                   'rescheduled': 0, 'follow_up': 0,'acknowledged':0,'pending_cancelled':pending_cancelled})
+
                 else:
                     name=models.Final.objects.all().filter(assigned=user)
                     context = {'name': name, "fresh": fresh, "cancelled": cancelled, "closed": closed, "other": other,
-                               'rescheduled': rescheduled, 'follow_up': follow_up,'acknowledged':0}
+                               'rescheduled': rescheduled, 'follow_up': follow_up,'acknowledged':acknowledged,'pending_cancelled':pending_cancelled}
                     return render(request, 'main_lead_display.html',context)
 
-        context = {'name': name, "fresh": fresh, "cancelled": cancelled, "closed": closed, "other": other,
-                   'rescheduled': rescheduled, 'follow_up': follow_up,'acknowledged':acknowledged}
+        context = {'name': name, "fresh": fresh, "cancelled": cancelled, "closed": closed, "other": other,'al':al,
+                   'rescheduled': rescheduled, 'follow_up': follow_up,'acknowledged':acknowledged,'pending_cancelled':pending_cancelled}
 
         return render(request,'main_lead_display.html',context)
     else:
@@ -198,6 +224,7 @@ def all(request):
 
 
 def edit_employee(request):
+
     id = request.session.get('id')
     name = models.Final.objects.get(id=id)
     first_name = name.name.split()[0]
@@ -212,19 +239,19 @@ def edit_employee(request):
     feet = int(tot_feet)
     bmi = name.bmi
     cls = ''
-    if (bmi < 16):
+    if bmi < 16:
         cls = "severely underweight"
 
-    elif (bmi >= 16 and bmi < 18.5):
+    elif 16 <= bmi < 18.5:
         cls = "Underweight"
 
-    elif (bmi >= 18.5 and bmi < 25):
+    elif 18.5 <= bmi < 25:
         cls = " Normal Weight"
 
-    elif (bmi >= 25 and bmi < 30):
+    elif 25 <= bmi < 30:
         cls = "Overweight"
 
-    elif (bmi >= 30):
+    elif bmi >= 30:
         cls = "Obese"
     person_stat = {'feet': feet, 'inch': inch, 'cls': cls}
     if request.method == "POST":
@@ -232,10 +259,12 @@ def edit_employee(request):
 
         status = request.POST.get('status', "acknowledged")
         substatus = request.POST.get('substatus', None)
+        cancel_link = request.POST['cancel_link']
         comment=f'{name.comment},  {request.POST.get("comment",None)}'
         rescheduled=request.POST.get('rescheduled', None)
         updater.status = status
         updater.substatus = substatus
+        updater.insta_user = cancel_link
         updater.comment=comment
         updater.rescheduled=rescheduled
 
@@ -258,8 +287,11 @@ def report(request):
         all_rescheduled = 0
         all_follow_up = 0
         all_acknowledged=0
+        all_pending_cancelled=0
+        days7=0
         for all_item in all_data:
             all_total+=1
+
             if all_item.status == 'fresh':
                 all_fresh += 1
             elif all_item.status == 'cancelled':
@@ -272,9 +304,16 @@ def report(request):
                 all_follow_up += 1
             elif all_item.status == 'acknowledged':
                 all_acknowledged += 1
+
+            elif all_item.status=='pending_cancelled':
+                all_pending_cancelled+=1
+
+            elif ((datetime.datetime.now(timezone.utc)) - all_item.created).days >1:
+                days7+=1
+
             else:
                 all_other+=1
-        all={'all_total':all_total,'all_fresh':all_fresh,'all_cancelled':all_cancelled,'all_closed':all_closed,'all_rescheduled':all_rescheduled,'all_follow_up':all_follow_up,'all_acknowledged':all_acknowledged}
+        all={'all_total':all_total,'all_fresh':all_fresh,'all_cancelled':all_cancelled,'all_closed':all_closed,'all_rescheduled':all_rescheduled,'all_follow_up':all_follow_up,'all_acknowledged':all_acknowledged,'all_pending_cancelled':all_pending_cancelled}
 
         names = User.objects.order_by('username').values('username').distinct()
         report_name=[]
@@ -293,6 +332,7 @@ def report(request):
             rescheduled = 0
             follow_up = 0
             acknowledged=0
+            pending_cancelled=0
             user_data=models.Final.objects.raw('select * from accounts_final where (created between "'+startdate+'" and "'+todate+'") and assigned_id ="'+str(assigned_id[0][0])+'" ')
             for count in user_data:
                 tot+=1
@@ -308,13 +348,39 @@ def report(request):
                     follow_up += 1
                 elif count.status == 'acknowledged':
                     acknowledged += 1
-
+                elif count.status =='pending_cancelled':
+                    pending_cancelled+=1
                 else:
                     other += 1
-            final[f'{one}']={'tot':tot,'fresh': fresh, 'cancelled': cancelled, 'closed': closed, 'rescheduled': rescheduled,'follow_up':follow_up,'other':other,'acknowledged':acknowledged}
+            final[f'{one}']={'tot':tot,'fresh': fresh, 'cancelled': cancelled, 'closed': closed, 'rescheduled': rescheduled,'follow_up':follow_up,'other':other,'acknowledged':acknowledged,'pending_cancelled':pending_cancelled}
 
 
         return render(request, 'report.html', {'all': all,'final':final,'user_data':user_data})
     else:
         all_data = models.Final.objects.raw('select * from accounts_final')
         return render(request,'report.html',{'all_data':all_data})
+
+
+
+
+def export_csv(request):
+    response=HttpResponse(content_type='text/csv')
+
+
+    writer=csv.writer(response)
+    writer.writerow(['Name','number','email','city','state','weight','height','bmi','gender','contact','type','created'
+                     ,'rescheduled','comment','status','substatus','assigned'])
+    if request.user.is_staff:
+        for member in models.Final.objects.all().values_list('name','number','email','city','state','weight','height','bmi','gender','contact','type','created'
+                         ,'rescheduled','comment','status','substatus','assigned'):
+            writer.writerow(member)
+    else:
+        u=request.user
+        for member in models.Final.objects.all().filter(assigned=u).values_list('name','number','email','city','state','weight','height','bmi','gender','contact','type','created'
+                         ,'rescheduled','comment','status','substatus','assigned'):
+            writer.writerow(member)
+
+    response['Content-Disposition']='attachement; filename="members.csv"'
+    '''models.Final.objects.all().values_list('name','number','email','city','state','weight','height','bmi','gender','contact','type','created'
+                     ,'rescheduled','comment','status','substatus','assigned')'''
+    return response

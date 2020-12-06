@@ -484,15 +484,7 @@ background-image: -webkit-linear-gradient( 136deg, rgb(226 226 226) 0%, rgb(255 
                 </div>
                 <div class="form-row">
 
-                    <script type="text/javascript">
-function checkvalue(val)
-{
-    if(val==="Instagram")
-       document.getElementById('mode').style.display='block';
-    else
-       document.getElementById('mode').style.display='none';
-}
-                    </script>
+
                     <select name="mode" onchange="checkvalue(this.value);">
                         <option value="" disabled selected>{{name.contact}}</option>
                         <option value="WhatsApp">WhatsApp</option>
@@ -502,10 +494,7 @@ function checkvalue(val)
 							  	<i class='bx bx-chevron-down-circle'></i>
 							</span>
                 </div>
-                <div class="form-row">
-                    <input type="text" name="instauser" id="mode" class="input-text"
-                           placeholder="Instagram UserName" style="display:none;" value="{{name.instauser}}">
-                </div>
+
 
                 <div class="form-group">
                 <div class="form-row form-row-1">
@@ -520,12 +509,24 @@ function checkvalue(val)
 
                 <div class="form-row">
 
-
-                    <select name="status" onchange="checkstatus(this.value);" required>
+ <script type="text/javascript">
+function checkvalue(val)
+{
+    if(val==="Instagram"){
+       document.getElementById('cancel_link').style.display='block';
+       document.getElementById('cancel_link').required=true;}
+    else
+       {document.getElementById('cancel_link').style.display='none';
+       document.getElementById('cancel_link').required=false;}
+}
+</script>
+                    <select name="status" onchange="checkstatus(this.value);" required id="status">
                         <option value="acknowledged" selected>{{name.status}}</option>
-
+                        {%if request.user.is_staff%}
+                        <option value="cancelled">Cancelled</option>
+                        {%endif%}
                          <option value="closed">Closed</option>
-                        <option value="cancelled">Cancelled </option>
+                        <option value="pending_cancelled">Pending Cancelled </option>
                         <option value="rescheduled">Reschedule </option>
                         <option value="follow_up">Follow up</option>
 
@@ -537,25 +538,34 @@ function checkvalue(val)
                 <script type="text/javascript">
 function checkstatus(val)
 {
-    if(val==="cancelled"){
+    if(val==="pending_cancelled"){
+        document.getElementById('cancel_link').style.display='block';
+        document.getElementById('cancel_link').required=true;
+        document.getElementById('link').style.display='block';
         document.getElementById('closed').style.display='none';
         document.getElementById('rescheduled').style.display='none';
        document.getElementById('cancelled').style.display='block';
        document.getElementById('follow_up').style.display='none';
        }
     else if(val=="closed"){
+    document.getElementById('cancel_link').style.display='none';
+       document.getElementById('cancel_link').required=false;
         document.getElementById('closed').style.display='block';
         document.getElementById('rescheduled').style.display='none';
        document.getElementById('cancelled').style.display='none';
        document.getElementById('follow_up').style.display='none';
        }
     else if(val=="rescheduled"){
+    document.getElementById('cancel_link').style.display='none';
+       document.getElementById('cancel_link').required=false;
         document.getElementById('closed').style.display='none';
         document.getElementById('rescheduled').style.display='block';
        document.getElementById('cancelled').style.display='none';
        document.getElementById('follow_up').style.display='none';
        }
     else if(val=="follow_up"){
+    document.getElementById('cancel_link').style.display='none';
+       document.getElementById('cancel_link').required=false;
         document.getElementById('closed').style.display='none';
         document.getElementById('rescheduled').style.display='none';
        document.getElementById('cancelled').style.display='none';
@@ -566,7 +576,7 @@ function checkstatus(val)
 }
                     </script>
 
-                 <select name="substatus" onchange="checkvalue(this.value);" id="closed" style="display:none;">
+                 <select name="substatus"  id="closed" style="display:none;">
                         <option value="" disabled selected>{{name.substatus}}</option>
                         <option value="partially_paid">Partiall Paid</option>
                         <option value="fully_paid">Fully Paid</option>
@@ -576,7 +586,7 @@ function checkstatus(val)
 							  	<i class='bx bx-chevron-down-circle'></i>
 							</span>
 
-                <select name="substatus" onchange="checkvalue(this.value);" id="cancelled" style="display:none;">
+                <select name="substatus"  id="cancelled" style="display:none;">
                         <option value="" disabled selected>{{name.substatus}}</option>
                         <option value="not_responding">Not Responding</option>
                         <option value="switch_off">Switch Off </option>
@@ -589,7 +599,7 @@ function checkstatus(val)
 							  	<i class='bx bx-chevron-down-circle'></i>
                     </span>
 
-                <select name="substatus" onchange="checkvalue(this.value);" id="rescheduled" style="display:none;">
+                <select name="substatus"  id="rescheduled" style="display:none;">
                         <option value="" disabled selected>{{name.substatus}}</option>
                         <option value="not_responding">Not Responding</option>
                         <option value="switch_off">Switch Off </option>
@@ -600,7 +610,7 @@ function checkstatus(val)
 							  	<i class='bx bx-chevron-down-circle'></i>
                     </span>
 
-                <select name="substatus" onchange="checkvalue(this.value);" id="follow_up" style="display:none;">
+                <select name="substatus"  id="follow_up" style="display:none;">
                         <option value="" disabled selected>{{name.substatus}}</option>
                         <option value="follow_up_1">Follow Up 1</option>
                         <option value="follow_up_2">Follow Up 2</option>
@@ -610,11 +620,20 @@ function checkstatus(val)
                     <span class="select-btn">
 							  	<i class='bx bx-chevron-down-circle'></i>
                     </span>
+                </div>
+                <div class="form-row" style="display:none;" id="link">
+                    <a target="_blank" href="https://drive.google.com/drive/folders/1uNI2NVRDunTpygAaMgZ71Pl0G4JUhf1c?usp=sharing"><label>Click To upload</label></a>
+                </div>
+                <div class="form-row">
+                    <input type="text" name="cancel_link" id="cancel_link" class="input-text"
+                           placeholder="Place Cancel Link Here" style="display:none;" value="{{name.insta_user}}">
+                </div>
 
                     <div class="form-row">
                     <input type="text" name="comment"  id="comment" placeholder="comment" required>
                 </div>
-<label for="comment" style="color: navajowhite;">{{name.comment}}</label>
+                <div class="form-row">
+<label for="comment" style="color: navajowhite;">{{name.comment}}</label></div>
                 <div class="form-row-last">
                     <input type="submit" onclick="myFunction()">
                 </div>

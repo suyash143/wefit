@@ -712,14 +712,106 @@ p {
 </head>
 <body>
 {%if request.user.is_staff %}
-<form method="POST">
+<form method="POST" id="date">
     {%csrf_token%}
-  <input type="date" name="startdate" required>
-    <input type="date" name="todate" required>
-    <input type="submit" name="submit">
+  <input type="date" id="startdate" name="startdate" required>
+    <input type="date" id="todate" name="todate" required>
+  <button type="button" form="date" onclick=
+          '{
+  var myDate = new Date();
+
+var year = myDate.getFullYear();
+
+var month = myDate.getMonth() + 1;
+if(month <= 9)
+    month = "0"+month;
+
+var day= myDate.getDate();
+if(day<=6){
+    month=month-1;
+    day = day+24;}
+else if(day<=9)
+    {day="0"+day}
+
+var curDate = new Date();
+
+var curyear = curDate.getFullYear();
+
+var curmonth = curDate.getMonth() + 1;
+if(curmonth <= 9)
+    curmonth = "0"+curmonth;
+
+var curday= curDate.getDate()+1;
+if(curday <= 9)
+    curday = "0"+curday;
+
+var pDate = curyear +"-"+ curmonth +"-"+ curday;
+
+var prettyDate = year +"-"+ month +"-"+ day;
+document.getElementById("startdate").defaultValue =prettyDate
+document.getElementById("todate").defaultValue =pDate;
+document.getElementById("loginSubmit").click();
+}'
+  >Previous 7 Day</button>
+
+
+
+  <button type="button" form="date" onclick=
+          '{
+var curDate = new Date();
+
+var curyear = curDate.getFullYear();
+
+var curmonth = curDate.getMonth() + 1;
+if(curmonth <= 9)
+    curmonth = "0"+curmonth;
+
+var curday= curDate.getDate()+1;
+if(curday <= 9)
+    curday = "0"+curday;
+
+var pDate = curyear +"-"+ curmonth +"-"+ curday;
+
+
+document.getElementById("startdate").defaultValue =new Date().toISOString().slice(0, 10)
+document.getElementById("todate").defaultValue =pDate;
+document.getElementById("loginSubmit").click();
+}'
+  >today Day</button>
+
+
+
+
+  <button type="button" form="date"
+          onclick='{
+var curDate = new Date();
+
+var curyear = curDate.getFullYear();
+
+var curmonth = curDate.getMonth() + 1;
+if(curmonth <= 9)
+    curmonth = "0"+curmonth;
+
+var curday= curDate.getDate()+1;
+if(curday <= 9)
+    curday = "0"+curday;
+
+var pDate = curyear +"-"+ curmonth +"-"+ curday;
+
+
+document.getElementById("startdate").defaultValue ="2010-01-01"
+document.getElementById("todate").defaultValue =pDate;
+document.getElementById("loginSubmit").click();
+}'
+  >All Leads</button>
+
+
+    <input type="submit" name="submit" id="loginSubmit">
+
 
 
 </form>
+
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.3.1/css/all.min.css" rel="stylesheet">
 
@@ -826,6 +918,24 @@ p {
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Pending to be Cancelled</h5>
+                      <span class="h2 font-weight-bold mb-0">{{all.all_pending_cancelled}}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
+                        <i class="fas fa-clock" style="background-color:"></i>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-lg-6">
+              <div class="card card-stats mb-4 mb-xl-0">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
                       <h5 class="card-title text-uppercase text-muted mb-0">acknowledged</h5>
                       <span class="h2 font-weight-bold mb-0">{{all.all_acknowledged}}</span>
                     </div>
@@ -906,6 +1016,24 @@ p {
                     <div class="col">
                       <h5 class="card-title text-uppercase text-muted mb-0">Follow Up</h5>
                       <span class="h2 font-weight-bold mb-0">{{item.follow_up}}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
+                        <i class="fas fa-users"></i>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          <div class="col-xl-3 col-lg-6">
+              <div class="card card-stats mb-4 mb-xl-0">
+                <div class="card-body" >
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Pending To be Cancelled</h5>
+                      <span class="h2 font-weight-bold mb-0">{{item.pending_cancelled}}</span>
                     </div>
                     <div class="col-auto">
                       <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
