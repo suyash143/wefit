@@ -731,7 +731,17 @@ if(day<=6){
     month=month-1;
     day = day+24;}
 else if(day<=9)
-    {day="0"+day}
+        {day="0"+day;
+    if (day<=9)
+    {day=day-6;
+    day="0"+day;}
+
+    }
+else if (day<=15)
+{day=day-6;
+day="0"+day;}
+else
+{day=day-6;}
 
 var curDate = new Date();
 
@@ -816,6 +826,9 @@ document.getElementById("loginSubmit").click();
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.3.1/css/all.min.css" rel="stylesheet">
 
 <body class="bg-default">
+{{all.all_days3}}
+{{all.all_days7}}
+
   <div class="main-content">
     <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
       <div class="container-fluid">
@@ -949,6 +962,44 @@ document.getElementById("loginSubmit").click();
                 </div>
               </div>
             </div>
+             <div class="col-xl-3 col-lg-6">
+              <div class="card card-stats mb-4 mb-xl-0">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Total +3 Leads</h5>
+                      <span class="h2 font-weight-bold mb-0">{{all.all_days3}}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                        <i class="fas fa-chart-pie"></i>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+             <div class="col-xl-3 col-lg-6">
+              <div class="card card-stats mb-4 mb-xl-0">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">All +7 Leads</h5>
+                      <span class="h2 font-weight-bold mb-0">{{all.all_days7}}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                        <i class="fas fa-chart-pie"></i>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
             <div class="col-xl-3 col-lg-6">
               <div class="card card-stats mb-4 mb-xl-0">
                 <div class="card-body">
@@ -1077,6 +1128,44 @@ document.getElementById("loginSubmit").click();
                       </div>
                     </div>
                   </div>
+
+                </div>
+              </div>
+            </div>
+          <div class="col-xl-3 col-lg-6">
+              <div class="card card-stats mb-4 mb-xl-0">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Total +3 Leads</h5>
+                      <span class="h2 font-weight-bold mb-0">{{item.days3}}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                        <i class="fas fa-chart-pie"></i>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+             <div class="col-xl-3 col-lg-6">
+              <div class="card card-stats mb-4 mb-xl-0">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">All +7 Leads</h5>
+                      <span class="h2 font-weight-bold mb-0">{{item.days7}}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                        <i class="fas fa-chart-pie"></i>
+                      </div>
+                    </div>
+                  </div>
+
 
                 </div>
               </div>
