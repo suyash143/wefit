@@ -408,7 +408,9 @@ Closed:{{closed}}
 <a href="{%url 'download'%}" class="button-click-a">download csv</a>
 
   <a href="{%url 'logout'%}" class="button-click-a"><strong >Logout<i class='bx bx-log-out'></i></strong></a>
+      {%if request.user.is_staff%}
       <a href="{%url 'admin:index'%}" class="button-click-a" style="background-color: #ff0000;" target="_blank">Assign Users</a>
+      {%endif%}
   </div></div>
    <div id="donutchart" style="width: 1350px; height: 500px;border-style: solid;"></div>
 <form method="POST" id="filter">

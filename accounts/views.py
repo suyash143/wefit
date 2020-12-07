@@ -326,7 +326,7 @@ def report(request):
         all_days7 = 0
         for all_item in all_data:
 
-            print((datetime.datetime.now().date() - all_item.created.date()).days)
+
             all_total += 1
 
             if all_item.status == 'fresh':
@@ -418,20 +418,35 @@ def export_csv(request):
 
     writer = csv.writer(response)
     writer.writerow(
-        ['Name', 'number', 'email', 'city', 'state', 'weight', 'height', 'bmi', 'gender', 'contact', 'type', 'created'
-            , 'rescheduled', 'comment', 'status', 'substatus', 'assigned'])
+        ['Lead Id','Name', 'Number', 'Email', 'City', 'State', 'Weight', 'Height', 'BMI', 'Gender', 'Contact', 'Type', 'Created'
+            , 'Rescheduled', 'Comment', 'Status', 'Substatus', 'Assigned User ID','Assigned Username'])
     if request.user.is_staff:
-        for member in models.Final.objects.all().values_list('name', 'number', 'email', 'city', 'state', 'weight',
+
+        for member in models.Final.objects.all().values_list('id','name', 'number', 'email', 'city', 'state', 'weight',
                                                              'height', 'bmi', 'gender', 'contact', 'type', 'created'
-                , 'rescheduled', 'comment', 'status', 'substatus', 'assigned'):
-            writer.writerow(member)
+                , 'rescheduled', 'comment', 'status', 'substatus','assigned'):
+            i=member[-1]
+
+            print(i)
+            try:
+                name=User.objects.filter(id=i)[0]
+            except:
+                name='None'
+
+            print(name)
+            new=member+(name,)
+            writer.writerow(new)
     else:
         u = request.user
         for member in models.Final.objects.all().filter(assigned=u).values_list('name', 'number', 'email', 'city',
                                                                                 'state', 'weight', 'height', 'bmi',
                                                                                 'gender', 'contact', 'type', 'created'
-                , 'rescheduled', 'comment', 'status', 'substatus', 'assigned'):
-            writer.writerow(member)
+                , 'rescheduled', 'comment', 'status', 'substatus'):
+            name=User.objects.filter(id=request.user.id)[0]
+            new=member+(name,)
+            writer.writerow(new)
+
+
 
     response['Content-Disposition'] = 'attachement; filename="members.csv"'
     '''models.Final.objects.all().values_list('name','number','email','city','state','weight','height','bmi','gender','contact','type','created'
