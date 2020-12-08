@@ -418,37 +418,56 @@ def export_csv(request):
 
     writer = csv.writer(response)
     writer.writerow(
-        ['Lead Id','Name', 'Number', 'Email', 'City', 'State', 'Weight', 'Height', 'BMI', 'Gender', 'Contact', 'Type', 'Created'
-            , 'Rescheduled', 'Comment', 'Status', 'Substatus', 'Assigned User ID','Assigned Username'])
+        ['Lead Id','Name', 'Number', 'Email', 'City', 'State','Link Of Cancellation', 'Weight', 'Height', 'BMI', 'Gender', 'Contact', 'Type', 'Created'
+            , 'Rescheduled', 'Comment', 'Status', 'Substatus', 'Assigned User ID','Assigned Username','Lead age','Range'])
     if request.user.is_staff:
 
-        for member in models.Final.objects.all().values_list('id','name', 'number', 'email', 'city', 'state', 'weight',
+        for member in models.Final.objects.all().values_list('id','name', 'number', 'email', 'city', 'state','insta_user', 'weight',
                                                              'height', 'bmi', 'gender', 'contact', 'type', 'created'
                 , 'rescheduled', 'comment', 'status', 'substatus','assigned'):
             i=member[-1]
+            created=member[13]
+            print(created)
 
-            print(i)
             try:
                 name=User.objects.filter(id=i)[0]
             except:
                 name='None'
+            range=''
+            days=(datetime.datetime.now().date() - created.date()).days
+            if days<3:
+                range='0-2'
+            elif 3<days<7:
+                range='3-6'
+            else:
+                range='+7'
 
-            print(name)
-            new=member+(name,)
+            new=member+(name,days,range)
             writer.writerow(new)
     else:
         u = request.user
-        for member in models.Final.objects.all().filter(assigned=u).values_list('name', 'number', 'email', 'city',
-                                                                                'state', 'weight', 'height', 'bmi',
-                                                                                'gender', 'contact', 'type', 'created'
-                , 'rescheduled', 'comment', 'status', 'substatus'):
+        for member in models.Final.objects.all().filter(assigned=u).values_list('id','name', 'number', 'email', 'city', 'state','insta_user', 'weight',
+                                                             'height', 'bmi', 'gender', 'contact', 'type', 'created'
+                , 'rescheduled', 'comment', 'status', 'substatus','assigned'):
+            created = member[13]
             name=User.objects.filter(id=request.user.id)[0]
-            new=member+(name,)
+
+            range = ''
+            days = (datetime.datetime.now().date() - created.date()).days
+            if days < 3:
+                range = '0-2'
+            elif 3 < days < 7:
+                range = '3-6'
+            else:
+                range = '+7'
+
+            new = member + (name, days, range)
+
             writer.writerow(new)
 
 
 
-    response['Content-Disposition'] = 'attachement; filename="members.csv"'
+    response['Content-Disposition'] = 'attachement; filename="Wefit.csv"'
     '''models.Final.objects.all().values_list('name','number','email','city','state','weight','height','bmi','gender','contact','type','created'
                      ,'rescheduled','comment','status','substatus','assigned')'''
     return response
