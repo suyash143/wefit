@@ -531,6 +531,10 @@ main {
   background-color: #ffd600 !important;
 }
 
+.bg-orange {
+  background-color: #ff3000 !important;
+}
+
 a.bg-yellow:hover,
 a.bg-yellow:focus,
 button.bg-yellow:hover,
@@ -707,6 +711,24 @@ p {
 }
 
 }
+.emp-button {
+color:red;
+font-weight:bold;
+}
+.button-click{
+color: white;
+text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  background-color: #414346;
+  font-size: 12px;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+  }
+
 
     </style>
 </head>
@@ -899,7 +921,7 @@ document.getElementById("loginSubmit").click();
                       <span class="h2 font-weight-bold mb-0">{{all.all_cancelled}}</span>
                     </div>
                     <div class="col-auto">
-                      <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
+                      <div class="icon icon-shape bg-orange  text-white rounded-circle shadow">
                         <i class="fas fa-users"></i>
                       </div>
                     </div>
@@ -981,6 +1003,7 @@ document.getElementById("loginSubmit").click();
                 </div>
               </div>
             </div>
+
              <div class="col-xl-3 col-lg-6">
               <div class="card card-stats mb-4 mb-xl-0">
                 <div class="card-body">
@@ -988,6 +1011,25 @@ document.getElementById("loginSubmit").click();
                     <div class="col">
                       <h5 class="card-title text-uppercase text-muted mb-0">All +7 Leads</h5>
                       <span class="h2 font-weight-bold mb-0">{{all.all_days7}}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                        <i class="fas fa-chart-pie"></i>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-lg-6">
+              <div class="card card-stats mb-4 mb-xl-0">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Unassigned</h5>
+                      <span class="h2 font-weight-bold mb-0">{{all.all_unassigned}}</span>
                     </div>
                     <div class="col-auto">
                       <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
@@ -1020,8 +1062,24 @@ document.getElementById("loginSubmit").click();
             </div>
 
           </div>
-          {%for key,item in final.items%}
           <hr style="padding-top:2px">
+          <h2 class="mb-5 text-white">Employee Stats</h2>
+          {%for key,item in final.items%}
+          <div class="btn-group-vertical">
+          <button class="button-click"  onclick="myFunction{{item.assigned_id}}()">{{key}} || All: {{item.tot}} || Fresh : {{item.fresh}} || Acknowledged : {{item.acknowledged}} || Follow Up :{{item.follow_up}} || Pending to be Cancelled: {{item.pending_cancelled}}</button>
+          <button class="button-click" onclick="myFunctionHide{{item.assigned_id}}()">Hide</button>
+</div>
+          <script>
+            function myFunction{{item.assigned_id}}() {
+            document.getElementById('{{item.assigned_id}}').style.display='block';
+            }
+            function myFunctionHide{{item.assigned_id}}(){
+            document.getElementById('{{item.assigned_id}}').style.display='none';
+            }
+          </script>
+<br><br>
+          <div id="{{item.assigned_id}}" style="display:none;">
+            <hr style="padding-top:2px">
           <h2 class="mb-5 text-white">{{key}}</h2>
           <div class="col-xl-3 col-lg-6">
               <div class="card card-stats mb-4 mb-xl-0">
@@ -1205,6 +1263,7 @@ document.getElementById("loginSubmit").click();
 
                 </div>
               </div>
+            </div>
             </div>
 
           {%endfor%}

@@ -401,6 +401,7 @@ Cancelled:{{cancelled}}
 Closed:{{closed}}
     Rescheduled:{{rescheduled}}
     Follow Up:{{follow_up}}
+  Unassigned: {{unassigned}}
   Please Correct the Status:{{other}}  {{request.user.id}}{%if request.user.is_staff%}<br>
   <a href="{%url 'report'%}" class="button-click-a  ">Open Report<i class='bx bxs-credit-card-front' style="" ></i> </a>
   {%endif%}
@@ -578,7 +579,6 @@ document.getElementById("loginSubmit").click();
 </div>
 </div>
 </div>
-
 <script>
 function sortTable(n) {
   var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;

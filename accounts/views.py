@@ -12,6 +12,7 @@ from django.utils import timezone
 from django.db import connection
 import datetime
 from . import utils
+from django.core.paginator import *
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 
@@ -80,6 +81,8 @@ def all(request):
         follow_up = 0
         acknowledged = 0
         pending_cancelled = 0
+        unassigned = 0
+
         user = request.user
 
         if request.user.is_staff:
@@ -108,6 +111,9 @@ def all(request):
 
             else:
                 other += 1
+
+            if item.assigned is None:
+                unassigned += 1
 
         if request.method == "POST" and 'id' in request.POST:
             id = request.POST.get('id')
@@ -248,7 +254,7 @@ def all(request):
 
         context = {'name': name, "fresh": fresh, "cancelled": cancelled, "closed": closed, "other": other, 'al': al,
                    'rescheduled': rescheduled, 'follow_up': follow_up, 'acknowledged': acknowledged,
-                   'pending_cancelled': pending_cancelled}
+                   'pending_cancelled': pending_cancelled, 'unassigned': unassigned}
 
         return render(request, 'main_lead_display.html', context)
     else:
@@ -324,8 +330,8 @@ def report(request):
         all_pending_cancelled = 0
         all_days3 = 0
         all_days7 = 0
+        all_unassigned = 0
         for all_item in all_data:
-
 
             all_total += 1
 
@@ -351,9 +357,13 @@ def report(request):
                 all_days3 += 1
             elif (datetime.datetime.now().date() - all_item.created.date()).days >= 7:
                 all_days7 += 1
+
+            if all_item.assigned==None:
+                all_unassigned+=1
+
         all = {'all_total': all_total, 'all_fresh': all_fresh, 'all_cancelled': all_cancelled, 'all_closed': all_closed,
                'all_rescheduled': all_rescheduled, 'all_follow_up': all_follow_up, 'all_acknowledged': all_acknowledged,
-               'all_pending_cancelled': all_pending_cancelled, 'all_days7': all_days7, 'all_days3': all_days3}
+               'all_pending_cancelled': all_pending_cancelled, 'all_days7': all_days7, 'all_days3': all_days3,'all_unassigned':all_unassigned}
 
         names = User.objects.order_by('username').values('username').distinct()
         report_name = []
@@ -374,7 +384,8 @@ def report(request):
             acknowledged = 0
             pending_cancelled = 0
             days3 = 0
-            days7=0
+            days7 = 0
+
 
             user_data = models.Final.objects.raw(
                 'select * from accounts_final where (created between "' + startdate + '" and "' + todate + '") and assigned_id ="' + str(
@@ -403,9 +414,11 @@ def report(request):
                 elif (datetime.datetime.now().date() - count.created.date()).days >= 7:
                     days7 += 1
 
+
             final[f'{one}'] = {'tot': tot, 'fresh': fresh, 'cancelled': cancelled, 'closed': closed,
                                'rescheduled': rescheduled, 'follow_up': follow_up, 'other': other,
-                               'acknowledged': acknowledged, 'pending_cancelled': pending_cancelled,'days3':days3, 'days7':days7}
+                               'acknowledged': acknowledged, 'pending_cancelled': pending_cancelled, 'days3': days3,
+                               'days7': days7,'assigned_id':assigned_id[0][0]}
 
         return render(request, 'report.html', {'all': all, 'final': final, 'user_data': user_data})
     else:
@@ -418,40 +431,24 @@ def export_csv(request):
 
     writer = csv.writer(response)
     writer.writerow(
-        ['Lead Id','Name', 'Number', 'Email', 'City', 'State','Link Of Cancellation', 'Weight', 'Height', 'BMI', 'Gender', 'Contact', 'Type', 'Created'
-            , 'Rescheduled', 'Comment', 'Status', 'Substatus', 'Assigned User ID','Assigned Username','Lead age','Range'])
+        ['Lead Id', 'Name', 'Number', 'Email', 'City', 'State', 'Link Of Cancellation', 'Weight', 'Height', 'BMI',
+         'Gender', 'Contact', 'Type', 'Created'
+            , 'Rescheduled', 'Comment', 'Status', 'Substatus', 'Assigned User ID', 'Assigned Username', 'Lead age',
+         'Range'])
     if request.user.is_staff:
 
-        for member in models.Final.objects.all().values_list('id','name', 'number', 'email', 'city', 'state','insta_user', 'weight',
+        for member in models.Final.objects.all().values_list('id', 'name', 'number', 'email', 'city', 'state',
+                                                             'insta_user', 'weight',
                                                              'height', 'bmi', 'gender', 'contact', 'type', 'created'
-                , 'rescheduled', 'comment', 'status', 'substatus','assigned'):
-            i=member[-1]
-            created=member[13]
+                , 'rescheduled', 'comment', 'status', 'substatus', 'assigned'):
+            i = member[-1]
+            created = member[13]
             print(created)
 
             try:
-                name=User.objects.filter(id=i)[0]
+                name = User.objects.filter(id=i)[0]
             except:
-                name='None'
-            range=''
-            days=(datetime.datetime.now().date() - created.date()).days
-            if days<3:
-                range='0-2'
-            elif 3<days<7:
-                range='3-6'
-            else:
-                range='+7'
-
-            new=member+(name,days,range)
-            writer.writerow(new)
-    else:
-        u = request.user
-        for member in models.Final.objects.all().filter(assigned=u).values_list('id','name', 'number', 'email', 'city', 'state','insta_user', 'weight',
-                                                             'height', 'bmi', 'gender', 'contact', 'type', 'created'
-                , 'rescheduled', 'comment', 'status', 'substatus','assigned'):
-            created = member[13]
-            name=User.objects.filter(id=request.user.id)[0]
-
+                name = 'None'
             range = ''
             days = (datetime.datetime.now().date() - created.date()).days
             if days < 3:
@@ -462,10 +459,29 @@ def export_csv(request):
                 range = '+7'
 
             new = member + (name, days, range)
+            writer.writerow(new)
+    else:
+        u = request.user
+        for member in models.Final.objects.all().filter(assigned=u).values_list('id', 'name', 'number', 'email', 'city',
+                                                                                'state', 'insta_user', 'weight',
+                                                                                'height', 'bmi', 'gender', 'contact',
+                                                                                'type', 'created'
+                , 'rescheduled', 'comment', 'status', 'substatus', 'assigned'):
+            created = member[13]
+            name = User.objects.filter(id=request.user.id)[0]
+
+            range = ''
+            days = (datetime.datetime.now().date() - created.date()).days
+            if days < 3:
+                range = '0-2'
+            elif 3 <= days < 7:
+                range = '3-6'
+            else:
+                range = '+7'
+
+            new = member + (name, days, range)
 
             writer.writerow(new)
-
-
 
     response['Content-Disposition'] = 'attachement; filename="Wefit.csv"'
     '''models.Final.objects.all().values_list('name','number','email','city','state','weight','height','bmi','gender','contact','type','created'
