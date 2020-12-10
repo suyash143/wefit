@@ -12,7 +12,8 @@ from django.utils import timezone
 from django.db import connection
 import datetime
 from . import utils
-from django.core.paginator import *
+from django.core.paginator import Paginator
+
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 
@@ -88,9 +89,15 @@ def all(request):
         if request.user.is_staff:
 
             name = models.Final.objects.all()
+            name_paginator=Paginator(name,140)
+            page_num=request.GET.get('page')
+            page=name_paginator.get_page(page_num)
 
         else:
             name = models.Final.objects.all().filter(assigned=user)
+            name_paginator = Paginator(name, 100)
+            page_num = request.GET.get('page')
+            page = name_paginator.get_page(page_num)
 
         for item in name:
             al += 1
@@ -136,125 +143,176 @@ def all(request):
                     name = models.Final.objects.raw(
                         'select * from accounts_final where (created between "' + startdate + '" and "' + todate + '") and status ="' + filter_value + '" ')
 
+                    name_paginator = Paginator(name, 100)
+                    page_num = request.GET.get('page')
+                    page = name_paginator.get_page(page_num)
+
                     return render(request, 'main_lead_display.html',
                                   {'name': name, "fresh": fresh, "cancelled": 0, "closed": 0, "other": other,
-                                   'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0, 'pending_cancelled': 0})
+                                   'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0, 'pending_cancelled': 0,'page':page})
 
                 elif filter_value == "closed":
                     name = models.Final.objects.raw(
                         'select * from accounts_final where (created between "' + startdate + '" and "' + todate + '") and status ="' + filter_value + '" ')
+                    name_paginator = Paginator(name, 100)
+                    page_num = request.GET.get('page')
+                    page = name_paginator.get_page(page_num)
                     return render(request, 'main_lead_display.html',
                                   {'name': name, "fresh": 0, "cancelled": 0, "closed": closed, "other": other,
-                                   'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0, 'pending_cancelled': 0})
+                                   'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0, 'pending_cancelled': 0,'page':page})
                 elif filter_value == "rescheduled":
                     name = models.Final.objects.raw(
                         'select * from accounts_final where (created between "' + startdate + '" and "' + todate + '") and status ="' + filter_value + '" ')
+                    name_paginator = Paginator(name, 100)
+                    page_num = request.GET.get('page')
+                    page = name_paginator.get_page(page_num)
                     return render(request, 'main_lead_display.html',
                                   {'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
                                    'rescheduled': rescheduled, 'follow_up': 0, 'acknowledged': 0,
-                                   'pending_cancelled': 0})
+                                   'pending_cancelled': 0,'page':page})
                 elif filter_value == "cancelled":
                     name = models.Final.objects.raw(
                         'select * from accounts_final where (created between "' + startdate + '" and "' + todate + '") and status ="' + filter_value + '" ')
+                    name_paginator = Paginator(name, 100)
+                    page_num = request.GET.get('page')
+                    page = name_paginator.get_page(page_num)
                     return render(request, 'main_lead_display.html',
                                   {'name': name, "fresh": 0, "cancelled": cancelled, "closed": 0, "other": other,
-                                   'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0, 'pending_cancelled': 0})
+                                   'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0, 'pending_cancelled': 0,'page':page})
                 elif filter_value == "follow_up":
                     name = models.Final.objects.raw(
                         'select * from accounts_final where (created between "' + startdate + '" and "' + todate + '") and status ="' + filter_value + '" ')
+                    name_paginator = Paginator(name, 100)
+                    page_num = request.GET.get('page')
+                    page = name_paginator.get_page(page_num)
                     return render(request, 'main_lead_display.html',
-                                  {'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
+                                  {'page':page,'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
                                    'rescheduled': 0, 'follow_up': follow_up, 'acknowledged': 0, 'pending_cancelled': 0})
 
                 elif filter_value == "acknowledged":
                     name = models.Final.objects.raw(
                         'select * from accounts_final where (created between "' + startdate + '" and "' + todate + '") and status ="' + filter_value + '" ')
+                    name_paginator = Paginator(name, 100)
+                    page_num = request.GET.get('page')
+                    page = name_paginator.get_page(page_num)
                     return render(request, 'main_lead_display.html',
                                   {'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
                                    'rescheduled': 0, 'follow_up': 0, 'acknowledged': acknowledged,
-                                   'pending_cancelled': 0})
+                                   'pending_cancelled': 0,'page':page})
 
                 elif filter_value == "pending_cancelled":
                     name = models.Final.objects.raw(
                         'select * from accounts_final where (created between "' + startdate + '" and "' + todate + '") and status ="' + filter_value + '" ')
+                    name_paginator = Paginator(name, 100)
+                    page_num = request.GET.get('page')
+                    page = name_paginator.get_page(page_num)
                     return render(request, 'main_lead_display.html',
                                   {'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
                                    'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0,
-                                   'pending_cancelled': pending_cancelled})
+                                   'pending_cancelled': pending_cancelled,'page':page})
                 else:
                     name = models.Final.objects.raw(
                         'select * from accounts_final where created between "' + startdate + '" and "' + todate + '"')
+                    name_paginator = Paginator(name, 100)
+                    page_num = request.GET.get('page')
+                    page = name_paginator.get_page(page_num)
                     context = {'name': name, "fresh": fresh, "cancelled": cancelled, "closed": closed, "other": other,
                                'rescheduled': rescheduled, 'follow_up': follow_up, 'acknowledged': acknowledged,
-                               'pending_cancelled': pending_cancelled}
+                               'pending_cancelled': pending_cancelled,'page':page}
                     return render(request, 'main_lead_display.html', context)
             else:
                 if filter_value == "fresh":
                     name = models.Final.objects.raw(
                         'select * from accounts_final where (created between "' + startdate + '" and "' + todate + '") and status ="' + filter_value + '" and assigned_id="' + str(
                             user_id) + '" ')
+                    name_paginator = Paginator(name, 100)
+                    page_num = request.GET.get('page')
+                    page = name_paginator.get_page(page_num)
                     return render(request, 'main_lead_display.html',
                                   {'name': name, "fresh": fresh, "cancelled": 0, "closed": 0, "other": other,
-                                   'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0, 'pending_cancelled': 0})
+                                   'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0, 'pending_cancelled': 0,'page':page})
 
                 elif filter_value == "closed":
                     name = models.Final.objects.raw(
                         'select * from accounts_final where (created between "' + startdate + '" and "' + todate + '") and status ="' + filter_value + '" and assigned_id="' + str(
                             user_id) + '" ')
+                    name_paginator = Paginator(name, 100)
+                    page_num = request.GET.get('page')
+                    page = name_paginator.get_page(page_num)
                     return render(request, 'main_lead_display.html',
                                   {'name': name, "fresh": 0, "cancelled": 0, "closed": closed, "other": other,
-                                   'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0, 'pending_cancelled': 0})
+                                   'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0, 'pending_cancelled': 0,'page':page})
                 elif filter_value == "rescheduled":
                     name = models.Final.objects.raw(
                         'select * from accounts_final where (created between "' + startdate + '" and "' + todate + '") and status ="' + filter_value + '" and assigned_id="' + str(
                             user_id) + '" ')
+                    name_paginator = Paginator(name, 100)
+                    page_num = request.GET.get('page')
+                    page = name_paginator.get_page(page_num)
                     return render(request, 'main_lead_display.html',
                                   {'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
                                    'rescheduled': rescheduled, 'follow_up': 0, 'acknowledged': 0,
-                                   'pending_cancelled': 0})
+                                   'pending_cancelled': 0,'page':page})
                 elif filter_value == "cancelled":
                     name = models.Final.objects.raw(
                         'select * from accounts_final where (created between "' + startdate + '" and "' + todate + '") and status ="' + filter_value + '" and assigned_id="' + str(
                             user_id) + '" ')
+                    name_paginator = Paginator(name, 100)
+                    page_num = request.GET.get('page')
+                    page = name_paginator.get_page(page_num)
                     return render(request, 'main_lead_display.html',
                                   {'name': name, "fresh": 0, "cancelled": cancelled, "closed": 0, "other": other,
-                                   'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0, 'pending_cancelled': 0})
+                                   'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0, 'pending_cancelled': 0,
+                                   'page':page})
                 elif filter_value == "follow_up":
                     name = models.Final.objects.raw(
                         'select * from accounts_final where (created between "' + startdate + '" and "' + todate + '") and status ="' + filter_value + '" and assigned_id="' + str(
                             user_id) + '" ')
+                    name_paginator = Paginator(name, 100)
+                    page_num = request.GET.get('page')
+                    page = name_paginator.get_page(page_num)
                     return render(request, 'main_lead_display.html',
                                   {'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
-                                   'rescheduled': 0, 'follow_up': follow_up, 'acknowledged': 0, 'pending_cancelled': 0})
+                                   'rescheduled': 0, 'follow_up': follow_up, 'acknowledged': 0, 'pending_cancelled': 0,'page':page})
 
                 elif filter_value == "acknowledged":
                     name = models.Final.objects.raw(
                         'select * from accounts_final where (created between "' + startdate + '" and "' + todate + '") and status ="' + filter_value + '" and assigned_id="' + str(
                             user_id) + '" ')
+                    name_paginator = Paginator(name, 100)
+                    page_num = request.GET.get('page')
+                    page = name_paginator.get_page(page_num)
                     return render(request, 'main_lead_display.html',
                                   {'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
                                    'rescheduled': 0, 'follow_up': 0, 'acknowledged': acknowledged,
-                                   'pending_cancelled': 0})
+                                   'pending_cancelled': 0,'page':page})
 
                 elif filter_value == "pending_cancelled":
                     name = models.Final.objects.raw(
                         'select * from accounts_final where (created between "' + startdate + '" and "' + todate + '") and status ="' + filter_value + '" and assigned_id="' + str(
                             user_id) + '" ')
+                    name_paginator = Paginator(name, 100)
+                    page_num = request.GET.get('page')
+                    page = name_paginator.get_page(page_num)
                     return render(request, 'main_lead_display.html',
                                   {'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
                                    'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0,
-                                   'pending_cancelled': pending_cancelled})
+                                   'pending_cancelled': pending_cancelled,'page':page})
 
                 else:
                     name = models.Final.objects.all().filter(assigned=user)
+                    name_paginator = Paginator(name, 100)
+                    page_num = request.GET.get('page')
+                    page = name_paginator.get_page(page_num)
                     context = {'name': name, "fresh": fresh, "cancelled": cancelled, "closed": closed, "other": other,
                                'rescheduled': rescheduled, 'follow_up': follow_up, 'acknowledged': acknowledged,
-                               'pending_cancelled': pending_cancelled}
+                               'pending_cancelled': pending_cancelled,'page':page}
+
                     return render(request, 'main_lead_display.html', context)
 
         context = {'name': name, "fresh": fresh, "cancelled": cancelled, "closed": closed, "other": other, 'al': al,
                    'rescheduled': rescheduled, 'follow_up': follow_up, 'acknowledged': acknowledged,
-                   'pending_cancelled': pending_cancelled, 'unassigned': unassigned}
+                   'pending_cancelled': pending_cancelled, 'unassigned': unassigned,'page':page}
 
         return render(request, 'main_lead_display.html', context)
     else:

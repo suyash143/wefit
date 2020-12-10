@@ -554,7 +554,7 @@ document.getElementById("loginSubmit").click();
 </tr>
 </thead>
 <tbody>
-{%for object in name%}
+{%for object in page.object_list%}
 <tr>
 <td class="column1">{{object.created}}</td>
 
@@ -574,7 +574,14 @@ document.getElementById("loginSubmit").click();
 </tr>
 {%endfor%}
 </tbody>
+
 </table>
+    {% if page.has_previous %}
+      <a href="{%url 'all'%}?page={{page.previous_page_number}}">Previous Page</a>
+      {% endif %}
+      {% if page.has_next %}
+      <a href="{%url 'all'%}?page={{page.next_page_number}}">Next Page</a>
+      {% endif %}
 </div>
 </div>
 </div>
