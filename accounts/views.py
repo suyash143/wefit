@@ -88,13 +88,13 @@ def all(request):
 
         if request.user.is_staff:
 
-            name = models.Final.objects.all()
+            name = models.Final.objects.all().order_by('-created')
             name_paginator=Paginator(name,140)
             page_num=request.GET.get('page')
             page=name_paginator.get_page(page_num)
 
         else:
-            name = models.Final.objects.all().filter(assigned=user)
+            name = models.Final.objects.all().filter(assigned=user).order_by('-created')
             name_paginator = Paginator(name, 100)
             page_num = request.GET.get('page')
             page = name_paginator.get_page(page_num)
@@ -424,6 +424,8 @@ def report(request):
                'all_pending_cancelled': all_pending_cancelled, 'all_days7': all_days7, 'all_days3': all_days3,'all_unassigned':all_unassigned}
 
         names = User.objects.order_by('username').values('username').distinct()
+        print(names)
+
         report_name = []
         final = {}
         for item in names:
@@ -545,3 +547,18 @@ def export_csv(request):
     '''models.Final.objects.all().values_list('name','number','email','city','state','weight','height','bmi','gender','contact','type','created'
                      ,'rescheduled','comment','status','substatus','assigned')'''
     return response
+
+
+def dashboard(request):
+    today=datetime.date.today()
+    id=request.user.id
+    rescheduled_data = models.Final.objects.raw(
+        'select * from accounts_final where (rescheduled like "%' + str(today) + '%" ) and assigned_id ="' + str(id) + '" ')
+    tot=models.Final.objects.filter(assigned=request.user).count()
+    fresh = models.Final.objects.filter(assigned=request.user,status='fresh').count()
+    follow_up = models.Final.objects.filter(assigned=request.user, status='follow_up').count()
+
+    return render(request,'dashboard.html',{'rescheduled_data':rescheduled_data,'today':today,'tot':tot,'fresh':fresh,'follow_up':follow_up})
+
+def profile(request):
+    return render(request,'profile.html')

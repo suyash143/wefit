@@ -10,5 +10,7 @@ urlpatterns = [
 	path('all',views.all,name='all'),
 	path('edit_employee',views.edit_employee,name='edit_employee'),
 	path('report',views.report,name='Report'),
-	path('download',views.export_csv,name='csv')
+	path('download',views.export_csv,name='csv'),
+	path('dashboard',views.dashboard,name='dashboard'),
+	path('profile',views.profile,name='profile')
 ]
