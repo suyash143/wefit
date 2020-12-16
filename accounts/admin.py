@@ -15,4 +15,7 @@ class OrderAdmin(admin.ModelAdmin):
     def transfer_to_divyansh(self, request, queryset):
         all=queryset.values().all().update(assigned=User.objects.get(id=3))
     transfer_to_divyansh.short_description = 'Transfer to divyansh'
+    def transfer_to_aryan(self, request, queryset):
+        all=queryset.values().all().update(assigned=User.objects.get(id=5))
+    transfer_to_aryan.short_description = 'Transfer to aryan'
 admin.site.register(Final,OrderAdmin)

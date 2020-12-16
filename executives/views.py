@@ -34,10 +34,11 @@ def employee_add(request):
                 else:
                     user = User.objects.create_user(username=username,password=password1,email=email,first_name=first_name,last_name=last_name)
                     user.save()
+
                     count= 0
-                    all_users=User.objects.all()
-                    for users in all_users:
-                        count+=1
+                    all_users=User.objects.latest('pk')
+                    id = all_users.pk
+                    count=id
                     user_str=str(username)
                     count_str=str(count)
                     add_admin_use.user_adder(user_str)
@@ -74,4 +75,9 @@ def login(request):
 
 def logout(request):
     auth.logout(request)
+    latest = User.objects.latest('pk')
+    print(latest)
+    id=latest.pk
+    print(id)
     return redirect('login')
+
