@@ -357,13 +357,39 @@ def edit_employee(request):
         cancel_link = request.POST['cancel_link']
         comment = f'{name.comment},  {request.POST.get("comment", None)}'
         rescheduled = request.POST.get('rescheduled', None)
+        total= request.POST.get('total',None)
+        paid=request.POST.get('paid',None)
         updater.status = status
         updater.substatus = substatus
         updater.insta_user = cancel_link
         updater.comment = comment
         updater.rescheduled = rescheduled
 
+
+
         updater.save()
+        if updater.status=='closed':
+            updater.purchased=total
+            if updater.paid is None:
+                updater.paid=paid
+                updater.save()
+                assigned=updater.assigned.pk
+                target_updater=models.Info.objects.get(user_id=assigned)
+
+                target_updater.target_achieved=int(target_updater.target_achieved)+int(paid)
+                target_updater.save()
+            else:
+                previous_paid=updater.paid
+                updater.paid=paid
+                money_acquired=abs(int(paid)-int(previous_paid))
+                updater.save()
+                assigned=updater.assigned.pk
+                target_updater=models.Info.objects.get(user_id=assigned)
+                target_updater.target_achieved=int(target_updater.target_achieved)+int(money_acquired)
+                target_updater.save()
+
+
+
         return redirect('all')
     return render(request, 'edit_employee.html',
                   {'id': id, 'first_name': first_name, 'last_name': last_name, 'name': name,
@@ -557,8 +583,40 @@ def dashboard(request):
     tot=models.Final.objects.filter(assigned=request.user).count()
     fresh = models.Final.objects.filter(assigned=request.user,status='fresh').count()
     follow_up = models.Final.objects.filter(assigned=request.user, status='follow_up').count()
+    try:
+        remaining=abs(request.user.info.target-request.user.info.target_achieved)
+    except:
+        remaining = request.user.info.target
+    return render(request,'dashboard.html',{'remaining':remaining,'rescheduled_data':rescheduled_data,'today':today,'tot':tot,'fresh':fresh,'follow_up':follow_up})
 
-    return render(request,'dashboard.html',{'rescheduled_data':rescheduled_data,'today':today,'tot':tot,'fresh':fresh,'follow_up':follow_up})
 
 def profile(request):
     return render(request,'profile.html')
+
+
+def target(request):
+    users=User.objects.all()
+    if request.method == "POST" and 'id' in request.POST:
+        id = request.POST.get('id')
+        name = models.Final.objects.get(id=id)
+        if name.status == "fresh":
+            name.status = "acknowledged"
+            name.save()
+
+        request.session['user_id'] = id
+
+        return redirect('info_edit')
+    return render(request,'target.html',{'users':users})
+
+def info_edit(request):
+    pk = request.session.get('user_id')
+    users=User.objects.get(pk=pk)
+    if request.method=='POST':
+        target=request.POST.get('target')
+        mobile=request.POST.get('mobile')
+        start_date=request.POST.get('start_date')
+        end_date=request.POST.get('end_date')
+        users.info.target=target
+        users.info.mobile = mobile
+        users.save()
+    return render(request,'edit_info.html',{'users':users})

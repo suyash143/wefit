@@ -555,10 +555,10 @@ document.getElementById("loginSubmit").click();
 </thead>
 <tbody>
 {%for object in page.object_list%}
-<tr>
+<tr style="cursor:default;">
 <td class="column1">{{object.created}}</td>
 
-<td class="column5" style="text-align:center;"><form method="POST"> {% csrf_token %}<i class="bx bxs-user"><input type="submit" value="{{object.id}}" name="id" ></i></form></td>
+<td class="column5" style="text-align:center;cursor:pointer"><form method="POST"> {% csrf_token %}<i class="bx bxs-user"><input style="cursor:pointer" type="submit" value="{{object.id}}" name="id" ></i></form></td>
   <td class="column3">{{object.status}}</td>
   <td class="column3">{{object.substatus}}</td>
     <td class="column3">{{object.assigned}}</td>

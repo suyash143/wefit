@@ -147,15 +147,7 @@
                                 <span class="hide-menu">Table</span>
                             </a>
                         </li>
-                        {%if request.user.is_staff%}
-                        <li class="sidebar-item pt-2">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'target'%}"
-                                aria-expanded="false">
-                                <i class='bx bxs-layer'></i>
-                                <span class="hide-menu">Set Target</span>
-                            </a>
-                        </li>
-                        {%endif%}
+
                         <li class="text-center p-20 upgrade-btn">
                             <a href="{%url 'download'%}"
                                 class="btn btn-block btn-danger text-white" target="_blank">
@@ -201,78 +193,11 @@
             <!-- ============================================================== -->
             <!-- Container fluid  -->
             <!-- ============================================================== -->
-            <div class="container-fluid">
+
                 <!-- ============================================================== -->
                 <!-- Three charts -->
                 <!-- ============================================================== -->
-                <div class="row justify-content-center">
-                    <div class="col-lg-4 col-sm-6 col-xs-12">
-                        <div class="white-box analytics-info">
-                            <h3 class="box-title">Target </h3>
-                            <ul class="list-inline two-part d-flex align-items-center mb-0">
-                                <li>
-                                    <div id="sparklinedash"><canvas width="67" height="30"
-                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
-                                    </div>
-                                </li>
-                                <li class="ml-auto"><span class="counter text-success">{{request.user.info.target}}</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 col-xs-12">
-                        <div class="white-box analytics-info">
-                            <h3 class="box-title">Target Achieved</h3>
-                            <ul class="list-inline two-part d-flex align-items-center mb-0">
-                                <li>
-                                    <div id="sparklinedash2"><canvas width="67" height="30"
-                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
-                                    </div>
-                                </li>
-                                <li class="ml-auto"><span class="counter text-purple">{{request.user.info.target_achieved}}</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 col-xs-12">
-                        <div class="white-box analytics-info">
-                            <h3 class="box-title">Remaining</h3>
-                            <ul class="list-inline two-part d-flex align-items-center mb-0">
-                                <li>
-                                    <div id="sparklinedash3"><canvas width="67" height="30"
-                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
-                                    </div>
-                                </li>
 
-                                <li class="ml-auto"><span class="counter text-info">{{remaining}}</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- ============================================================== -->
-                <!-- PRODUCTS YEARLY SALES -->
-                <!-- ============================================================== -->
-                <div class="row">
-                    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                        <div class="white-box">
-                            <h3 class="box-title">Products Yearly Sales</h3>
-                            <div class="d-md-flex">
-                                <ul class="list-inline d-flex ml-auto">
-                                    <li class="pl-3">
-                                        <h5><i class="fa fa-circle m-r-5 text-info"></i>Mac</h5>
-                                    </li>
-                                    <li class="pl-3">
-                                        <h5><i class="fa fa-circle m-r-5 text-inverse"></i>Windows</h5>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div id="ct-visits" style="height: 405px;">
-                                <div class="chartist-tooltip" style="top: -17px; left: -12px;"><span
-                                        class="chartist-tooltip-value">6</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <!-- ============================================================== -->
                 <!-- RECENT SALES -->
                 <!-- ============================================================== -->
@@ -280,7 +205,7 @@
                     <div class="col-md-12 col-lg-12 col-sm-12">
                         <div class="white-box">
                             <div class="d-md-flex mb-3">
-                                <h3 class="box-title mb-0">Today's Follow-up</h3>
+                                <h3 class="box-title mb-0">Employee info Edit</h3>
                                 <div class="col-md-3 col-sm-4 col-xs-6 ml-auto">
                                     <select class="form-control row border-top">
                                         <option>{{today}}</option>
@@ -294,23 +219,23 @@
                                         <tr>
                                             <th class="border-top-0">#</th>
                                             <th class="border-top-0">NAME</th>
-                                            <th class="border-top-0">Created</th>
-                                            <th class="border-top-0">Rescheduled</th>
-                                            <th class="border-top-0">Mobile</th>
-                                            <th class="border-top-0">Comment</th>
+                                            <th class="border-top-0">Mobile No.</th>
+                                            <th class="border-top-0">Target</th>
+                                            <th class="border-top-0">Target Achieved</th>
+                                            <th class="border-top-0">Target left</th>
 
                                         </tr>
 
                                     </thead>
                                     <tbody>
 
-                                    {%for obj in rescheduled_data%}
+                                    {%for obj in users%}
                                         <tr>
-                                            <td>{{obj.id}}</td>
-                                            <td class="txt-oflo">{{obj.name}}</td>
-                                            <td>{{obj.created}}</td>
-                                            <td class="txt-oflo">{{obj.rescheduled}}</td>
-                                            <td><span class="text-success">{{obj.number}}</span></td>
+                                            <td><form method="POST">{%csrf_token%} <input type="submit" value="{{obj.pk}}" name="id"></form></td>
+                                            <td class="txt-oflo">{{obj.username}}</td>
+                                            <td>{{obj.info.mobile}}</td>
+                                            <td class="txt-oflo">{{obj.info.target}}</td>
+                                            <td><span class="text-success">{{obj.info.target_achieved}}</span></td>
                                             <td class="txt-oflo">{{obj.contact}}</td>
                                         </tr>
                                     {%endfor%}
@@ -321,54 +246,6 @@
                         </div>
                     </div>
                 </div>
-                    <div class="container-fluid">
-                <!-- ============================================================== -->
-                <!-- Three charts -->
-                <!-- ============================================================== -->
-                <div class="row justify-content-center">
-                    <div class="col-lg-4 col-sm-6 col-xs-12">
-                        <div class="white-box analytics-info">
-                            <h3 class="box-title">Total Assigned Lead</h3>
-                            <ul class="list-inline two-part d-flex align-items-center mb-0">
-                                <li>
-                                    <div id="sparklinedash"><canvas width="67" height="30"
-                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
-                                    </div>
-                                </li>
-                                <li class="ml-auto"><span class="counter text-success">{{tot}}</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 col-xs-12">
-                        <div class="white-box analytics-info">
-                            <h3 class="box-title">Total Fresh</h3>
-                            <ul class="list-inline two-part d-flex align-items-center mb-0">
-                                <li>
-                                    <div id="sparklinedash2"><canvas width="67" height="30"
-                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
-                                    </div>
-                                </li>
-                                <li class="ml-auto"><span class="counter text-purple">{{fresh}}</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 col-xs-12">
-                        <div class="white-box analytics-info">
-                            <h3 class="box-title">Total Follow Up</h3>
-                            <ul class="list-inline two-part d-flex align-items-center mb-0">
-                                <li>
-                                    <div id="sparklinedash3"><canvas width="67" height="30"
-                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
-                                    </div>
-                                </li>
-                                <li class="ml-auto"><span class="counter text-info">{{follow_up}}</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-
                 <!-- ============================================================== -->
                 <!-- Recent Comments -->
                 <!-- ============================================================== -->

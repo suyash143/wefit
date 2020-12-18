@@ -4,7 +4,7 @@ from. models import *
 from. import add_admin_use
 
 
-
+admin.site.register(Info)
 
 
 class OrderAdmin(admin.ModelAdmin):
