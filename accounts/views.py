@@ -7,6 +7,8 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 import os
 import pytz
+from celery.schedules import crontab
+from celery.task import periodic_task
 from datetime import date
 from django.utils import timezone
 from django.db import connection
@@ -357,8 +359,8 @@ def edit_employee(request):
         cancel_link = request.POST['cancel_link']
         comment = f'{name.comment},  {request.POST.get("comment", None)}'
         rescheduled = request.POST.get('rescheduled', None)
-        total= request.POST.get('total',None)
-        paid=request.POST.get('paid',None)
+        total= request.POST.get('total',0)
+        paid=request.POST.get('paid',0)
         updater.status = status
         updater.substatus = substatus
         updater.insta_user = cancel_link
@@ -449,7 +451,7 @@ def report(request):
                'all_rescheduled': all_rescheduled, 'all_follow_up': all_follow_up, 'all_acknowledged': all_acknowledged,
                'all_pending_cancelled': all_pending_cancelled, 'all_days7': all_days7, 'all_days3': all_days3,'all_unassigned':all_unassigned}
 
-        names = User.objects.order_by('username').values('username').distinct()
+        names = User.objects.filter(is_staff=0).order_by('username').values('username').distinct()
         print(names)
 
         report_name = []
@@ -576,26 +578,28 @@ def export_csv(request):
 
 
 def dashboard(request):
-    today=datetime.date.today()
-    id=request.user.id
-    rescheduled_data = models.Final.objects.raw(
-        'select * from accounts_final where (rescheduled like "%' + str(today) + '%" ) and assigned_id ="' + str(id) + '" ')
-    tot=models.Final.objects.filter(assigned=request.user).count()
-    fresh = models.Final.objects.filter(assigned=request.user,status='fresh').count()
-    follow_up = models.Final.objects.filter(assigned=request.user, status='follow_up').count()
-    try:
-        remaining=abs(request.user.info.target-request.user.info.target_achieved)
-    except:
-        remaining = request.user.info.target
-    return render(request,'dashboard.html',{'remaining':remaining,'rescheduled_data':rescheduled_data,'today':today,'tot':tot,'fresh':fresh,'follow_up':follow_up})
-
+    if request.user.is_authenticated:
+        today=datetime.date.today()
+        id=request.user.id
+        rescheduled_data = models.Final.objects.raw(
+            'select * from accounts_final where (rescheduled like "%' + str(today) + '%" ) and assigned_id ="' + str(id) + '" ')
+        tot=models.Final.objects.filter(assigned=request.user).count()
+        fresh = models.Final.objects.filter(assigned=request.user,status='fresh').count()
+        follow_up = models.Final.objects.filter(assigned=request.user, status='follow_up').count()
+        try:
+            remaining=abs(request.user.info.target-request.user.info.target_achieved)
+        except:
+            remaining = request.user.info.target
+        return render(request,'dashboard.html',{'remaining':remaining,'rescheduled_data':rescheduled_data,'today':today,'tot':tot,'fresh':fresh,'follow_up':follow_up})
+    else:
+        return HttpResponse('Please Log In to View Your Data')
 
 def profile(request):
     return render(request,'profile.html')
 
 
 def target(request):
-    users=User.objects.all()
+    users=User.objects.all().filter(is_staff=0)
     if request.method == "POST" and 'id' in request.POST:
         id = request.POST.get('id')
         name = models.Final.objects.get(id=id)
@@ -620,3 +624,34 @@ def info_edit(request):
         users.info.mobile = mobile
         users.save()
     return render(request,'edit_info.html',{'users':users})
+
+
+
+
+def target_reset(request):
+    first=User.objects.filter(is_staff=0)[0]
+    start_date=first.info.date_start
+    end_date = first.info.date_end
+    today=datetime.date.today()
+    next_monday=today-datetime.timedelta(days=today.weekday())
+    next_6=next_monday+datetime.timedelta(days=6)
+    target_saver=User.objects.filter(is_staff=0)
+    for item in target_saver:
+        id=item.pk
+        target=item.info.target
+        achieved=item.info.target_achieved
+
+        mod, created = models.Record.objects.get_or_create(start_date=start_date,end_date=end_date,target=target,achieved=achieved,user_id=id)
+        mod.save()
+        changer=item.info
+        changer.target=target
+        changer.target_achieved=0
+        changer.date_start=next_monday
+        changer.date_end=next_6
+        changer.save()
+
+
+    return HttpResponse("reset Successful")
+
+
+

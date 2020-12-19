@@ -5,6 +5,7 @@ from. import add_admin_use
 
 
 admin.site.register(Info)
+admin.site.register(Record)
 
 
 class OrderAdmin(admin.ModelAdmin):
@@ -18,4 +19,13 @@ class OrderAdmin(admin.ModelAdmin):
     def transfer_to_aryan(self, request, queryset):
         all=queryset.values().all().update(assigned=User.objects.get(id=5))
     transfer_to_aryan.short_description = 'Transfer to aryan'
+    def transfer_to_yash(self, request, queryset):
+        all=queryset.values().all().update(assigned=User.objects.get(id=8))
+    transfer_to_yash.short_description = 'Transfer to yash'
+    def transfer_to_atharva(self, request, queryset):
+        all=queryset.values().all().update(assigned=User.objects.get(id=9))
+    transfer_to_atharva.short_description = 'Transfer to atharva'
+    def transfer_to_pp(self, request, queryset):
+        all=queryset.values().all().update(assigned=User.objects.get(id=10))
+    transfer_to_pp.short_description = 'Transfer to pp'
 admin.site.register(Final,OrderAdmin)

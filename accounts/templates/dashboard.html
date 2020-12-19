@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 {% load static %}
 <html dir="ltr" lang="en">
-
+{%if user.is_authenticated%}
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -413,6 +413,9 @@
     <script src="https://www.creativefuel.io/dashboard/plugins/bower_components/chartist/dist/chartist.min.js"></script>
     <script src="https://www.creativefuel.io/dashboard/plugins/bower_components/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
     <script src="https://www.creativefuel.io/dashboard/js/pages/dashboards/dashboard1.js"></script>
+{%else%}
+            Please Log In to view Your Data
+            {%endif%}
 </body>
 
 </html>

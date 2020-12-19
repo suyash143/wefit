@@ -4,6 +4,7 @@ from django.utils import timezone
 from django import forms
 from django.db.models.signals import post_save,post_delete
 from django.dispatch import receiver
+import datetime
 
 class AllLead(models.Model):
 
@@ -68,8 +69,8 @@ class Final(models.Model):
     status = models.CharField(max_length=300, null=True)
     substatus = models.CharField(max_length=300, null=True)
     assigned = models.ForeignKey(User,on_delete=models.SET_NULL, null=True)
-    purchased = models.IntegerField(null=True, blank=True)
-    paid = models.IntegerField(null=True, blank=True)
+    purchased = models.IntegerField(null=True, blank=True,default=0)
+    paid = models.IntegerField(null=True, blank=True,default=0)
 
 class Info(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE)
@@ -79,8 +80,8 @@ class Info(models.Model):
     birthdate=models.DateField(null=True, blank=True)
     profile=models.CharField(max_length=400,null=True,blank=True)
     target_achieved=models.IntegerField(null=True,blank=True,default=0)
-    date_start=models.DateField(null=True, blank=True)
-    date_end=models.DateField(null=True, blank=True)
+    date_start=models.DateField(null=True, blank=True,default=datetime.date.today()- datetime.timedelta(days=datetime.date.today().weekday()))
+    date_end=models.DateField(null=True, blank=True,default=datetime.date.today()-datetime.timedelta(days=datetime.date.today().weekday())+datetime.timedelta(days=6))
 
 
 @receiver(post_save, sender=User)
@@ -98,4 +99,10 @@ def post_delete_user(sender, instance, *args, **kwargs):
         instance.user.delete()
 
 
+class Record(models.Model):
+    user=models.ForeignKey(User,on_delete=models.SET_NULL, null=True)
+    start_date=models.DateField(null=True, blank=True)
+    end_date=models.DateField(null=True,blank=True)
+    target=models.IntegerField(null=True,blank=True)
+    achieved=models.IntegerField(null=True,blank=True)
 
