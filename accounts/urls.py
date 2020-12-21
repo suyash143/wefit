@@ -15,5 +15,5 @@ urlpatterns = [
 	path('profile',views.profile,name='profile'),
 	path('target',views.target,name='target'),
 	path('info_edit',views.info_edit,name='info_edit'),
-	path('target_reset',views.target_reset,name='target_reset')
+	path('target_reset',views.target_reset,name='target_reset'),
 ]

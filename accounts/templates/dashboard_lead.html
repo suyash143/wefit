@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 {% load static %}
 <html dir="ltr" lang="en">
-{%if user.is_authenticated%}
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -23,6 +23,36 @@
     <!-- Custom CSS -->
     <link href="https://www.creativefuel.io/dashboard/css/style.min.css " rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+
+  <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          ['Fresh ({{fresh}})',     {{fresh}}],
+          ['Cancelled ({{cancelled}})',      {{cancelled}}],
+          ['Closed ({{closed}})',  {{closed}}],
+          ['Rescheduled ({{rescheduled}})',  {{rescheduled}}],
+          ['Follow Up ({{follow_up}})',  {{follow_up}}],
+          ['Correct Option ({{other}})', {{other}}],
+          ['Pending To be Cancelled {{pending_cancelled}}', {{pending_cancelled}}],
+          ['Acknowledged ({{acknowledged}})', {{acknowledged}}],
+
+
+        ]);
+
+        var options = {
+          title: 'My Daily Activities',
+          pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+        chart.draw(data, options);
+      }
+    </script>
 </head>
 
 <body>
@@ -147,15 +177,7 @@
                                 <span class="hide-menu">Table</span>
                             </a>
                         </li>
-                        {%if request.user.is_staff%}
-                        <li class="sidebar-item pt-2">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'target'%}"
-                                aria-expanded="false">
-                                <i class='bx bxs-layer'></i>
-                                <span class="hide-menu">Set Target</span>
-                            </a>
-                        </li>
-                        {%endif%}
+
                         <li class="text-center p-20 upgrade-btn">
                             <a href="{%url 'download'%}"
                                 class="btn btn-block btn-danger text-white" target="_blank">
@@ -188,9 +210,12 @@
                             <ol class="breadcrumb ml-auto">
                                 <li><a href="#">Dashboard</a></li>
                             </ol>
-                            <a href="{%url 'logout'%}" target="_blank"
-                                class="btn btn-danger  d-none d-md-block pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Logout </a>
+                            {%if request.user.is_staff%}
+                            <a href="{%url 'target_reset'%}" target="_blank"
+                                class="btn btn-danger  d-none d-md-block pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Reset Target</a>
+                            {%endif%}
                         </div>
+
                     </div>
                 </div>
                 <!-- /.col-lg-12 -->
@@ -201,103 +226,142 @@
             <!-- ============================================================== -->
             <!-- Container fluid  -->
             <!-- ============================================================== -->
-            <div class="container-fluid">
+
                 <!-- ============================================================== -->
                 <!-- Three charts -->
                 <!-- ============================================================== -->
-                <div class="row justify-content-center">
-                    <div class="col-lg-4 col-sm-6 col-xs-12">
-                        <div class="white-box analytics-info">
-                            <h3 class="box-title">Target </h3>
-                            <ul class="list-inline two-part d-flex align-items-center mb-0">
-                                <li>
-                                    <div id="sparklinedash"><canvas width="67" height="30"
-                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
-                                    </div>
-                                </li>
-                                <li class="ml-auto"><span class="counter text-success">{{request.user.info.target}}</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 col-xs-12">
-                        <div class="white-box analytics-info">
-                            <h3 class="box-title">Target Achieved</h3>
-                            <ul class="list-inline two-part d-flex align-items-center mb-0">
-                                <li>
-                                    <div id="sparklinedash2"><canvas width="67" height="30"
-                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
-                                    </div>
-                                </li>
-                                <li class="ml-auto"><span class="counter text-purple">{{request.user.info.target_achieved}}({{percent|floatformat:2}}%)</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 col-xs-12">
-                        <div class="white-box analytics-info">
-                            <h3 class="box-title">Remaining</h3>
-                            <ul class="list-inline two-part d-flex align-items-center mb-0">
-                                <li>
-                                    <div id="sparklinedash3"><canvas width="67" height="30"
-                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
-                                    </div>
-                                </li>
 
-                                <li class="ml-auto"><span class="counter text-info">{{remaining}}</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- ============================================================== -->
-                <!-- PRODUCTS YEARLY SALES -->
-                <!-- ============================================================== -->
-                <div class="row">
-
-                    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-                    <script>
-                        google.charts.load('current', {packages: ['corechart', 'bar']});
-google.charts.setOnLoadCallback(drawBarColors);
-
-function drawBarColors() {
-      var data = google.visualization.arrayToDataTable([
-        ['Name', 'Target', 'Achieved'],
-        {%for item in names%}
-        ['{{item.username}}', {{item.info.target}},{{item.info.target_achieved}}],
-        {%endfor%}
-      ]);
-
-      var options = {
-        title: 'Target and Achievement Comparison',
-        chartArea: {width: '50%'},
-        colors: ['#b0120a', '#ffab91'],
-        displayExactValues: true,
-            'showRowNumber': false,
-             'allowHtml': true,
-             is3D: true,
-        hAxis: {
-          title: 'Money',
-          minValue: 0
-        },
-        vAxis: {
-          title: 'Users'
-        }
-      };
-      var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
-      chart.draw(data, options);
-    }
-                    </script>
-                    <div class="white-box" style="padding-left:25%;padding-right:35%">
-                        <div id="chart_div"></div></div>
-                </div>
                 <!-- ============================================================== -->
                 <!-- RECENT SALES -->
                 <!-- ============================================================== -->
+            <div class="row"><div id="donutchart" style="width:95%;height:400px ;border-style: solid;"></div></div>
+            <form method="POST" id="filter">
+    {% csrf_token%}
+    <center>
+  <select name="filter_value"  style="padding:10px;" id="filter_value"  >
+                        <option value="all" disabled selected>Please Select Option</option>
+                        <option value="fresh">Fresh</option>
+                        <option value="closed">Closed</option>
+                        <option value="cancelled">Cancelled </option>
+                        <option value="rescheduled">Reschedule </option>
+                        <option value="follow_up">Follow up</option>
+                        <option value="acknowledged">Acknowledged</option>
+                        <option value="pending_cancelled">Pending To be Cancelled</option>
+
+                    </select>
+        <input type="date" name="startdate" id="startdate" class="button-click-a">
+    <input type="date" name="todate" id="todate" class="button-click-a">
+        <button class="button-click" type="button" form="filter_value" onclick=
+          '{
+  var myDate = new Date();
+
+var year = myDate.getFullYear();
+
+var month = myDate.getMonth() + 1;
+if(month <= 9)
+    month = "0"+month;
+
+var day= myDate.getDate();
+if(day<6){
+    month=month-1;
+    day = day+24;}
+else if(day<=9)
+    {day="0"+day;
+    if (day<=9)
+    {day=day-6;
+    day="0"+day;}
+
+    }
+else if (day<=15)
+{day=day-6;
+day="0"+day;}
+else
+{day=day-6;}
+
+
+var curDate = new Date();
+
+var curyear = curDate.getFullYear();
+
+var curmonth = curDate.getMonth() + 1;
+if(curmonth <= 9)
+    curmonth = "0"+curmonth;
+
+var curday= curDate.getDate()+1;
+if(curday <= 9)
+    curday = "0"+curday;
+
+var ptyDate = year +"-"+ month +"-"+ day;
+var pDate = curyear +"-"+ curmonth +"-"+ curday;
+
+var prettyDate = year +"-"+ month +"-"+ day;
+document.getElementById("startdate").defaultValue =ptyDate
+document.getElementById("todate").defaultValue =pDate;
+document.getElementById("loginSubmit").click();
+}'
+  >Previous 7 Day</button>
+
+
+
+  <button class="button-click" type="button" form="filter_value" onclick=
+          '{
+var curDate = new Date();
+
+var curyear = curDate.getFullYear();
+
+var curmonth = curDate.getMonth() + 1;
+if(curmonth <= 9)
+    curmonth = "0"+curmonth;
+
+var curday= curDate.getDate()+1;
+if(curday <= 9)
+    curday = "0"+curday;
+
+var pDate = curyear +"-"+ curmonth +"-"+ curday;
+
+
+document.getElementById("startdate").defaultValue =new Date().toISOString().slice(0, 10)
+document.getElementById("todate").defaultValue =pDate;
+document.getElementById("loginSubmit").click();
+}'
+  >today Day</button>
+
+
+
+
+  <button class="button-click" type="button" form="filter_value"
+          onclick='{
+var curDate = new Date();
+
+var curyear = curDate.getFullYear();
+
+var curmonth = curDate.getMonth() + 1;
+if(curmonth <= 9)
+    curmonth = "0"+curmonth;
+
+var curday= curDate.getDate()+1;
+if(curday <= 9)
+    curday = "0"+curday;
+
+var pDate = curyear +"-"+ curmonth +"-"+ curday;
+
+
+document.getElementById("startdate").defaultValue ="2010-01-01"
+document.getElementById("todate").defaultValue =pDate;
+document.getElementById("loginSubmit").click();
+}'
+  >All Leads</button>
+
+
+  <input type="submit" name="filter" id="loginSubmit" class="button-click" style="background-color: #ff0000;">
+</center>
+</form>
                 <div class="row">
                     <div class="col-md-12 col-lg-12 col-sm-12">
                         <div class="white-box">
                             <div class="d-md-flex mb-3">
-                                <h3 class="box-title mb-0">Today's Follow-up</h3>
-                                <div class="col-md-3 col-sm-4 col-xs-6 ml-auto">
+                                <h3 class="box-title mb-0">Employee info Edit</h3>
+                                <div class="col-md-9 col-sm-15 col-xs-24 ml-auto">
                                     <select class="form-control row border-top">
                                         <option>{{today}}</option>
 
@@ -309,10 +373,14 @@ function drawBarColors() {
                                     <thead>
                                         <tr>
                                             <th class="border-top-0">#</th>
-                                            <th class="border-top-0">NAME</th>
                                             <th class="border-top-0">Created</th>
+                                            <th class="border-top-0">Name</th>
+                                            <th class="border-top-0">Assigened</th>
+                                            <th class="border-top-0">Status</th>
+                                            <th class="border-top-0">Substatus</th>
+                                            <th class="border-top-0">Number</th>
+                                            <th class="border-top-0">Contact</th>
                                             <th class="border-top-0">Rescheduled</th>
-                                            <th class="border-top-0">Mobile</th>
                                             <th class="border-top-0">Comment</th>
 
                                         </tr>
@@ -320,71 +388,47 @@ function drawBarColors() {
                                     </thead>
                                     <tbody>
 
-                                    {%for obj in rescheduled_data%}
+                                    {%for obj in page.object_list%}
                                         <tr>
-                                            <td>{{obj.id}}</td>
+                                            <td><form method="POST">{%csrf_token%} <input type="submit" value="{{obj.pk}}" name="id"></form></td>
+                                            <td >{{obj.created}}</td>
                                             <td class="txt-oflo">{{obj.name}}</td>
-                                            <td>{{obj.created}}</td>
-                                            <td class="txt-oflo">{{obj.rescheduled}}</td>
-                                            <td><span class="text-success">{{obj.number}}</span></td>
+                                            <td class="txt-oflo">{{obj.assigned}}</td>
+                                            <td class="txt-oflo">{{obj.status}}</td>
+                                            <td class="txt-oflo">{{obj.substatus}}</td>
+                                            <td>{{obj.number}}</td>
+
                                             <td class="txt-oflo">{{obj.contact}}</td>
+                                            <td class="txt-oflo">{{obj.rescheduled}}</td>
+                                            <td class="txt-oflo">{{obj.comment}}</td>
                                         </tr>
                                     {%endfor%}
 
+
                                     </tbody>
+
                                 </table>
+                                <center>
+
+                    {% for num in page.paginator.page_range %}
+                  {% ifequal num page.number %}
+                    <span class="current"><b>{{ num }}</b></span>
+                  {% else %}
+                    <a href="?page={{ num }}"> {{ num }}</a>
+                  {% endifequal %}
+                {% endfor %}
+        {% if page.has_previous %}
+      <a href="{%url 'all'%}?page={{page.previous_page_number}}">Previous Page</a>
+
+      {% endif %}
+      {% if page.has_next %}
+
+      <a href="{%url 'all'%}?page={{page.next_page_number}}">Next Page</a>
+      {% endif %}</center>
                             </div>
                         </div>
                     </div>
                 </div>
-                    <div class="container-fluid">
-                <!-- ============================================================== -->
-                <!-- Three charts -->
-                <!-- ============================================================== -->
-                <div class="row justify-content-center">
-                    <div class="col-lg-4 col-sm-6 col-xs-12">
-                        <div class="white-box analytics-info">
-                            <h3 class="box-title">Total Assigned Lead</h3>
-                            <ul class="list-inline two-part d-flex align-items-center mb-0">
-                                <li>
-                                    <div id="sparklinedash"><canvas width="67" height="30"
-                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
-                                    </div>
-                                </li>
-                                <li class="ml-auto"><span class="counter text-success">{{tot}}</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 col-xs-12">
-                        <div class="white-box analytics-info">
-                            <h3 class="box-title">Total Fresh</h3>
-                            <ul class="list-inline two-part d-flex align-items-center mb-0">
-                                <li>
-                                    <div id="sparklinedash2"><canvas width="67" height="30"
-                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
-                                    </div>
-                                </li>
-                                <li class="ml-auto"><span class="counter text-purple">{{fresh}}</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 col-xs-12">
-                        <div class="white-box analytics-info">
-                            <h3 class="box-title">Total Follow Up</h3>
-                            <ul class="list-inline two-part d-flex align-items-center mb-0">
-                                <li>
-                                    <div id="sparklinedash3"><canvas width="67" height="30"
-                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
-                                    </div>
-                                </li>
-                                <li class="ml-auto"><span class="counter text-info">{{follow_up}}</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-
                 <!-- ============================================================== -->
                 <!-- Recent Comments -->
                 <!-- ============================================================== -->
@@ -429,9 +473,6 @@ function drawBarColors() {
     <script src="https://www.creativefuel.io/dashboard/plugins/bower_components/chartist/dist/chartist.min.js"></script>
     <script src="https://www.creativefuel.io/dashboard/plugins/bower_components/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
     <script src="https://www.creativefuel.io/dashboard/js/pages/dashboards/dashboard1.js"></script>
-{%else%}
-            Please Log In to view Your Data
-            {%endif%}
 </body>
 
 </html>

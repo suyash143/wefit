@@ -7,14 +7,16 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 import os
 import pytz
-from celery.schedules import crontab
-from celery.task import periodic_task
+
 from datetime import date
 from django.utils import timezone
 from django.db import connection
 import datetime
 from . import utils
 from django.core.paginator import Paginator
+from django.core.mail import send_mail
+
+
 
 
 BASE = os.path.dirname(os.path.abspath(__file__))
@@ -91,13 +93,13 @@ def all(request):
         if request.user.is_staff:
 
             name = models.Final.objects.all().order_by('-created')
-            name_paginator=Paginator(name,140)
+            name_paginator=Paginator(name,130)
             page_num=request.GET.get('page')
             page=name_paginator.get_page(page_num)
 
         else:
             name = models.Final.objects.all().filter(assigned=user).order_by('-created')
-            name_paginator = Paginator(name, 100)
+            name_paginator = Paginator(name, 130)
             page_num = request.GET.get('page')
             page = name_paginator.get_page(page_num)
 
@@ -149,7 +151,7 @@ def all(request):
                     page_num = request.GET.get('page')
                     page = name_paginator.get_page(page_num)
 
-                    return render(request, 'main_lead_display.html',
+                    return render(request, 'dashboard_lead.html',
                                   {'name': name, "fresh": fresh, "cancelled": 0, "closed": 0, "other": other,
                                    'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0, 'pending_cancelled': 0,'page':page})
 
@@ -159,7 +161,7 @@ def all(request):
                     name_paginator = Paginator(name, 100)
                     page_num = request.GET.get('page')
                     page = name_paginator.get_page(page_num)
-                    return render(request, 'main_lead_display.html',
+                    return render(request, 'dashboard_lead.html',
                                   {'name': name, "fresh": 0, "cancelled": 0, "closed": closed, "other": other,
                                    'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0, 'pending_cancelled': 0,'page':page})
                 elif filter_value == "rescheduled":
@@ -168,7 +170,7 @@ def all(request):
                     name_paginator = Paginator(name, 100)
                     page_num = request.GET.get('page')
                     page = name_paginator.get_page(page_num)
-                    return render(request, 'main_lead_display.html',
+                    return render(request, 'dashboard_lead.html',
                                   {'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
                                    'rescheduled': rescheduled, 'follow_up': 0, 'acknowledged': 0,
                                    'pending_cancelled': 0,'page':page})
@@ -178,7 +180,7 @@ def all(request):
                     name_paginator = Paginator(name, 100)
                     page_num = request.GET.get('page')
                     page = name_paginator.get_page(page_num)
-                    return render(request, 'main_lead_display.html',
+                    return render(request, 'dashboard_lead.html',
                                   {'name': name, "fresh": 0, "cancelled": cancelled, "closed": 0, "other": other,
                                    'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0, 'pending_cancelled': 0,'page':page})
                 elif filter_value == "follow_up":
@@ -187,7 +189,7 @@ def all(request):
                     name_paginator = Paginator(name, 100)
                     page_num = request.GET.get('page')
                     page = name_paginator.get_page(page_num)
-                    return render(request, 'main_lead_display.html',
+                    return render(request, 'dashboard_lead.html',
                                   {'page':page,'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
                                    'rescheduled': 0, 'follow_up': follow_up, 'acknowledged': 0, 'pending_cancelled': 0})
 
@@ -197,7 +199,7 @@ def all(request):
                     name_paginator = Paginator(name, 100)
                     page_num = request.GET.get('page')
                     page = name_paginator.get_page(page_num)
-                    return render(request, 'main_lead_display.html',
+                    return render(request, 'dashboard_lead.html',
                                   {'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
                                    'rescheduled': 0, 'follow_up': 0, 'acknowledged': acknowledged,
                                    'pending_cancelled': 0,'page':page})
@@ -208,7 +210,7 @@ def all(request):
                     name_paginator = Paginator(name, 100)
                     page_num = request.GET.get('page')
                     page = name_paginator.get_page(page_num)
-                    return render(request, 'main_lead_display.html',
+                    return render(request, 'dashboard_lead.html',
                                   {'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
                                    'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0,
                                    'pending_cancelled': pending_cancelled,'page':page})
@@ -221,7 +223,7 @@ def all(request):
                     context = {'name': name, "fresh": fresh, "cancelled": cancelled, "closed": closed, "other": other,
                                'rescheduled': rescheduled, 'follow_up': follow_up, 'acknowledged': acknowledged,
                                'pending_cancelled': pending_cancelled,'page':page}
-                    return render(request, 'main_lead_display.html', context)
+                    return render(request, 'dashboard_lead.html', context)
             else:
                 if filter_value == "fresh":
                     name = models.Final.objects.raw(
@@ -230,7 +232,7 @@ def all(request):
                     name_paginator = Paginator(name, 100)
                     page_num = request.GET.get('page')
                     page = name_paginator.get_page(page_num)
-                    return render(request, 'main_lead_display.html',
+                    return render(request, 'dashboard_lead.html',
                                   {'name': name, "fresh": fresh, "cancelled": 0, "closed": 0, "other": other,
                                    'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0, 'pending_cancelled': 0,'page':page})
 
@@ -241,7 +243,7 @@ def all(request):
                     name_paginator = Paginator(name, 100)
                     page_num = request.GET.get('page')
                     page = name_paginator.get_page(page_num)
-                    return render(request, 'main_lead_display.html',
+                    return render(request, 'dashboard_lead.html',
                                   {'name': name, "fresh": 0, "cancelled": 0, "closed": closed, "other": other,
                                    'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0, 'pending_cancelled': 0,'page':page})
                 elif filter_value == "rescheduled":
@@ -251,7 +253,7 @@ def all(request):
                     name_paginator = Paginator(name, 100)
                     page_num = request.GET.get('page')
                     page = name_paginator.get_page(page_num)
-                    return render(request, 'main_lead_display.html',
+                    return render(request, 'dashboard_lead.html',
                                   {'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
                                    'rescheduled': rescheduled, 'follow_up': 0, 'acknowledged': 0,
                                    'pending_cancelled': 0,'page':page})
@@ -262,7 +264,7 @@ def all(request):
                     name_paginator = Paginator(name, 100)
                     page_num = request.GET.get('page')
                     page = name_paginator.get_page(page_num)
-                    return render(request, 'main_lead_display.html',
+                    return render(request, 'dashboard_lead.html',
                                   {'name': name, "fresh": 0, "cancelled": cancelled, "closed": 0, "other": other,
                                    'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0, 'pending_cancelled': 0,
                                    'page':page})
@@ -273,7 +275,7 @@ def all(request):
                     name_paginator = Paginator(name, 100)
                     page_num = request.GET.get('page')
                     page = name_paginator.get_page(page_num)
-                    return render(request, 'main_lead_display.html',
+                    return render(request, 'dashboard_lead.html',
                                   {'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
                                    'rescheduled': 0, 'follow_up': follow_up, 'acknowledged': 0, 'pending_cancelled': 0,'page':page})
 
@@ -284,7 +286,7 @@ def all(request):
                     name_paginator = Paginator(name, 100)
                     page_num = request.GET.get('page')
                     page = name_paginator.get_page(page_num)
-                    return render(request, 'main_lead_display.html',
+                    return render(request, 'dashboard_lead.html',
                                   {'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
                                    'rescheduled': 0, 'follow_up': 0, 'acknowledged': acknowledged,
                                    'pending_cancelled': 0,'page':page})
@@ -296,7 +298,7 @@ def all(request):
                     name_paginator = Paginator(name, 100)
                     page_num = request.GET.get('page')
                     page = name_paginator.get_page(page_num)
-                    return render(request, 'main_lead_display.html',
+                    return render(request, 'dashboard_lead.html',
                                   {'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
                                    'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0,
                                    'pending_cancelled': pending_cancelled,'page':page})
@@ -310,13 +312,13 @@ def all(request):
                                'rescheduled': rescheduled, 'follow_up': follow_up, 'acknowledged': acknowledged,
                                'pending_cancelled': pending_cancelled,'page':page}
 
-                    return render(request, 'main_lead_display.html', context)
+                    return render(request, 'dashboard_lead.html', context)
 
         context = {'name': name, "fresh": fresh, "cancelled": cancelled, "closed": closed, "other": other, 'al': al,
                    'rescheduled': rescheduled, 'follow_up': follow_up, 'acknowledged': acknowledged,
                    'pending_cancelled': pending_cancelled, 'unassigned': unassigned,'page':page}
 
-        return render(request, 'main_lead_display.html', context)
+        return render(request, 'dashboard_lead.html', context)
     else:
         return HttpResponse('<h1>Forbidden</h1><h2>Please Log in to view your data</h2>')
 
@@ -393,7 +395,7 @@ def edit_employee(request):
 
 
         return redirect('all')
-    return render(request, 'edit_employee.html',
+    return render(request, 'dashboard_edit_employee.html',
                   {'id': id, 'first_name': first_name, 'last_name': last_name, 'name': name,
                    'current_user': current_user, 'person_stat': person_stat})
 
@@ -586,11 +588,15 @@ def dashboard(request):
         tot=models.Final.objects.filter(assigned=request.user).count()
         fresh = models.Final.objects.filter(assigned=request.user,status='fresh').count()
         follow_up = models.Final.objects.filter(assigned=request.user, status='follow_up').count()
+        names = User.objects.filter(is_staff=0).order_by('username').distinct()
+
         try:
             remaining=abs(request.user.info.target-request.user.info.target_achieved)
+            percent=(remaining/request.user.info.target)*100
         except:
             remaining = request.user.info.target
-        return render(request,'dashboard.html',{'remaining':remaining,'rescheduled_data':rescheduled_data,'today':today,'tot':tot,'fresh':fresh,'follow_up':follow_up})
+            percent = (remaining / request.user.info.target) * 100
+        return render(request,'dashboard.html',{'names':names,'remaining':remaining,'percent':percent,'rescheduled_data':rescheduled_data,'today':today,'tot':tot,'fresh':fresh,'follow_up':follow_up})
     else:
         return HttpResponse('Please Log In to View Your Data')
 
@@ -654,4 +660,56 @@ def target_reset(request):
     return HttpResponse("reset Successful")
 
 
+def email_sender():
+    today = datetime.date.today()
+    yesterday = today - datetime.timedelta(days=1)
+    all_data = models.Final.objects.raw(
+        'select * from accounts_final where created between "' + str(yesterday) + '" and "' + str(today) + '"')
+    all_total = 0
+    all_fresh = 0
+    all_cancelled = 0
+    all_closed = 0
+    all_other = 0
+    all_rescheduled = 0
+    all_follow_up = 0
+    all_acknowledged = 0
+    all_pending_cancelled = 0
+    all_days3 = 0
+    all_days7 = 0
+    all_unassigned = 0
+    for all_item in all_data:
 
+        all_total += 1
+
+        if all_item.status == 'fresh':
+            all_fresh += 1
+        elif all_item.status == 'cancelled':
+            all_cancelled += 1
+        elif all_item.status == 'closed':
+            all_closed += 1
+        elif all_item.status == 'rescheduled':
+            all_rescheduled += 1
+        elif all_item.status == 'follow_up':
+            all_follow_up += 1
+        elif all_item.status == 'acknowledged':
+            all_acknowledged += 1
+
+        elif all_item.status == 'pending_cancelled':
+            all_pending_cancelled += 1
+
+        else:
+            all_other += 1
+        if 3 < (datetime.datetime.now().date() - all_item.created.date()).days <= 6:
+            all_days3 += 1
+        elif (datetime.datetime.now().date() - all_item.created.date()).days >= 7:
+            all_days7 += 1
+
+        if all_item.assigned == None:
+            all_unassigned += 1
+    message=f'Todays total Leads:{all_total} ,Fresh: {all_fresh} , Follow Up: {all_follow_up}, Acknowledged: {all_acknowledged}, Cancelled:{all_cancelled},  Acknowledged: {all_acknowledged}' \
+            f'Pending To be Cancelled :{all_pending_cancelled}  Unassigned: {all_unassigned} '
+    print(all_total,all_unassigned)
+    names = User.objects.filter(is_staff=0).order_by('username').distinct()
+    for item in names:
+        print(item.info.target)
+        print(item.info.target_achieved)

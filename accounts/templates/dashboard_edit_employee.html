@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords"
+        content="Wefit">
+    <meta name="description"
+        content="Dashboard">
+    <meta name="robots" content="noindex,nofollow">
+    <title>Wefit</title>
+    <link rel="canonical" href="https://www.wrappixel.com/templates/ample-admin-lite/" />
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="plugins/images/favicon.png">
+    <!-- Custom CSS -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+   <link href="https://www.creativefuel.io/dashboard/css/style.min.css" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+
+<![endif]-->
+</head>
+
+<body>
+    <!-- ============================================================== -->
+    <!-- Preloader - style you can find in spinners.css -->
+    <!-- ============================================================== -->
+    <div class="preloader">
+        <div class="lds-ripple">
+            <div class="lds-pos"></div>
+            <div class="lds-pos"></div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full"
+        data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full">
+        <!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        <header class="topbar" data-navbarbg="skin5">
+            <nav class="navbar top-navbar navbar-expand-md navbar-dark">
+                <div class="navbar-header" data-logobg="skin6">
+                    <!-- ============================================================== -->
+                    <!-- Logo -->
+                    <!-- ============================================================== -->
+                    <a class="navbar-brand" href="{%url 'dashboard'%}">
+                        <!-- Logo icon -->
+                        <b class="logo-icon">
+                            <!-- Dark Logo icon -->
+                            <img src="https://www.creativefuel.io/title.png" alt="homepage" />
+                        </b>
+                        <!--End Logo icon -->
+                        <!-- Logo text -->
+                        <span class="logo-text" style="color:black">
+                            <!-- dark Logo text -->
+                            Wefit Dashboard
+                        </span>
+                    </a>
+                    <!-- ============================================================== -->
+                    <!-- End Logo -->
+                    <!-- ============================================================== -->
+                    <!-- ============================================================== -->
+                    <!-- toggle and nav items -->
+                    <!-- ============================================================== -->
+                    <a class="nav-toggler waves-effect waves-light text-dark d-block d-md-none"
+                        href="javascript:void(0)"><i class="ti-menu ti-close"></i></a>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Logo -->
+                <!-- ============================================================== -->
+                <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
+                    <ul class="navbar-nav d-none d-md-block d-lg-none">
+                        <li class="nav-item">
+                            <a class="nav-toggler nav-link waves-effect waves-light text-white"
+                                href="javascript:void(0)"><i class="fas fa-layer-group"></i></a>
+                        </li>
+                    </ul>
+                    <!-- ============================================================== -->
+                    <!-- Right side toggle and nav items -->
+                    <!-- ============================================================== -->
+                    <ul class="navbar-nav ml-auto d-flex align-items-center">
+
+                        <!-- ============================================================== -->
+                        <!-- Search -->
+                        <!-- ============================================================== -->
+                        <li class=" in">
+                            <form role="search" class="app-search d-none d-md-block mr-3">
+                                <input type="text" placeholder="Search..." class="form-control mt-0">
+                                <a href="" class="active">
+                                    <i class="bx bx-search"></i>
+                                </a>
+                            </form>
+                        </li>
+                        <!-- ============================================================== -->
+                        <!-- User profile and search -->
+                        <!-- ============================================================== -->
+                        <li>
+                            <a class="profile-pic" href="#">
+                                <img src="https://www.searchpng.com/wp-content/uploads/2019/02/Profile-ICon.png" alt="user-img" width="36"
+                                    class="img-circle"><span class="text-white font-medium">{{request.user.username}}</span></a>
+                        </li>
+                        <!-- ============================================================== -->
+                        <!-- User profile and search -->
+                        <!-- ============================================================== -->
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- ============================================================== -->
+        <!-- End Topbar header -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+         <aside class="left-sidebar" data-sidebarbg="skin6">
+            <!-- Sidebar scroll-->
+            <div class="scroll-sidebar">
+                <!-- Sidebar navigation-->
+                <nav class="sidebar-nav">
+                    <ul id="sidebarnav">
+                        <!-- User Profile-->
+                        <li class="sidebar-item pt-2">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'dashboard'%}"
+                                aria-expanded="false">
+                                <i class='bx bxs-layer'></i>
+                                <span class="hide-menu">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'profile'%}"
+                                aria-expanded="false">
+                                <i class='bx bx-face'></i>
+                                <span class="hide-menu">Profile</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'all'%}"
+                                aria-expanded="false">
+                                <i class='bx bx-table'></i>
+                                <span class="hide-menu">Table</span>
+                            </a>
+                        </li>
+
+                        <li class="text-center p-20 upgrade-btn">
+                            <a href="{%url 'download'%}"
+                                class="btn btn-block btn-danger text-white" target="_blank">
+                                Download CSV</a>
+                        </li>
+                    </ul>
+
+                </nav>
+                <!-- End Sidebar navigation -->
+            </div>
+            <!-- End Sidebar scroll-->
+        </aside>
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Page wrapper  -->
+        <!-- ============================================================== -->
+        <div class="page-wrapper">
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <div class="page-breadcrumb bg-white">
+                <div class="row align-items-center">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                        <h4 class="page-title text-uppercase font-medium font-14">Profile page</h4>
+                    </div>
+                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                        <div class="d-md-flex">
+                            <ol class="breadcrumb ml-auto">
+                                <li><a href="#">Dashboard</a></li>
+                            </ol>
+                            <a href="https://wa.me/91{{name.number}}?text=Hello%2C%20This%20side%20coach%20{{current_user}}%20from%20Wefit." target="_blank"
+                                class="btn btn-danger  d-none d-md-block pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Open Whatsapp</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                <!-- Row -->
+                <div class="row">
+                    <!-- Column -->
+                    <div class="col-lg-4 col-xlg-3 col-md-12">
+                        <div class="white-box">
+                            <div class="user-bg"> <img width="100%" alt="user" src="https://www.nicepng.com/png/full/202-2022660_edit-user-profile-comments-edit-profile-icon-png.png">
+                                <div class="overlay-box">
+                                    <div class="user-content">
+                                        <a href="javascript:void(0)"><img src="https://cdn4.iconfinder.com/data/icons/instagram-ui-twotone/48/Paul-18-512.png"
+                                                class="thumb-lg img-circle" alt="img"></a>
+                                        <h4 class="text-white mt-2"><strong>{{first_name}} {{last_name}}</strong></h4>
+                                        <h5 class="text-white mt-2">{{name.email}}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="user-btm-box mt-5 d-md-flex">
+
+                                <div class="col-md-4 col-sm-4 text-center">
+                                    <h1>{{name.id}}</h1>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Column -->
+                    <!-- Column -->
+                    <div class="col-lg-8 col-xlg-9 col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <form class="form-horizontal form-material" method="POST">
+                                    {%csrf_token%}
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Contact Number</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                            <input type="text" placeholder="{{name.number}}"
+                                                class="form-control p-0 border-0"> </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">City - State</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                            <input type="text" placeholder="{{name.city}} - {{name.state}}"
+                                                class="form-control p-0 border-0"> </div>
+                                    </div>
+
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">BMI (Height) Type</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                            <input type="text" placeholder="BMI-{{name.bmi|floatformat:3}} ( {{person_stat.feet}} {{person_stat.inch}}' ) Category{{person_stat.cls}}"
+                                                class="form-control p-0 border-0"> </div>
+                                    </div>
+
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Created Date</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                            <input type="text" placeholder="{{name.created}} "
+                                                class="form-control p-0 border-0"> </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label for="rescheduled" class="col-md-12 p-0">Reschedule</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                            <input type="datetime-local" placeholder="{{name.rescheduled}}"
+                                                class="form-control p-0 border-0" name="rescheduled"
+                                                required>
+                                        </div>
+                                    </div>
+
+                                    <script type="text/javascript">
+function checkvalue(val)
+{
+    if(val==="Instagram"){
+       document.getElementById('cancel_link').style.display='block';
+       document.getElementById('cancel_link').required=true;}
+    else
+       {document.getElementById('cancel_link').style.display='none';
+       document.getElementById('cancel_link').required=false;}
+}
+</script>
+                                    <div class="form-group mb-4">
+                                        <label class="col-sm-12">Select Status</label>
+                                        <div class="col-sm-12 border-bottom">
+                    <select class="form-control p-0 border-0" name="status" onchange="checkstatus(this.value);" required id="status">
+                        <option value="acknowledged" selected>{{name.status}}</option>
+                        {%if request.user.is_staff%}
+                        <option value="cancelled">Cancelled</option>
+                        {%endif%}
+                         <option value="closed">Closed</option>
+                        <option value="pending_cancelled">Pending Cancelled </option>
+                        <option value="rescheduled">Reschedule </option>
+                        <option value="follow_up">Follow up</option>
+
+
+                    </select>
+                                        </div></div>
+                <script type="text/javascript">
+function checkstatus(val)
+{
+    if(val==="pending_cancelled"){
+        document.getElementById('cancel_link').style.display='block';
+        document.getElementById('cancel_link').required=true;
+        document.getElementById('link').style.display='block';
+        document.getElementById('closed').style.display='none';
+        document.getElementById('rescheduled').style.display='none';
+       document.getElementById('cancelled').style.display='block';
+       document.getElementById('follow_up').style.display='none';
+       document.getElementById('total').style.display='none';
+        document.getElementById('total').required=false;
+        document.getElementById('paid').style.display='none';
+        document.getElementById('paid').required=false;
+       }
+    else if(val=="closed"){
+    document.getElementById('cancel_link').style.display='none';
+       document.getElementById('cancel_link').required=false;
+        document.getElementById('closed').style.display='block';
+        document.getElementById('rescheduled').style.display='none';
+       document.getElementById('cancelled').style.display='none';
+       document.getElementById('follow_up').style.display='none';
+       document.getElementById('link').style.display='none';
+
+       }
+    else if(val=="rescheduled"){
+    document.getElementById('rescheduled').style.display='block';
+        document.getElementById('rescheduled').required=true;
+    document.getElementById('cancel_link').style.display='none';
+       document.getElementById('cancel_link').required=false;
+        document.getElementById('closed').style.display='none';
+
+       document.getElementById('cancelled').style.display='none';
+       document.getElementById('follow_up').style.display='none';
+       document.getElementById('link').style.display='none';
+       document.getElementById('total').style.display='false';
+        document.getElementById('total').required=false;
+        document.getElementById('paid').style.display='none';
+        document.getElementById('paid').required=false;
+       }
+    else if(val=="follow_up"){
+    document.getElementById('cancel_link').style.display='none';
+       document.getElementById('cancel_link').required=false;
+        document.getElementById('closed').style.display='none';
+        document.getElementById('rescheduled').style.display='none';
+       document.getElementById('cancelled').style.display='none';
+       document.getElementById('follow_up').style.display='block';
+       document.getElementById('link').style.display='none';
+       document.getElementById('total').style.display='false';
+        document.getElementById('total').required=false;
+        document.getElementById('paid').style.display='none';
+        document.getElementById('paid').required=false;
+       }
+    else
+       document.getElementById('mode').style.display='none';
+}
+                    </script>
+                                    <div class="form-group mb-4">
+                                        <label class="col-sm-12">Select Subtatus</label>
+                    <div class="col-sm-12 border-bottom">
+                 <select class="form-control p-0 border-0" name="substatus"  id="closed" style="display:none;" onchange="checkclosed(this.value);">
+                        <option value="" disabled selected>{{name.substatus}}</option>
+                        <option value="partially_paid">Partiall Paid</option>
+                        <option value="fully_paid">Fully Paid</option>
+
+                    </select>
+                    </div>
+                <script>
+function checkclosed(val)
+{
+    if(val==="partially_paid"){
+        document.getElementById('total').style.display='block';
+        document.getElementById('total').required=true;
+        document.getElementById('paid').style.display='block';
+        document.getElementById('paid').required=true;
+
+
+       }
+    else if(val=="fully_paid"){
+        document.getElementById('total').style.display='block';
+        document.getElementById('total').required=true;
+        document.getElementById('paid').style.display='block';
+        document.getElementById('paid').required=true;
+       }
+    else
+       document.getElementById('total').style.display='none';
+}
+
+
+                </script>
+                <div class="col-md-12 border-bottom p-0">
+                    <input class="form-control p-0 border-0" type="number" style="display:none;" name="total" value="{{name.purchased}}"  id="total" placeholder="Total Pack Purchased" >
+                </div>
+                <div class="col-md-12 border-bottom p-0">
+                    <input class="form-control p-0 border-0" type="number" style="display:none;" name="paid"  id="paid" value="{{name.paid}}" placeholder='Amount Paid'>
+                </div>
+                <div class="col-md-12 border-bottom p-0">
+                    <label style="color: navajowhite;">{{remaining}}</label></div>
+                <div class="form-row-last">
+
+                    <div class="col-sm-12 border-bottom">
+                <select class="form-control p-0 border-0" name="substatus"  id="cancelled" style="display:none;">
+                        <option value="" disabled selected>{{name.substatus}}</option>
+                        <option value="not_responding">Not Responding</option>
+                        <option value="switch_off">Switch Off </option>
+                    <option value="wrong_no">Wrong No</option>
+                    <option value="not_interested">Not Interested</option>
+
+                </select>
+                    </div>
+
+                <div class="col-sm-12 border-bottom">
+                <select class="form-control p-0 border-0" name="substatus"  id="rescheduled" style="display:none;">
+                        <option value="" disabled selected>{{name.substatus}}</option>
+                        <option value="not_responding">Not Responding</option>
+                        <option value="switch_off">Switch Off </option>
+                    <option value="call_back">Call Back</option>
+
+                    </select>
+                </div>
+                    <div class="col-sm-12 border-bottom">
+                <select class="form-control p-0 border-0" name="substatus"  id="follow_up" style="display:none;">
+                        <option value="" disabled selected>{{name.substatus}}</option>
+                        <option value="follow_up_1">Follow Up 1</option>
+                        <option value="follow_up_2">Follow Up 2</option>
+                    <option value="follow_up_3">Follow Up 3</option>
+
+                    </select>
+                    </div>
+
+                <div class="form-row" style="display:none;" id="link" >
+                    <a style="color: cornflowerblue;text-decoration-line: underline;" target="_blank" href="https://drive.google.com/drive/folders/1uNI2NVRDunTpygAaMgZ71Pl0G4JUhf1c?usp=sharing"><label>Click To upload</label></a>
+                </div>
+                <div class="col-md-12 border-bottom p-0">
+                    <input class="form-control p-0 border-0" type="text" name="cancel_link" id="cancel_link" class="input-text"
+                           placeholder="Place Cancel Link Here" style="display:none;" value="{{name.insta_user}}">
+                </div>
+                </div>
+
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Comment</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                           <input class="form-control p-0 border-0" type="text" name="comment"  id="comment" placeholder="comment" required>
+                                        </div>
+                                    </div>
+
+                                        <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Last Comments</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                           <input class="form-control p-0 border-0" type="text" placeholder="{{name.comment}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <div class="col-sm-12">
+                                             <input class="btn btn-success" type="submit" onclick="myFunction()">
+                                        </div>
+                                    </div>
+                                        <script>
+                                    var form = document.getElementById('updateform');
+
+                                    function myFunction() {
+                                      if (form.checkValidity()) {
+                                        alert("Edited Successfully");
+                                      }
+                                    }
+                                    </script>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Column -->
+                </div>
+                <!-- Row -->
+                <!-- ============================================================== -->
+                <!-- End PAge Content -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Right sidebar -->
+                <!-- ============================================================== -->
+                <!-- .right-sidebar -->
+                <!-- ============================================================== -->
+                <!-- End Right sidebar -->
+                <!-- ============================================================== -->
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
+            <footer class="footer text-center">Wefit<a
+                    href="wefitnutrition.in"> Nutrition </a>
+            </footer>
+            <!-- ============================================================== -->
+            <!-- End footer -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page wrapper  -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script src="https://www.creativefuel.io/dashboard/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="https://www.creativefuel.io/dashboard/plugins/bower_components/popper.js/dist/umd/popper.min.js"></script>
+    <script src="https://www.creativefuel.io/dashboard/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="https://www.creativefuel.io/dashboard/js/app-style-switcher.js"></script>
+    <!--Wave Effects -->
+    <script src="https://www.creativefuel.io/dashboard/js/waves.js"></script>
+    <!--Menu sidebar -->
+    <script src="https://www.creativefuel.io/dashboard/js/sidebarmenu.js"></script>
+    <!--Custom JavaScript -->
+    <script src="https://www.creativefuel.io/dashboard/js/custom.js"></script>
+</body>
+
+</html>
