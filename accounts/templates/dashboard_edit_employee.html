@@ -143,13 +143,43 @@
                         </li>
 
                         <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'follow_up'%}"
+                                aria-expanded="false">
+                                <i class='bx bx-calendar-exclamation'></i>
+                                <span class="hide-menu">Todays Follow Up</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'all'%}"
                                 aria-expanded="false">
                                 <i class='bx bx-table'></i>
                                 <span class="hide-menu">Table</span>
                             </a>
                         </li>
-
+                        {%if request.user.is_staff%}
+                        <li class="sidebar-item pt-2">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'target'%}"
+                                aria-expanded="false">
+                                <i class='bx bx-target-lock'></i>
+                                <span class="hide-menu">Set Target</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item pt-2">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'admin:index'%}"
+                                aria-expanded="false">
+                                <i class='bx bx-user-pin'></i>
+                                <span class="hide-menu">Assign Users</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item pt-2">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href=" /manage/register"
+                                aria-expanded="false">
+                                <i class='bx bx-user-plus' ></i>
+                                <span class="hide-menu">Add Users</span>
+                            </a>
+                        </li>
+                        {%endif%}
                         <li class="text-center p-20 upgrade-btn">
                             <a href="{%url 'download'%}"
                                 class="btn btn-block btn-danger text-white" target="_blank">
@@ -209,7 +239,7 @@
                                     <div class="user-content">
                                         <a href="javascript:void(0)"><img src="https://cdn4.iconfinder.com/data/icons/instagram-ui-twotone/48/Paul-18-512.png"
                                                 class="thumb-lg img-circle" alt="img"></a>
-                                        <h4 class="text-white mt-2"><strong>{{first_name}} {{last_name}}</strong></h4>
+                                        <h4 class="text-white mt-2"><strong>{{first_name}} {{last_name}} ({{name.gender}})</strong></h4>
                                         <h5 class="text-white mt-2">{{name.email}}</h5>
                                     </div>
                                 </div>

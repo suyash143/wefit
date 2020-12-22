@@ -582,12 +582,44 @@ def export_csv(request):
 def dashboard(request):
     if request.user.is_authenticated:
         today=datetime.date.today()
+        monday = today - datetime.timedelta(days=today.weekday())
+        next_6 = monday + datetime.timedelta(days=6)
         id=request.user.id
-        rescheduled_data = models.Final.objects.raw(
-            'select * from accounts_final where (rescheduled like "%' + str(today) + '%" ) and assigned_id ="' + str(id) + '" ')
-        tot=models.Final.objects.filter(assigned=request.user).count()
-        fresh = models.Final.objects.filter(assigned=request.user,status='fresh').count()
-        follow_up = models.Final.objects.filter(assigned=request.user, status='follow_up').count()
+        today_data = models.Final.objects.raw(
+            'select * from accounts_final where (created like "%' + str(today) + '%" ) and assigned_id ="' + str(id) + '" ')
+        week_data=user_data = models.Final.objects.raw(
+                'select * from accounts_final where (created between "' + str(monday) + '" and "' + str(next_6) + '") and assigned_id ="' + str(id) + '" ')
+        tot=models.Final.objects.filter(assigned=request.user,created__date=today).count()
+        fresh = models.Final.objects.filter(assigned=request.user,created__date=today,status='fresh').count()
+        follow_up = models.Final.objects.filter(assigned=request.user, status='follow_up',created__date=today).count()
+        pending_cancelled = models.Final.objects.filter(assigned=request.user, status='pending_cancelled', created__date=today).count()
+        closed = models.Final.objects.filter(assigned=request.user, status='closed', created__date=today).count()
+        acknowledged=models.Final.objects.filter(assigned=request.user, status='acknowledged', created__date=today).count()
+
+        this_day={'tot':tot,'fresh':fresh,'follow_up':follow_up,'pending_cancelled':pending_cancelled,'closed':closed,'acknowledged':acknowledged}
+
+        man_tot = models.Final.objects.filter(created__date=today).count()
+        man_fresh = models.Final.objects.filter(created__date=today, status='fresh').count()
+        man_follow_up = models.Final.objects.filter(status='follow_up', created__date=today).count()
+        man_pending_cancelled = models.Final.objects.filter(status='pending_cancelled',
+                                                        created__date=today).count()
+        man_closed = models.Final.objects.filter(status='closed', created__date=today).count()
+        man_acknowledged = models.Final.objects.filter(status='acknowledged',
+                                                   created__date=today).count()
+        man={'man_tot':man_tot,'man_fresh':man_fresh,'man_follow_up':man_follow_up,'man_pending_cancelled':man_pending_cancelled,'man_closed':man_closed,
+            'man_acknowledged':man_acknowledged}
+        week_assigned=0
+        week_cancelled=0
+        week_closed=0
+        for items in week_data:
+            week_assigned+=1
+            if items.status=="closed":
+                week_closed+=1
+            elif items.status=="cancelled":
+                week_cancelled+=1
+            else:
+                pass
+
         names = User.objects.filter(is_staff=0).order_by('username').distinct()
 
         try:
@@ -606,8 +638,8 @@ def dashboard(request):
             total_target_achieved+=objs.info.target_achieved
         total_target_remaining=abs(total_target-total_target_achieved)
 
-        return render(request,'dashboard.html',{'total_target':total_target,'total_target_achieved':total_target_achieved,
-                                                'total_target_remaining':total_target_remaining,'names':names,'remaining':remaining,'rescheduled_data':rescheduled_data,'today':today,'tot':tot,'fresh':fresh,'follow_up':follow_up})
+        return render(request,'dashboard.html',{'week_assigned':week_assigned,'week_cancelled':week_cancelled,'week_closed':week_closed,'total_target':total_target,'total_target_achieved':total_target_achieved,
+                                                'total_target_remaining':total_target_remaining,'names':names,'remaining':remaining,'today':today,'this_day':this_day,'man':man})
     else:
         return HttpResponse('Please Log In to View Your Data')
 
