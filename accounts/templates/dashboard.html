@@ -141,6 +141,14 @@
                         </li>
 
                         <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'follow_up'%}"
+                                aria-expanded="false">
+                                <i class='bx bx-face'></i>
+                                <span class="hide-menu">Todays Follow Up</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'all'%}"
                                 aria-expanded="false">
                                 <i class='bx bx-table'></i>
@@ -153,6 +161,20 @@
                                 aria-expanded="false">
                                 <i class='bx bxs-layer'></i>
                                 <span class="hide-menu">Set Target</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item pt-2">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'admin:index'%}"
+                                aria-expanded="false">
+                                <i class='bx bxs-layer'></i>
+                                <span class="hide-menu">Assign Users</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item pt-2">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href=" /manage/register"
+                                aria-expanded="false">
+                                <i class='bx bxs-layer'></i>
+                                <span class="hide-menu">Add Users</span>
                             </a>
                         </li>
                         {%endif%}
@@ -248,6 +270,53 @@
                         </div>
                     </div>
                 </div>
+                {%if user.is_staff%}
+                         <div class="row justify-content-center">
+                    <div class="col-lg-4 col-sm-6 col-xs-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Cumulative Target </h3>
+                            <ul class="list-inline two-part d-flex align-items-center mb-0">
+                                <li>
+                                    <div id="sparklinedash"><canvas width="67" height="30"
+                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
+                                    </div>
+                                </li>
+                                <li class="ml-auto"><span class="counter text-success">{{total_target}}</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 col-xs-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Cumulative Target Achieved</h3>
+                            <ul class="list-inline two-part d-flex align-items-center mb-0">
+                                <li>
+                                    <div id="sparklinedash2"><canvas width="67" height="30"
+                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
+                                    </div>
+                                </li>
+                                <li class="ml-auto"><span class="counter text-purple">{{total_target_achieved}}({{percent|floatformat:2}}%)</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 col-xs-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Cumulative Remaining</h3>
+                            <ul class="list-inline two-part d-flex align-items-center mb-0">
+                                <li>
+                                    <div id="sparklinedash3"><canvas width="67" height="30"
+                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
+                                    </div>
+                                </li>
+
+                                <li class="ml-auto"><span class="counter text-info">{{total_target_remaining}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                {%endif%}
+
                 <!-- ============================================================== -->
                 <!-- PRODUCTS YEARLY SALES -->
                 <!-- ============================================================== -->
@@ -260,9 +329,10 @@ google.charts.setOnLoadCallback(drawBarColors);
 
 function drawBarColors() {
       var data = google.visualization.arrayToDataTable([
-        ['Name', 'Target', 'Achieved'],
+        ['Name', '% Achieved'],
         {%for item in names%}
-        ['{{item.username}}', {{item.info.target}},{{item.info.target_achieved}}],
+
+        ['{{item.username}}', {% widthratio item.info.target_achieved item.info.target 100 %}],
         {%endfor%}
       ]);
 
@@ -275,7 +345,7 @@ function drawBarColors() {
              'allowHtml': true,
              is3D: true,
         hAxis: {
-          title: 'Money',
+          title: 'Percentage Achieved',
           minValue: 0
         },
         vAxis: {

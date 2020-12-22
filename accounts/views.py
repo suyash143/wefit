@@ -592,11 +592,22 @@ def dashboard(request):
 
         try:
             remaining=abs(request.user.info.target-request.user.info.target_achieved)
-            percent=(remaining/request.user.info.target)*100
+
+
         except:
             remaining = request.user.info.target
             percent = (remaining / request.user.info.target) * 100
-        return render(request,'dashboard.html',{'names':names,'remaining':remaining,'percent':percent,'rescheduled_data':rescheduled_data,'today':today,'tot':tot,'fresh':fresh,'follow_up':follow_up})
+
+        total_target=0
+        total_target_achieved=0
+        total_target_remaining=0
+        for objs in names:
+            total_target+=objs.info.target
+            total_target_achieved+=objs.info.target_achieved
+        total_target_remaining=abs(total_target-total_target_achieved)
+
+        return render(request,'dashboard.html',{'total_target':total_target,'total_target_achieved':total_target_achieved,
+                                                'total_target_remaining':total_target_remaining,'names':names,'remaining':remaining,'rescheduled_data':rescheduled_data,'today':today,'tot':tot,'fresh':fresh,'follow_up':follow_up})
     else:
         return HttpResponse('Please Log In to View Your Data')
 
@@ -713,3 +724,18 @@ def email_sender():
     for item in names:
         print(item.info.target)
         print(item.info.target_achieved)
+
+
+
+def follow_up(request):
+    if request.user.is_authenticated:
+        today = datetime.date.today()
+        id = request.user.id
+        rescheduled_data = models.Final.objects.raw(
+            'select * from accounts_final where (rescheduled like "%' + str(today) + '%" ) and assigned_id ="' + str(
+                id) + '" ')
+
+        name_paginator = Paginator(rescheduled_data, 100)
+        page_num = request.GET.get('page')
+        page = name_paginator.get_page(page_num)
+        return render(request,'dashboard_follow_up.html',{'rescheduled_data':rescheduled_data,'page':page})

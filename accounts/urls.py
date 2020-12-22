@@ -16,4 +16,5 @@ urlpatterns = [
 	path('target',views.target,name='target'),
 	path('info_edit',views.info_edit,name='info_edit'),
 	path('target_reset',views.target_reset,name='target_reset'),
+	path('follow_up',views.follow_up,name='follow_up')
 ]
