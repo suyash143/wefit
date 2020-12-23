@@ -155,6 +155,13 @@
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
                         <!-- User Profile-->
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'dashboard_register'%}"
+                                aria-expanded="false">
+                                <i class='bx bx-calendar-exclamation'></i>
+                                <span class="hide-menu">Add Leads</span>
+                            </a>
+                        </li>
                         <li class="sidebar-item pt-2">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'dashboard'%}"
                                 aria-expanded="false">
@@ -240,10 +247,7 @@
                             <ol class="breadcrumb ml-auto">
                                 <li><a href="#">Dashboard</a></li>
                             </ol>
-                            {%if request.user.is_staff%}
-                            <a href="{%url 'target_reset'%}" target="_blank"
-                                class="btn btn-danger  d-none d-md-block pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Reset Target</a>
-                            {%endif%}
+
                         </div>
 
                     </div>

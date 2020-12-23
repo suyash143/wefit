@@ -678,29 +678,31 @@ def info_edit(request):
 
 
 def target_reset(request):
-    first=User.objects.filter(is_staff=0)[0]
-    start_date=first.info.date_start
-    end_date = first.info.date_end
-    today=datetime.date.today()
-    next_monday=today-datetime.timedelta(days=today.weekday())
-    next_6=next_monday+datetime.timedelta(days=6)
-    target_saver=User.objects.filter(is_staff=0)
-    for item in target_saver:
-        id=item.pk
-        target=item.info.target
-        achieved=item.info.target_achieved
+    if request.user.is_staff:
+        first=User.objects.filter(is_staff=0)[0]
+        start_date=first.info.date_start
+        end_date = first.info.date_end
+        today=datetime.date.today()
+        next_monday=today-datetime.timedelta(days=today.weekday())
+        next_6=next_monday+datetime.timedelta(days=6)
+        target_saver=User.objects.filter(is_staff=0)
+        for item in target_saver:
+            id=item.pk
+            target=item.info.target
+            achieved=item.info.target_achieved
 
-        mod, created = models.Record.objects.get_or_create(start_date=start_date,end_date=end_date,target=target,achieved=achieved,user_id=id)
-        mod.save()
-        changer=item.info
-        changer.target=target
-        changer.target_achieved=0
-        changer.date_start=next_monday
-        changer.date_end=next_6
-        changer.save()
+            mod, created = models.Record.objects.get_or_create(start_date=start_date,end_date=end_date,target=target,achieved=achieved,user_id=id)
+            mod.save()
+            changer=item.info
+            changer.target=target
+            changer.target_achieved=0
+            changer.date_start=next_monday
+            changer.date_end=next_6
+            changer.save()
 
-
-    return HttpResponse("reset Successful")
+        return redirect('target')
+    else:
+        return HttpResponse("you do not have permission")
 
 
 def email_sender():
@@ -771,3 +773,32 @@ def follow_up(request):
         page_num = request.GET.get('page')
         page = name_paginator.get_page(page_num)
         return render(request,'dashboard_follow_up.html',{'rescheduled_data':rescheduled_data,'page':page})
+
+def register_emp(request):
+    if request.method=='POST':
+
+        name = request.POST['name']
+        number = request.POST['number']
+
+        weight = request.POST['weight']
+        foot = request.POST.get('foot', 5)
+        inch = request.POST.get('inch', 8)
+        gender = request.POST['gender']
+
+        height = (((float(foot) * 12) + float(inch)) * 2.54) / 100
+        bmi = float(weight) / (height * height)
+
+        IST = pytz.timezone('Asia/Kolkata')
+
+        if models.Final.objects.filter(number=number).order_by('-id')[:100]:
+            return redirect('/token')
+
+        lead3, created = models.Final.objects.get_or_create(name=name, number=number, weight=weight,
+                                                            height=height, gender=gender,bmi=bmi,
+                                                            created=datetime.datetime.now(), status='fresh',assigned=request.user)
+        lead3.save()
+
+        return redirect("/all")
+
+    else:
+        return render(request,"dashboard_register.html")
