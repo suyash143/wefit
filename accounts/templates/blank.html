@@ -1,28 +1,57 @@
-<!DOCTYPE html>
-<html dir="ltr" lang="en">
 
+<!DOCTYPE html>
+{% load static %}
+<html dir="ltr" lang="en">
+{%if user.is_authenticated%}
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="keywords"
-        content="wrappixel, admin dashboard, html css dashboard, web dashboard, bootstrap 4 admin, bootstrap 4, css3 dashboard, bootstrap 4 dashboard, Ample lite admin bootstrap 4 dashboard, frontend, responsive bootstrap 4 admin template, Ample admin lite dashboard bootstrap 4 dashboard template">
+        content="Nutrition">
     <meta name="description"
-        content="Ample Admin Lite is powerful and clean admin dashboard template, inpired from Bootstrap Framework">
+        content="Wefit">
     <meta name="robots" content="noindex,nofollow">
-    <title>Ample Admin Lite Template by WrapPixel</title>
+    <title>DashBoard</title>
     <link rel="canonical" href="https://www.wrappixel.com/templates/ample-admin-lite/" />
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="plugins/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://www.creativefuel.io/title.png">
     <!-- Custom CSS -->
-   <link href="css/style.min.css" rel="stylesheet">
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
+    <link href="https://www.creativefuel.io/dashboard/plugins/bower_components/chartist/dist/chartist.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://www.creativefuel.io/dashboard/plugins/bower_components/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.css">
+    <!-- Custom CSS -->
+    <link href="https://www.creativefuel.io/dashboard/css/style.min.css " rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          ['Fresh ({{fresh}})',     {{fresh}}],
+          ['Cancelled ({{cancelled}})',      {{cancelled}}],
+          ['Closed ({{closed}})',  {{closed}}],
+          ['Rescheduled ({{rescheduled}})',  {{rescheduled}}],
+          ['Follow Up ({{follow_up}})',  {{follow_up}}],
+          ['Correct Option ({{other}})', {{other}}],
+          ['Pending To be Cancelled {{pending_cancelled}}', {{pending_cancelled}}],
+          ['Acknowledged ({{acknowledged}})', {{acknowledged}}],
+
+
+        ]);
+
+        var options = {
+          title: 'My Daily Activities',
+          pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+        chart.draw(data, options);
+      }
+    </script>
+
 </head>
 
 <body>
@@ -49,17 +78,17 @@
                     <!-- ============================================================== -->
                     <!-- Logo -->
                     <!-- ============================================================== -->
-                    <a class="navbar-brand" href="dashboard.html">
+                    <a class="navbar-brand" href="{%url 'dashboard'%}">
                         <!-- Logo icon -->
                         <b class="logo-icon">
                             <!-- Dark Logo icon -->
-                            <img src="plugins/images/logo-icon.png" alt="homepage" />
+                            <img src="https://www.creativefuel.io/title.png" alt="homepage" />
                         </b>
                         <!--End Logo icon -->
                         <!-- Logo text -->
-                        <span class="logo-text">
+                        <span class="logo-text" style="color:black">
                             <!-- dark Logo text -->
-                            <img src="plugins/images/logo-text.png" alt="homepage" />
+                            Wefit Dashboard
                         </span>
                     </a>
                     <!-- ============================================================== -->
@@ -78,7 +107,7 @@
                     <ul class="navbar-nav d-none d-md-block d-lg-none">
                         <li class="nav-item">
                             <a class="nav-toggler nav-link waves-effect waves-light text-white"
-                                href="javascript:void(0)"><i class="ti-menu ti-close"></i></a>
+                                href="javascript:void(0)"><i class="fas fa-layer-group"></i></a>
                         </li>
                     </ul>
                     <!-- ============================================================== -->
@@ -93,7 +122,7 @@
                             <form role="search" class="app-search d-none d-md-block mr-3">
                                 <input type="text" placeholder="Search..." class="form-control mt-0">
                                 <a href="" class="active">
-                                    <i class="fa fa-search"></i>
+                                    <i class="bx bx-search"></i>
                                 </a>
                             </form>
                         </li>
@@ -102,8 +131,8 @@
                         <!-- ============================================================== -->
                         <li>
                             <a class="profile-pic" href="#">
-                                <img src="plugins/images/users/varun.jpg" alt="user-img" width="36"
-                                    class="img-circle"><span class="text-white font-medium">Steave</span></a>
+                                <img src="https://www.searchpng.com/wp-content/uploads/2019/02/Profile-ICon.png" alt="user-img" width="36"
+                                    class="img-circle"><span class="text-white font-medium">{{request.user.username}}</span></a>
                         </li>
                         <!-- ============================================================== -->
                         <!-- User profile and search -->
@@ -125,32 +154,78 @@
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
                         <!-- User Profile-->
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="index.html" aria-expanded="false"><i class="fas fa-clock fa-fw"
-                                    aria-hidden="true"></i><span class="hide-menu">Dashboard</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="profile.html" aria-expanded="false">
-                                <i class="fa fa-user" aria-hidden="true"></i><span class="hide-menu">Profile</span></a>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'dashboard_register'%}"
+                                aria-expanded="false">
+                                <i class='bx bx-calendar-exclamation'></i>
+                                <span class="hide-menu">Add Leads</span>
+                            </a>
                         </li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="basic-table.html" aria-expanded="false"><i class="fa fa-table"
-                                    aria-hidden="true"></i><span class="hide-menu">Table</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="fontawesome.html" aria-expanded="false"><i class="fa fa-font"
-                                    aria-hidden="true"></i><span class="hide-menu">Icon</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="map-google.html" aria-expanded="false"><i class="fa fa-globe"
-                                    aria-hidden="true"></i><span class="hide-menu">Google Map</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="blank.html" aria-expanded="false"><i class="fa fa-columns"
-                                    aria-hidden="true"></i><span class="hide-menu">Blank</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="404.html" aria-expanded="false"><i class="fa fa-info-circle"
-                                    aria-hidden="true"></i><span class="hide-menu">404</span></a></li>
+                        <li class="sidebar-item pt-2">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'dashboard'%}"
+                                aria-expanded="false">
+                                <i class='bx bxs-layer'></i>
+                                <span class="hide-menu">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'profile'%}"
+                                aria-expanded="false">
+                                <i class='bx bx-face'></i>
+                                <span class="hide-menu">Profile</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'follow_up'%}"
+                                aria-expanded="false">
+                                <i class='bx bx-calendar-exclamation'></i>
+                                <span class="hide-menu">Todays Follow Up</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'all'%}"
+                                aria-expanded="false">
+                                <i class='bx bx-table'></i>
+                                <span class="hide-menu">Table</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'dashboard_script'%}"
+                                aria-expanded="false">
+                                <i class='bx bx-table'></i>
+                                <span class="hide-menu">Script</span>
+                            </a>
+                        </li>
+                        {%if request.user.is_staff%}
+                        <li class="sidebar-item pt-2">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'target'%}"
+                                aria-expanded="false">
+                                <i class='bx bx-target-lock'></i>
+                                <span class="hide-menu">Set Target</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item pt-2">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'admin:index'%}"
+                                aria-expanded="false">
+                                <i class='bx bx-user-pin'></i>
+                                <span class="hide-menu">Assign Users</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item pt-2">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href=" /manage/register"
+                                aria-expanded="false">
+                                <i class='bx bx-user-plus' ></i>
+                                <span class="hide-menu">Add Users</span>
+                            </a>
+                        </li>
+                        {%endif%}
                         <li class="text-center p-20 upgrade-btn">
-                            <a href="https://wrappixel.com/templates/ampleadmin/"
-                                class="btn btn-block btn-danger text-white" target="_blank">Upgrade to
-                                Pro</a>
+                            <a href="{%url 'download'%}"
+                                class="btn btn-block btn-danger text-white" target="_blank">
+                                Download CSV</a>
                         </li>
                     </ul>
 
@@ -165,23 +240,23 @@
         <!-- ============================================================== -->
         <!-- Page wrapper  -->
         <!-- ============================================================== -->
-        <div class="page-wrapper" style="min-height: 250px;">
+        {%block outer%}
+        <div class="page-wrapper">
             <!-- ============================================================== -->
             <!-- Bread crumb and right sidebar toggle -->
             <!-- ============================================================== -->
             <div class="page-breadcrumb bg-white">
                 <div class="row align-items-center">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title text-uppercase font-medium font-14">Profile Page</h4>
+                        <h4 class="page-title text-uppercase font-medium font-14">Dashboard</h4>
                     </div>
                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                         <div class="d-md-flex">
                             <ol class="breadcrumb ml-auto">
                                 <li><a href="#">Dashboard</a></li>
                             </ol>
-                            <a href="https://wrappixel.com/templates/ampleadmin/" target="_blank"
-                                class="btn btn-danger  d-none d-md-block pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Upgrade
-                                to Pro</a>
+                            <a href="{%url 'logout'%}" target="_blank"
+                                class="btn btn-danger  d-none d-md-block pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Logout </a>
                         </div>
                     </div>
                 </div>
@@ -193,36 +268,25 @@
             <!-- ============================================================== -->
             <!-- Container fluid  -->
             <!-- ============================================================== -->
-            <div class="container-fluid">
+            {%block content%}
+
+            {%endblock content%}
+            {%endblock outer%}
+
+
+
                 <!-- ============================================================== -->
-                <!-- Start Page Content -->
+                <!-- Recent Comments -->
                 <!-- ============================================================== -->
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="white-box">
-                            <h3 class="box-title">Blank Page</h3>
-                        </div>
-                    </div>
-                </div>
-                <!-- ============================================================== -->
-                <!-- End PAge Content -->
-                <!-- ============================================================== -->
-                <!-- ============================================================== -->
-                <!-- Right sidebar -->
-                <!-- ============================================================== -->
-                <!-- .right-sidebar -->
-                <!-- ============================================================== -->
-                <!-- End Right sidebar -->
-                <!-- ============================================================== -->
-            </div>
+
             <!-- ============================================================== -->
             <!-- End Container fluid  -->
             <!-- ============================================================== -->
             <!-- ============================================================== -->
             <!-- footer -->
             <!-- ============================================================== -->
-            <footer class="footer text-center"> 2020 © Ample Admin brought to you by <a
-                    href="https://www.wrappixel.com/">wrappixel.com</a>
+            <footer class="footer text-center">Wefit CRM presented by <a
+                    href="https://www.wefitnutrition.in/">wefitnutrition.in</a>
             </footer>
             <!-- ============================================================== -->
             <!-- End footer -->
@@ -238,17 +302,26 @@
     <!-- ============================================================== -->
     <!-- All Jquery -->
     <!-- ============================================================== -->
-    <script src="plugins/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="https://www.creativefuel.io/dashboard/plugins/bower_components/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap tether Core JavaScript -->
-    <script src="plugins/bower_components/popper.js/dist/umd/popper.min.js"></script>
-    <script src="bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="js/app-style-switcher.js"></script>
+    <script src="https://www.creativefuel.io/dashboard/plugins/bower_components/popper.js/dist/umd/popper.min.js"></script>
+    <script src="https://www.creativefuel.io/dashboard/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="https://www.creativefuel.io/dashboard/js/app-style-switcher.js"></script>
+    <script src="https://www.creativefuel.io/dashboard/plugins/bower_components/jquery-sparkline/jquery.sparkline.min.js"></script>
     <!--Wave Effects -->
-    <script src="js/waves.js"></script>
+    <script src="https://www.creativefuel.io/dashboard/js/waves.js"></script>
     <!--Menu sidebar -->
-    <script src="js/sidebarmenu.js"></script>
+    <script src="https://www.creativefuel.io/dashboard/js/sidebarmenu.js"></script>
     <!--Custom JavaScript -->
-    <script src="js/custom.js"></script>
+    <script src="https://www.creativefuel.io/dashboard/js/custom.js"></script>
+    <!--This page JavaScript -->
+    <!--chartis chart-->
+    <script src="https://www.creativefuel.io/dashboard/plugins/bower_components/chartist/dist/chartist.min.js"></script>
+    <script src="https://www.creativefuel.io/dashboard/plugins/bower_components/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
+    <script src="https://www.creativefuel.io/dashboard/js/pages/dashboards/dashboard1.js"></script>
+{%else%}
+            Please Log In to view Your Data
+            {%endif%}
 </body>
 
 </html>

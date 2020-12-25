@@ -106,3 +106,8 @@ class Record(models.Model):
     target=models.IntegerField(null=True,blank=True)
     achieved=models.IntegerField(null=True,blank=True)
 
+
+class Questions(models.Model):
+    category=models.TextField(null=True)
+    questions=models.TextField(null=True)
+    answers=models.TextField(null=True)

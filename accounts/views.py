@@ -326,8 +326,6 @@ def all(request):
 def edit_employee(request):
     id = request.session.get('id')
     name = models.Final.objects.get(id=id)
-    first_name = name.name.split()[0]
-    last_name = name.name.split()[1]
     request.session['id'] = id
     current_user = request.user.get_short_name()
     m = name.height
@@ -396,7 +394,7 @@ def edit_employee(request):
 
         return redirect('all')
     return render(request, 'dashboard_edit_employee.html',
-                  {'id': id, 'first_name': first_name, 'last_name': last_name, 'name': name,
+                  {'id': id,  'name': name,
                    'current_user': current_user, 'person_stat': person_stat})
 
 
@@ -802,3 +800,42 @@ def register_emp(request):
 
     else:
         return render(request,"dashboard_register.html")
+
+
+def dashboard_script(request):
+    script=models.Questions.objects.all()
+    if request.method=="POST":
+        script_id=request.POST['script_id']
+        request.session['script_id']=script_id
+        return redirect('dashboard_script_edit')
+    return render(request,'dashboard_script.html',{'script':script})
+
+def dashboard_script_edit(request):
+    script_id=request.session['script_id']
+    print(script_id)
+    if script_id:
+        script=models.Questions.objects.all().get(pk=script_id)
+        if request.method=='POST':
+
+            category=request.POST['category']
+            question = request.POST['question']
+            answer = request.POST['answer']
+            script.category=category
+            script.question=question
+            script.answer=answer
+            script.save()
+        return render(request, "dashboard_script_edit.html", {'script': script})
+
+    return render(request,"dashboard_script_edit.html")
+
+
+def dashboard_script_add(request):
+
+    if request.method == 'POST':
+        category = request.POST['category']
+        question = request.POST['question']
+        answer = request.POST['answer']
+        sc, created = models.Questions.objects.get_or_create(category=category,questions=question,answers=answer)
+        sc.save()
+
+    return render(request,"dashboard_script_edit.html")

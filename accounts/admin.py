@@ -6,6 +6,7 @@ from. import add_admin_use
 
 admin.site.register(Info)
 admin.site.register(Record)
+admin.site.register(Questions)
 
 
 class OrderAdmin(admin.ModelAdmin):
