@@ -14,6 +14,7 @@ from django.db import connection
 import datetime
 from . import utils
 from django.core.paginator import Paginator
+from django.conf import settings
 from django.core.mail import send_mail
 
 
@@ -754,8 +755,21 @@ def email_sender():
     print(all_total,all_unassigned)
     names = User.objects.filter(is_staff=0).order_by('username').distinct()
     for item in names:
+        message+=f'{item.username} Target:{item.info.target} Achieved: {item.info.target_achieved}'
         print(item.info.target)
         print(item.info.target_achieved)
+        id=item.pk
+        data = models.Final.objects.raw(
+            'select * from accounts_final where (created like "%' + str(today) + '%" ) and assigned_id ="' + str(
+                id) + '" ')
+
+    subject = 'welcome to GFG world'
+
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = ['nikhil@creativefuel.io', 'suyashpathak143@gmail.com']
+    send_mail(subject, message, email_from, recipient_list)
+
+
 
 
 
