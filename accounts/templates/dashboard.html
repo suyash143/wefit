@@ -2,6 +2,9 @@
 {%extends 'blank.html'%}
 {% load static %}
 {%block content%}
+
+
+
             <!-- ============================================================== -->
             <!-- End Bread crumb and right sidebar toggle -->
             <!-- ============================================================== -->
@@ -114,10 +117,10 @@ google.charts.setOnLoadCallback(drawBarColors);
 
 function drawBarColors() {
       var data = google.visualization.arrayToDataTable([
-        ['Name', '% Achieved'],
+        ['Name {% widthratio item.info.target_achieved item.info.target 100 %}', '% Achieved'],
         {%for item in names%}
 
-        ['{{item.username}}', {% widthratio item.info.target_achieved item.info.target 100 %}],
+        ['{{item.username}} ({% widthratio item.info.target_achieved item.info.target 100 %}%)', {% widthratio item.info.target_achieved item.info.target 100 %}],
         {%endfor%}
       ]);
 
@@ -128,7 +131,7 @@ function drawBarColors() {
         displayExactValues: true,
             'showRowNumber': false,
              'allowHtml': true,
-             is3D: true,
+             'is3D': true,
         hAxis: {
           title: 'Percentage Achieved',
           minValue: 0
@@ -141,9 +144,56 @@ function drawBarColors() {
       chart.draw(data, options);
     }
                     </script>
-                    <div class="white-box" style="padding-left:25%;padding-right:35%">
-                        <div id="chart_div"></div></div>
-                </div>
+                    <script>
+window.onload = function () {
+
+var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	theme: "light2", //"light1", "dark1", "dark2"
+	title:{
+		text: "Employee Achievement"
+	},
+	axisY:{
+		interval: 10,
+		suffix: "%"
+	},
+	toolTip:{
+		shared: true
+	},
+	data:[{
+		type: "stackedBar100",
+		toolTipContent: "{label}<br><b>{name}:</b> {y} (#percent%)",
+		showInLegend: true,
+		name: "Achieved",
+		dataPoints: [
+		{%for item in names%}
+			{ y: {% widthratio item.info.target_achieved item.info.target 100 %}, label: "{{item.username}}" },
+			{%endfor%}
+
+		]
+		},
+		{
+			type: "stackedBar100",
+			toolTipContent: "<b>{name}:</b> {y} (#percent%)",
+			showInLegend: true,
+			name: "remaining",
+			dataPoints: [
+				{%for item in names%}
+			{ y: 100, label: "{{item.username}}" },
+			{%endfor%}
+			]
+		}
+		]
+});
+chart.render();
+
+}
+</script>
+
+
+                    <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
                 <!-- ============================================================== -->
                 <!-- RECENT SALES -->
                 <!-- ============================================================== -->
