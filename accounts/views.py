@@ -689,8 +689,9 @@ def target_reset(request):
             id=item.pk
             target=item.info.target
             achieved=item.info.target_achieved
+            username=item.username
 
-            mod, created = models.Record.objects.get_or_create(start_date=start_date,end_date=end_date,target=target,achieved=achieved,user_id=id)
+            mod, created = models.Record.objects.get_or_create(start_date=start_date,end_date=end_date,target=target,achieved=achieved,user_id=id,username=username)
             mod.save()
             changer=item.info
             changer.target=target
@@ -752,21 +753,20 @@ def email_sender():
             all_unassigned += 1
     message=f'Todays total Leads:{all_total} ,Fresh: {all_fresh} , Follow Up: {all_follow_up}, Acknowledged: {all_acknowledged}, Cancelled:{all_cancelled},  Acknowledged: {all_acknowledged}' \
             f'Pending To be Cancelled :{all_pending_cancelled}  Unassigned: {all_unassigned} '
-    print(all_total,all_unassigned)
+    
     names = User.objects.filter(is_staff=0).order_by('username').distinct()
     for item in names:
         message+=f'{item.username} Target:{item.info.target} Achieved: {item.info.target_achieved}'
-        print(item.info.target)
-        print(item.info.target_achieved)
+
         id=item.pk
         data = models.Final.objects.raw(
             'select * from accounts_final where (created like "%' + str(today) + '%" ) and assigned_id ="' + str(
                 id) + '" ')
 
-    subject = 'welcome to GFG world'
+    subject = 'Wefit Daily Report'
 
     email_from = settings.EMAIL_HOST_USER
-    recipient_list = ['nikhil@creativefuel.io', 'suyashpathak143@gmail.com']
+    recipient_list = ['suyashpathak143@gmail.com']
     send_mail(subject, message, email_from, recipient_list)
 
 

@@ -29,4 +29,7 @@ class OrderAdmin(admin.ModelAdmin):
     def transfer_to_pp(self, request, queryset):
         all=queryset.values().all().update(assigned=User.objects.get(id=10))
     transfer_to_pp.short_description = 'Transfer to pp'
+    def transfer_to_anuj(self, request, queryset):
+        all=queryset.values().all().update(assigned=User.objects.get(id=16))
+    transfer_to_anuj.short_description = 'Transfer to anuj'
 admin.site.register(Final,OrderAdmin)

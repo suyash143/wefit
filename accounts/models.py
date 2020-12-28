@@ -93,10 +93,6 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):
     instance.info.save()
 
-@receiver(post_delete, sender=User)
-def post_delete_user(sender, instance, *args, **kwargs):
-    if instance.user: # just in case user is not specified
-        instance.user.delete()
 
 
 class Record(models.Model):
@@ -105,6 +101,7 @@ class Record(models.Model):
     end_date=models.DateField(null=True,blank=True)
     target=models.IntegerField(null=True,blank=True)
     achieved=models.IntegerField(null=True,blank=True)
+    username=models.CharField(null=True,blank=True,max_length=200)
 
 
 class Questions(models.Model):

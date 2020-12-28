@@ -3,8 +3,8 @@ import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "wefit.settings")
 import django
 django.setup()
-from accounts import views
+from accounts.views import email_sender
 
 from django.shortcuts import render, redirect
 
-views.email_sender()
+email_sender()

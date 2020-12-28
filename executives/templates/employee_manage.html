@@ -1,0 +1,59 @@
+{%extends 'blank.html'%}
+{%block content%}
+<div class="row">
+                    <div class="col-md-12 col-lg-12 col-sm-12">
+                        <div class="white-box">
+                            <div class="d-md-flex mb-3">
+                                <h3 class="box-title mb-0">Question - Answers</h3>
+                                <div class="col-md-9 col-sm-15 col-xs-24 ml-auto">
+                                    <select class="form-control row border-top">
+                                        <option>{{today}}</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table no-wrap">
+                                    <thead>
+                                        <tr>
+                                            <th class="border-top-0">#</th>
+                                            <th class="border-top-0">Category</th>
+                                            <th class="border-top-0">Question</th>
+                                            <th class="border-top-0">Answer</th>
+
+
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        {%for name in names%}
+
+                                        <tr>
+
+                                            <td><form method="POST">{%csrf_token%} <input type="submit" value="{{name.pk}}" name="employee_id"></form></td>
+
+
+
+                                            <td >{{name.username}}</td>
+                                            <td class="txt-oflo">{{name.info.target}}</td>
+                                            <td class="txt-oflo">{{name.info.target_achieved}}</td>
+
+
+                                        </tr>
+                                        {%endfor%}
+
+
+                                    </tbody>
+
+                                </table>
+                                {%if request.user.is_staff%}
+                                <a href="/manage/register" target="_blank"
+                                class="btn btn-danger   waves-effect waves-light">Add User</a>
+
+
+                                {%endif%}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+{%endblock content%}

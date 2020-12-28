@@ -1,11 +1,13 @@
 import os, sys
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User,auth
-from accounts.models import Final
+from accounts.models import Final,Questions,Info,Record
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from accounts import add_admin_use
+from django.http import HttpResponse
+import datetime
 
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -73,11 +75,50 @@ def login(request):
     else:
         return render(request,'login.html')
 
+
 def logout(request):
     auth.logout(request)
     latest = User.objects.latest('pk')
-    print(latest)
+
     id=latest.pk
-    print(id)
+
     return redirect('login')
 
+
+def employee(request):
+    if request.user.is_staff:
+        names=User.objects.filter(is_staff=0)
+        if request.method=="POST":
+            employee_id=request.POST['employee_id']
+            request.session['employee_id'] = employee_id
+            print(employee_id)
+            return redirect('employee_profile')
+        return render(request,'employee_manage.html',{'names':names})
+    else:
+        return HttpResponse("You Do Not Have permission ")
+
+def employee_profile(request):
+    if request.user.is_staff:
+        employee_id=request.session['employee_id']
+        name=User.objects.get(pk=employee_id)
+        if request.method=="POST":
+            emp_id=request.POST["employee_pk"]
+            print(emp_id,employee_id)
+            start_date = name.info.date_start
+            end_date = name.info.date_end
+            today = datetime.date.today()
+            next_monday = today - datetime.timedelta(days=today.weekday())
+            next_6 = next_monday + datetime.timedelta(days=6)
+            target = name.info.target
+            achieved = name.info.target_achieved
+
+            mod, created = Record.objects.get_or_create(start_date=start_date, end_date=end_date, target=target,
+                                                               achieved=achieved, user_id=name.pk,username=name.username)
+            mod.save()
+            add_admin_use.user_delete(str(name.username),name.pk)
+            name.delete()
+
+            return redirect('employee')
+        return render(request,'employee_profile.html',{'name':name})
+    else:
+        return HttpResponse("you Do Not have Permission")

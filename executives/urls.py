@@ -9,5 +9,7 @@ urlpatterns =[
     path('logout', views.logout, name='logout'),
     path('report',report,name="report"),
     path('download',export_csv,name='download'),
+    path('employee',views.employee,name='employee'),
+    path('employee_profile',views.employee_profile,name='employee_profile')
 
     ]

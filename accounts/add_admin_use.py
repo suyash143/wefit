@@ -35,5 +35,33 @@ def user_adder(username):
    #count is remaining to be added
 
 
+def user_delete(username,count):
+    a_file = open(os.path.join(BASE, 'admin.py'),'r')
+    lines = a_file.readlines()
+    a_file.close()
+
+    new_file = open(os.path.join(BASE, 'admin.py'),'w')
+    for line in lines:
+        if line.strip("\n") == f"    def transfer_to_{username}(self, request, queryset):":
+            pass
+        elif line.strip("\n") == f"        all=queryset.values().all().update(assigned=User.objects.get(id={count}))":
+            pass
+        elif line.strip("\n") == f"    transfer_to_{username}.short_description = 'Transfer to {username}'":
+            pass
+        else:
+            new_file.write(line)
+    new_file.close()
+    with open(os.path.join(BASE, 'users.txt'),'r') as f:
+        lines = f.readlines()
+    with open(os.path.join(BASE, 'users.txt'),'w') as f:
+        for line in lines:
+            if line.strip("\n") != f'transfer_to_{username}':
+                f.write(line)
+
+
+
+
+
+
 
 
