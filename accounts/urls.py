@@ -20,5 +20,6 @@ urlpatterns = [
 	path('dashboard_register',views.register_emp,name='dashboard_register'),
 	path('dashboard_script',views.dashboard_script,name='dashboard_script'),
 	path('dashboard_script_edit',views.dashboard_script_edit,name='dashboard_script_edit'),
-	path('dashboard_script_add',views.dashboard_script_add,name='dashboard_script_add')
+	path('dashboard_script_add',views.dashboard_script_add,name='dashboard_script_add'),
+	path('log',views.get_current_users,name='log')
 ]

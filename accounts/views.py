@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 import os
 import pytz
+from django.contrib.sessions.models import Session
 
 from datetime import date
 from django.utils import timezone
@@ -853,3 +854,15 @@ def dashboard_script_add(request):
         sc.save()
 
     return render(request,"dashboard_script_edit.html")
+
+
+
+def get_current_users(request):
+    active_sessions = Session.objects.filter(expire_date__gte=timezone.now())
+    user_id_list = []
+    for session in active_sessions:
+        data = session.get_decoded()
+        user_id_list.append(data.get('_auth_user_id', None))
+    # Query all logged in users based on id list
+    print(User.objects.filter(id__in=user_id_list))
+    return render(request,'blank.html')
