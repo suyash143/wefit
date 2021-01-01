@@ -222,7 +222,7 @@ document.getElementById("loginSubmit").click();
 
 
 </form>
-
+<link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.3.1/css/all.min.css" rel="stylesheet">
 
@@ -232,46 +232,249 @@ document.getElementById("loginSubmit").click();
 
     <div class="row">
       <div class="col-md-3">
-        <div class="stati midnight_blue ">
-          <i class="icon-present icons"></i>
+        <div class="stati midnight_blue left">
+          <i class='bx bx-ball'></i>
           <div>
-            <b>36</b>
-            <span>.midnight_blue left</span>
+            <b>{{all.all_total}}</b>
+            <span>Total Leads</span>
           </div>
         </div>
       </div>
       <div class="col-md-3">
         <div class="stati midnight_blue left">
-          <i class="icon-playlist icons"></i>
+          <i class='bx bx-news'></i>
           <div>
-            <b>37</b>
-            <span>.midnight_blue left</span>
+            <b>{{all.all_fresh}}</b>
+            <span>Total Fresh</span>
           </div>
         </div>
       </div>
       <div class="col-md-3">
         <div class="stati midnight_blue left">
-          <i class="icon-playlist icons"></i>
+         <i class='bx bx-bell' ></i>
           <div>
-            <b>37</b>
-            <span>.midnight_blue left</span>
+            <b>{{all.all_follow_up}}</b>
+            <span>Total Follow Up</span>
           </div>
         </div>
       </div>
       <div class="col-md-3">
         <div class="stati midnight_blue left">
-          <i class="icon-playlist icons"></i>
+          <i class='bx bx-no-entry'></i>
           <div>
-            <b>37</b>
-            <span>.midnight_blue left</span>
+            <b>{{all.all_cancelled}}</b>
+            <span>Total Cancelled</span>
           </div>
         </div>
       </div>
-</div>
 
 </div>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="stati midnight_blue left">
+          <i class='bx bx-reset' ></i>
+          <div>
+            <b>{{all.all_rescheduled}}</b>
+            <span>Total Reschedule</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stati midnight_blue left">
+          <i class='bx bx-left-indent'></i>
+          <div>
+            <b>{{all.all_pending_cancelled}}</b>
+            <span>Pending for Cancellation</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stati midnight_blue left">
+          <i class='bx bx-pencil' ></i>
+          <div>
+            <b>{{all.all_acknowledged}}</b>
+            <span>Total Acknowledged</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stati midnight_blue left">
+          <i class='bx bx-message-rounded-x'></i>
+          <div>
+            <b>{{all.all_unassigned}}</b>
+            <span>Total Unassigned Leads</span>
+          </div>
+        </div>
+      </div>
+
+</div>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="stati midnight_blue left">
+          <i class='bx bxl-css3'></i>
+          <div>
+            <b>{{all.all_days3}}</b>
+            <span>Total 3+ Leads</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stati midnight_blue left">
+          <i class="bx bx-stats"></i>
+          <div>
+            <b>{{all.all_days7}}</b>
+            <span>Total +7 Leads</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="stati midnight_blue left">
+          <i class='bx bx-money'></i>
+          <div>
+            <b>{{all.all_closed}}</b>
+            <span>Total Closed Leads</span>
+          </div>
+        </div>
+      </div>
+    </div>
+<br><br>
+      <h2 class="">Employee Stats</h2>
+          {%for key,item in final.items%}
+          <div class="btn-group-vertical">
+          <button class="button-click"  onclick="myFunction{{item.assigned_id}}()">{{key}} || All: {{item.tot}} || Fresh : {{item.fresh}} || Acknowledged : {{item.acknowledged}} || Follow Up :{{item.follow_up}} || Pending to be Cancelled: {{item.pending_cancelled}}</button>
+          <button class="button-click" onclick="myFunctionHide{{item.assigned_id}}()">Hide</button>
+</div>
+          <script>
+            function myFunction{{item.assigned_id}}() {
+            document.getElementById('{{item.assigned_id}}').style.display='block';
+            }
+            function myFunctionHide{{item.assigned_id}}(){
+            document.getElementById('{{item.assigned_id}}').style.display='none';
+            }
+          </script>
+<br><br>
+          <div id="{{item.assigned_id}}" style="display:none;">
+            <hr style="padding-top:2px">
+          <h2 class="">{{key}}</h2>
+            <div class="row">
+      <div class="col-md-3">
+        <div class="stati midnight_blue left">
+          <i class='bx bx-ball'></i>
+          <div>
+            <b>{{item.tot}}</b>
+            <span>Total Leads</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stati midnight_blue left">
+          <i class='bx bx-news'></i>
+          <div>
+            <b>{{item.fresh}}</b>
+            <span>Total Fresh</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stati midnight_blue left">
+         <i class='bx bx-bell' ></i>
+          <div>
+            <b>{{item.follow_up}}</b>
+            <span>Total Follow Up</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stati midnight_blue left">
+          <i class='bx bx-no-entry'></i>
+          <div>
+            <b>{{item.cancelled}}</b>
+            <span>Total Cancelled</span>
+          </div>
+        </div>
+      </div>
+
+</div>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="stati midnight_blue left">
+          <i class='bx bx-reset' ></i>
+          <div>
+            <b>{{item.rescheduled}}</b>
+            <span>Total Reschedule</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stati midnight_blue left">
+          <i class='bx bx-left-indent'></i>
+          <div>
+            <b>{{item.pending_cancelled}}</b>
+            <span>Pending for Cancellation</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stati midnight_blue left">
+          <i class='bx bx-pencil' ></i>
+          <div>
+            <b>{{item.acknowledged}}</b>
+            <span>Total Acknowledged</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stati midnight_blue left">
+          <i class='bx bx-message-rounded-x'></i>
+          <div>
+            <b>{{item.unassigned}}</b>
+            <span>Total Unassigned Leads</span>
+          </div>
+        </div>
+      </div>
+
+</div>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="stati midnight_blue left">
+          <i class='bx bxl-css3'></i>
+          <div>
+            <b>{{item.days3}}</b>
+            <span>Total 3+ Leads</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stati midnight_blue left">
+          <i class="bx bx-stats"></i>
+          <div>
+            <b>{{item.days7}}</b>
+            <span>Total +7 Leads</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="stati midnight_blue left">
+          <i class='bx bx-money'></i>
+          <div>
+            <b>{{item.closed}}</b>
+            <span>Total Closed Leads</span>
+          </div>
+        </div>
+        </div>
+      </div>
+            </div>
+
+        {%endfor%}
+
+
+
+          </div>
+
 </body>
-{{final}}<br>
+<br>
 {%else%}
 <h1> Forbidden </h1>
 <h2>You do not have permission</h2>

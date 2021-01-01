@@ -182,11 +182,12 @@
                                 <span class="hide-menu">Set Target</span>
                             </a>
                         </li>
+
                         <li class="sidebar-item pt-2">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'admin:index'%}"
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'report'%}"
                                 aria-expanded="false">
                                 <i class='bx bx-user-pin'></i>
-                                <span class="hide-menu">Assign Users</span>
+                                <span class="hide-menu">Open Report</span>
                             </a>
                         </li>
 
@@ -244,10 +245,10 @@
             <!-- ============================================================== -->
             <!-- Container fluid  -->
             <!-- ============================================================== -->
+            {{users}}
             {%block content%}
-                {%for obj in users%}
-            {{ojb.username}}
-            {%endfor%}
+
+
             {%endblock content%}
             {%endblock outer%}
 
