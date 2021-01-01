@@ -6,3 +6,5 @@ transfer_to_pp
 transfer_to_kabi
 transfer_to_ath
 transfer_to_anuj
+transfer_to_kuldeep
+transfer_to_bhatia

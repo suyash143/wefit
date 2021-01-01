@@ -18,15 +18,11 @@ from django.core.paginator import Paginator
 from django.conf import settings
 from django.core.mail import send_mail
 
-
-
-
 BASE = os.path.dirname(os.path.abspath(__file__))
 
 emp_name_handle = open(os.path.join(BASE, 'employee.txt'))
 first = emp_name_handle.read()
 name_list = first.split()
-
 
 def register(request):
     if request.method == 'POST':
@@ -59,13 +55,59 @@ def register(request):
                                                              created=datetime.datetime.now(), status='fresh')
 
         lead.save()
-        lead3, created = models.Final.objects.get_or_create(name=name, email=email, number=number, city=city,
+        active_sessions = Session.objects.filter(expire_date__gte=timezone.now())
+        user_id_list = []
+        for session in active_sessions:
+            data = session.get_decoded()
+            user_id_list.append(data.get('_auth_user_id', None))
+        # Query all logged in users based on id list
+        active_user=User.objects.filter(id__in=user_id_list,is_staff=0)
+        active_user_count=active_user.count()
+
+        c = open(os.path.join(BASE, 'employee.txt', ))
+        count = c.readline()
+        num = count.partition(' ')[0]
+        c.close()
+        if int(num) >= active_user_count:
+            writer = open(os.path.join(BASE, 'employee.txt'), 'w+')
+            writer.write(str(0))
+            writer.close()
+            c = open(os.path.join(BASE, 'employee.txt', ))
+            count = c.readline()
+            num = count.partition(' ')[0]
+            c.close()
+            lead3, created = models.Final.objects.get_or_create(name=name, email=email, number=number, city=city,
+                                                                state=state, weight=weight,
+                                                                height=height, gender=gender,
+
+                                                                contact=mode, type=goal, insta_user=instauser, bmi=bmi,
+                                                                created=datetime.datetime.now(), status='fresh',assigned=active_user[int(num)])
+            lead3.save()
+
+        elif int(num)<int(active_user_count):
+            lead3, created = models.Final.objects.get_or_create(name=name, email=email, number=number, city=city,
                                                             state=state, weight=weight,
                                                             height=height, gender=gender,
 
                                                             contact=mode, type=goal, insta_user=instauser, bmi=bmi,
-                                                            created=datetime.datetime.now(), status='fresh')
-        lead3.save()
+                                                            created=datetime.datetime.now(), status='fresh',assigned=active_user[int(num)])
+            lead3.save()
+            c = open(os.path.join(BASE, 'employee.txt'))
+            count = c.readline()
+            c.close()
+            writer = open(os.path.join(BASE, 'employee.txt'), 'w+')
+            writer.write(str(int(count) + 1))
+            writer.close()
+
+
+        else:
+            lead3, created = models.Final.objects.get_or_create(name=name, email=email, number=number, city=city,
+                                                                state=state, weight=weight,
+                                                                height=height, gender=gender,
+
+                                                                contact=mode, type=goal, insta_user=instauser, bmi=bmi,
+                                                                created=datetime.datetime.now(), status='fresh')
+            lead3.save()
 
         return redirect("/token")
 
@@ -510,10 +552,10 @@ def report(request):
                                'acknowledged': acknowledged, 'pending_cancelled': pending_cancelled, 'days3': days3,
                                'days7': days7,'assigned_id':assigned_id[0][0]}
 
-        return render(request, 'report.html', {'all': all, 'final': final, 'user_data': user_data})
+        return render(request, 'dashboard_report.html', {'all': all, 'final': final, 'user_data': user_data})
     else:
         all_data = models.Final.objects.raw('select * from accounts_final')
-        return render(request, 'report.html', {'all_data': all_data})
+        return render(request, 'dashboard_report.html', {'all_data': all_data})
 
 
 def export_csv(request):
@@ -670,7 +712,6 @@ def info_edit(request):
         start_date=request.POST.get('start_date')
         end_date=request.POST.get('end_date')
         users.info.target=target
-        users.info.mobile = mobile
         users.save()
     return render(request,'edit_info.html',{'users':users})
 
@@ -819,11 +860,17 @@ def register_emp(request):
 
 def dashboard_script(request):
     script=models.Questions.objects.all()
-    if request.method=="POST":
+    category=models.Questions.objects.values('category').distinct()
+    if request.method=="POST" and 'script_id' in request.POST:
         script_id=request.POST['script_id']
         request.session['script_id']=script_id
         return redirect('dashboard_script_edit')
-    return render(request,'dashboard_script.html',{'script':script})
+
+    elif request.method=='POST' and 'filter' in request.POST:
+        filter_value=request.POST['filter']
+        script=models.Questions.objects.filter(category=filter_value)
+        return render(request,'dashboard_script.html',{'script':script,'category':category})
+    return render(request,'dashboard_script.html',{'script':script,'category':category})
 
 def dashboard_script_edit(request):
     script_id=request.session['script_id']
@@ -832,12 +879,12 @@ def dashboard_script_edit(request):
         script=models.Questions.objects.all().get(pk=script_id)
         if request.method=='POST':
 
-            category=request.POST['category']
+            category = request.POST['category']
             question = request.POST['question']
             answer = request.POST['answer']
             script.category=category
-            script.question=question
-            script.answer=answer
+            script.questions=question
+            script.answers=answer
             script.save()
         return render(request, "dashboard_script_edit.html", {'script': script})
 
@@ -864,5 +911,11 @@ def get_current_users(request):
         data = session.get_decoded()
         user_id_list.append(data.get('_auth_user_id', None))
     # Query all logged in users based on id list
-    print(User.objects.filter(id__in=user_id_list))
+    print(User.objects.filter(id__in=user_id_list,is_staff=0).count())
+    all_users=User.objects.all()
+    return render(request,'blank.html',{'users':User.objects.filter(id__in=user_id_list,is_staff=0),'all_users':all_users})
+
+def delete_session(request):
+    request.session.flush()
+    request.session.clear_expired()
     return render(request,'blank.html')

@@ -32,4 +32,10 @@ class OrderAdmin(admin.ModelAdmin):
     def transfer_to_anuj(self, request, queryset):
         all=queryset.values().all().update(assigned=User.objects.get(id=16))
     transfer_to_anuj.short_description = 'Transfer to anuj'
+    def transfer_to_kuldeep(self, request, queryset):
+        all=queryset.values().all().update(assigned=User.objects.get(id=17))
+    transfer_to_kuldeep.short_description = 'Transfer to kuldeep'
+    def transfer_to_bhatia(self, request, queryset):
+        all=queryset.values().all().update(assigned=User.objects.get(id=18))
+    transfer_to_bhatia.short_description = 'Transfer to bhatia'
 admin.site.register(Final,OrderAdmin)

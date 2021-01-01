@@ -3,7 +3,34 @@
 {% load static %}
 {%block content%}
 
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          ['Fresh ({{fresh}})',     {{fresh}}],
+          ['Cancelled ({{cancelled}})',      {{cancelled}}],
+          ['Closed ({{closed}})',  {{closed}}],
+          ['Rescheduled ({{rescheduled}})',  {{rescheduled}}],
+          ['Follow Up ({{follow_up}})',  {{follow_up}}],
+          ['Correct Option ({{other}})', {{other}}],
+          ['Pending To be Cancelled {{pending_cancelled}}', {{pending_cancelled}}],
+          ['Acknowledged ({{acknowledged}})', {{acknowledged}}],
 
+
+        ]);
+
+        var options = {
+          title: 'My Daily Activities',
+          pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+        chart.draw(data, options);
+      }
+    </script>
 
             <!-- ============================================================== -->
             <!-- End Bread crumb and right sidebar toggle -->
