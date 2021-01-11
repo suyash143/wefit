@@ -190,6 +190,21 @@
                                 <span class="hide-menu">Open Report</span>
                             </a>
                         </li>
+                        <li class="sidebar-item pt-2">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'admin:index' %}"
+                                aria-expanded="false">
+                                <i class='bx bx-target-lock'></i>
+                                <span class="hide-menu">Assign Employee</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item pt-2">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'dashboard_log' %}"
+                                aria-expanded="false">
+                                <i class='bx bx-target-lock'></i>
+                                <span class="hide-menu">Employee Logs</span>
+                            </a>
+                        </li>
 
                          <li class="sidebar-item pt-2">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'employee'%}"
@@ -245,7 +260,7 @@
             <!-- ============================================================== -->
             <!-- Container fluid  -->
             <!-- ============================================================== -->
-            {{users}}
+
             {%block content%}
 
 

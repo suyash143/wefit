@@ -21,6 +21,6 @@ urlpatterns = [
 	path('dashboard_script',views.dashboard_script,name='dashboard_script'),
 	path('dashboard_script_edit',views.dashboard_script_edit,name='dashboard_script_edit'),
 	path('dashboard_script_add',views.dashboard_script_add,name='dashboard_script_add'),
-	path('log',views.get_current_users,name='log'),
+	path('dashboard_log',views.get_current_users,name='dashboard_log'),
 	path('delete_session',views.delete_session,name='delete_session')
 ]

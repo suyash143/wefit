@@ -913,7 +913,11 @@ def get_current_users(request):
     # Query all logged in users based on id list
     print(User.objects.filter(id__in=user_id_list,is_staff=0).count())
     all_users=User.objects.all()
-    return render(request,'blank.html',{'users':User.objects.filter(id__in=user_id_list,is_staff=0),'all_users':all_users})
+    users=User.objects.filter(id__in=user_id_list,is_staff=0)
+
+
+    return render(request, 'dashboard_logs.html', {'users':users,'all_users':all_users})
+
 
 def delete_session(request):
     request.session.flush()

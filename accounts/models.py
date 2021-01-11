@@ -49,7 +49,6 @@ class Manager(models.Model):
     assigned = models.CharField(max_length=300, null=True)
 
 
-
 class Final(models.Model):
     name = models.CharField(max_length=200)
     number = models.IntegerField()
