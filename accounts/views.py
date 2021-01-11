@@ -915,7 +915,6 @@ def get_current_users(request):
     all_users=User.objects.all()
     users=User.objects.filter(id__in=user_id_list,is_staff=0)
 
-
     return render(request, 'dashboard_logs.html', {'users':users,'all_users':all_users})
 
 
@@ -923,3 +922,4 @@ def delete_session(request):
     request.session.flush()
     request.session.clear_expired()
     return render(request,'blank.html')
+
