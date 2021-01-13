@@ -68,7 +68,7 @@ def register(request):
         count = c.readline()
         num = count.partition(' ')[0]
         c.close()
-        if int(num) >= active_user_count:
+        if int(num) >= active_user_count != 0:
             writer = open(os.path.join(BASE, 'employee.txt'), 'w+')
             writer.write(str(0))
             writer.close()
@@ -84,7 +84,7 @@ def register(request):
                                                                 created=datetime.datetime.now(), status='fresh',assigned=active_user[int(num)])
             lead3.save()
 
-        elif int(num)<int(active_user_count):
+        elif int(num)<int(active_user_count) and active_user_count !=0:
             lead3, created = models.Final.objects.get_or_create(name=name, email=email, number=number, city=city,
                                                             state=state, weight=weight,
                                                             height=height, gender=gender,

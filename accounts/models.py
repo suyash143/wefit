@@ -6,6 +6,7 @@ from django.db.models.signals import post_save,post_delete
 from django.dispatch import receiver
 import datetime
 
+
 class AllLead(models.Model):
 
     name=models.CharField(max_length=200)
@@ -71,6 +72,7 @@ class Final(models.Model):
     purchased = models.IntegerField(null=True, blank=True,default=0)
     paid = models.IntegerField(null=True, blank=True,default=0)
 
+
 class Info(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE)
     mobile=models.IntegerField(null=True,blank=True)
@@ -88,10 +90,10 @@ def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Info.objects.create(user=instance)
 
+
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.info.save()
-
 
 
 class Record(models.Model):
