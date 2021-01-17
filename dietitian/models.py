@@ -12,9 +12,7 @@ class information(models.Model):
     drinking=models.CharField(max_length=100,blank=True,null=True)
     start_of_plan = models.DateTimeField(null=True, blank=True)
     photo_link = models.URLField(max_length=400, null=True, blank=True)
-
     dietitian_assigned = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-
     daily_diet = models.TextField(null=True, blank=True)
     sports = models.CharField(max_length=250, null=True, blank=True)
     supplements = models.CharField(max_length=250, null=True, blank=True)

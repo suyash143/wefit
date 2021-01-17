@@ -8,6 +8,7 @@ from django.http import HttpResponse
 import os
 import pytz
 from django.contrib.sessions.models import Session
+from dietitian.models import *
 
 from datetime import date
 from django.utils import timezone
@@ -923,3 +924,7 @@ def delete_session(request):
     request.session.clear_expired()
     return render(request,'blank.html')
 
+
+def create_information(request):
+    for user in Final.objects.all():
+        information.objects.get_or_create(lead=user)
