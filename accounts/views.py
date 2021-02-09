@@ -8,7 +8,7 @@ from django.http import HttpResponse
 import os
 import pytz
 from django.contrib.sessions.models import Session
-from dietitian.models import *
+
 
 from datetime import date
 from django.utils import timezone
@@ -694,10 +694,6 @@ def target(request):
     users=User.objects.all().filter(is_staff=0)
     if request.method == "POST" and 'id' in request.POST:
         id = request.POST.get('id')
-        name = models.Final.objects.get(id=id)
-        if name.status == "fresh":
-            name.status = "acknowledged"
-            name.save()
 
         request.session['user_id'] = id
 
@@ -853,7 +849,7 @@ def register_emp(request):
                                                             created=datetime.datetime.now(), status='fresh',assigned=request.user)
         lead3.save()
 
-        return redirect("/all")
+        return redirect("/all ")
 
     else:
         return render(request,"dashboard_register.html")
@@ -891,6 +887,12 @@ def dashboard_script_edit(request):
 
     return render(request,"dashboard_script_edit.html")
 
+def dashboard_script_delete(request):
+    script_id = request.session['script_id']
+    obj=models.Questions.objects.get(pk=script_id)
+    obj.delete()
+    return redirect('dashboard_script')
+
 
 def dashboard_script_add(request):
 
@@ -925,6 +927,3 @@ def delete_session(request):
     return render(request,'blank.html')
 
 
-def create_information(request):
-    for user in Final.objects.all():
-        information.objects.get_or_create(lead=user)
