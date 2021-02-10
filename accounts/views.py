@@ -628,6 +628,7 @@ def dashboard(request):
         monday = today - datetime.timedelta(days=today.weekday())
         next_6 = monday + datetime.timedelta(days=6)
         id=request.user.id
+        active_complaints=models.Improvement.objects.filter(status='Unresolved').count()
         today_data = models.Final.objects.raw(
             'select * from accounts_final where (created like "%' + str(today) + '%" ) and assigned_id ="' + str(id) + '" ')
         week_data=user_data = models.Final.objects.raw(
@@ -682,7 +683,7 @@ def dashboard(request):
         total_target_remaining=abs(total_target-total_target_achieved)
 
         return render(request,'dashboard.html',{'week_assigned':week_assigned,'week_cancelled':week_cancelled,'week_closed':week_closed,'total_target':total_target,'total_target_achieved':total_target_achieved,
-                                                'total_target_remaining':total_target_remaining,'names':names,'remaining':remaining,'today':today,'this_day':this_day,'man':man})
+                                                'total_target_remaining':total_target_remaining,'active_complaints':active_complaints,'names':names,'remaining':remaining,'today':today,'this_day':this_day,'man':man})
     else:
         return HttpResponse('Please Log In to View Your Data')
 
@@ -927,3 +928,36 @@ def delete_session(request):
     return render(request,'blank.html')
 
 
+def dashboard_improvement_add(request):
+    if request.method=="POST":
+        question=request.POST.get('question',None)
+        comment = request.POST.get('comment', None)
+        sc, created = models.Improvement.objects.get_or_create(question=question, comment=comment, created_on=datetime.datetime.now(),
+                                                               created_by=request.user,status="Unresolved")
+        sc.save()
+        return redirect('dashboard' )
+    return render(request,'dashboard_improvement_add.html')
+
+
+def dashboard_improvement_view(request):
+    users=models.Improvement.objects.all().order_by('-id')
+    if request.method=="POST" and "id" in request.POST:
+        id=request.POST.get('id',None)
+        request.session['id']=id
+        return redirect('dashboard_improvement_edit')
+    return render(request,'dashboard_improvement.html',{'users':users})
+
+def dashboard_improvement_edit(request):
+    id=request.session['id']
+    name=models.Improvement.objects.get(pk=id)
+    if request.method=='POST':
+        resolved_on=request.POST.get('resolved_on',None)
+        status=request.POST.get('status',None)
+        answer=request.POST.get('answer',None)
+        name.resolved_on=resolved_on
+        name.status=status
+        name.answer=answer
+        name.resolved_by=request.user.username
+        name.save()
+        return redirect('dashboard_improvement')
+    return render(request, 'dashboard_improvement_edit.html',{'name':name})

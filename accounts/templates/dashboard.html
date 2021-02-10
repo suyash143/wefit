@@ -42,6 +42,13 @@
                 <!-- ============================================================== -->
                 <!-- Three charts -->
                 <!-- ============================================================== -->
+                {%if request.user.is_staff%}
+                <p style="font-weight: 700;
+                    color: red;">
+                    <a href="{%url 'dashboard_improvement'%}">Active Complaints - {{active_complaints}}</a>
+
+                </p>
+                {%endif%}
                 <div class="row justify-content-center">
                     <div class="col-lg-4 col-sm-6 col-xs-12">
                         <div class="white-box analytics-info">

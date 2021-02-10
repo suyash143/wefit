@@ -42,13 +42,24 @@
                                             {%endif%}
                                             <td >{{obj.category}}</td>
                                             <td class="txt-oflo">
-                                                <textarea  name="" id="" cols="45" rows="5">{{obj.questions}}</textarea>
+                                                <textarea  name="" id="" cols="15" rows="5">{{obj.questions}}</textarea>
                                                 </td>
                                             <td class="txt-oflo">
-                                                <textarea  name="" id="" cols="45" rows="5">{{obj.answers}}</textarea>
+                                                <textarea  name="" id="{{obj.pk}}" cols="28" rows="5">{{obj.answers}}</textarea>
 
                                             </td>
+                                            <td>
+                                                <button onclick="execCopy{{obj.pk}}()">Copy </button>
+                                            </td>
 
+
+                                            <script>
+
+                                                function execCopy{{obj.pk}}() {
+                                                  document.getElementById("{{obj.pk}}").select();
+                                                  document.execCommand("copy");
+                                                }
+                                            </script>
 
                                         </tr>
                                         {%endfor%}

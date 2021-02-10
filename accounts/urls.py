@@ -24,6 +24,9 @@ urlpatterns = [
 	path('dashboard_script_delete',views.dashboard_script_delete,name='dashboard_script_delete'),
 	path('dashboard_log',views.get_current_users,name='dashboard_log'),
 	path('delete_session',views.delete_session,name='delete_session'),
+	path('dashboard_improvement_add',views.dashboard_improvement_add,name="dashboard_improvement_add"),
+	path('dashboard_improvement',views.dashboard_improvement_view,name='dashboard_improvement'),
+	path('dashboard_improvement_edit',views.dashboard_improvement_edit,name='dashboard_improvement_edit'),
 
 
 ]

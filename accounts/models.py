@@ -109,3 +109,18 @@ class Questions(models.Model):
     category=models.TextField(null=True)
     questions=models.TextField(null=True)
     answers=models.TextField(null=True)
+
+
+class Improvement(models.Model):
+    question=models.TextField(null=True,blank=True)
+    answer=models.TextField(null=True,blank=True)
+    status=models.CharField(null=True,blank=True,max_length=150)
+    created_by = models.ForeignKey(User,null=True,on_delete=models.SET_NULL)
+    created_on=models.DateTimeField(null=True,blank=True)
+    resolved_by = models.TextField(null=True,blank=True)
+    resolved_on=models.DateTimeField(null=True,blank=True)
+    comment=models.TextField(null=True,blank=True)
+
+
+
+
