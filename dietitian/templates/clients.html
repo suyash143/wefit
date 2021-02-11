@@ -1,4 +1,110 @@
 {%extends 'dietitianpanel.html'%}
 {%block content%}
+            <!-- ============================================================== -->
+            <!-- End Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
 
+                <!-- ============================================================== -->
+                <!-- Three charts -->
+                <!-- ============================================================== -->
+
+                <!-- ============================================================== -->
+                <!-- RECENT SALES -->
+                <!-- ============================================================== -->
+
+                <div class="row">
+                    <div class="col-md-12 col-lg-12 col-sm-12">
+                        <div class="white-box">
+                            <div class="d-md-flex mb-3">
+                                <h3 class="box-title mb-0">Client Details</h3>
+                                <div class="col-md-9 col-sm-15 col-xs-24 ml-auto">
+                                    <select class="form-control row border-top">
+                                        <option>{{today}}</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table no-wrap">
+                                    <thead>
+                                        <tr>
+                                            <th class="border-top-0">#</th>
+                                            <th class="border-top-0">Created</th>
+                                            <th class="border-top-0">Name</th>
+                                            <th class="border-top-0">Assigened</th>
+                                            <th class="border-top-0">Instagram Username</th>
+                                            <th class="border-top-0">City</th>
+                                            <th class="border-top-0">Number</th>
+
+
+
+                                            <th class="border-top-0">Paid</th>
+                                            <th class="border-top-0">Client Secret</th>
+
+
+
+
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+
+                                    {%for obj in page.object_list%}
+                                        <tr>
+                                            <td><form method="POST">{%csrf_token%} <input type="submit" value="{{obj.pk}}" name="id"></form></td>
+                                            <td >{{obj.created}}</td>
+                                            <td class="txt-oflo">{{obj.name}}</td>
+                                            <td class="txt-oflo">{{obj.assigned}}</td>
+                                            <td class="txt-oflo">{{obj.insta_user}}</td>
+                                            <td class="txt-oflo">{{obj.city}}</td>
+                                            <td>{{obj.number}}</td>
+
+
+                                            <td class="txt-oflo">{{obj.paid}}</td>
+
+                                            <td>{{obj.client_secret}}</td>
+
+
+
+                                        </tr>
+                                    {%endfor%}
+
+
+                                    </tbody>
+
+                                </table>
+                                <center>
+
+                    {% for num in page.paginator.page_range %}
+                  {% ifequal num page.number %}
+                    <span class="current"><b>{{ num }}</b></span>
+                  {% else %}
+                    <a href="?page={{ num }}"> {{ num }}</a>
+                  {% endifequal %}
+                {% endfor %}
+        {% if page.has_previous %}
+      <a href="{%url 'all'%}?page={{page.previous_page_number}}">Previous Page</a>
+
+      {% endif %}
+      {% if page.has_next %}
+
+      <a href="{%url 'all'%}?page={{page.next_page_number}}">Next Page</a>
+      {% endif %}</center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- Recent Comments -->
+                <!-- ============================================================== -->
+
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
 {%endblock content%}

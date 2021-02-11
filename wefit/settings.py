@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 import os.path
 import sys
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -42,7 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'executives',
-    'dietitian'
+    'dietitian',
+    'cloudinary'
 ]
 
 MIDDLEWARE = [
@@ -140,3 +144,9 @@ EMAIL_HOST_PASSWORD =''
 
 
 SESSION_COOKIE_AGE=60*60*12
+
+cloudinary.config(
+  cloud_name = "wefitnutrition",
+  api_key = "353931355246891",
+  api_secret = "R722i03GkO32tXNvdCEVNbNebDc"
+)

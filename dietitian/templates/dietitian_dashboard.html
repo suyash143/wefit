@@ -1,0 +1,168 @@
+{%extends 'dietitianpanel.html'%}
+
+{% load static %}
+{%block content%}
+
+ <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['bar']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Date', 'Chats', 'Stage 2 '],
+
+
+            {%for key,item in final.items%}
+        ['{{key}}', {{item.count}}, {{item.stage_2_count}}],
+        {%endfor%}
+
+        ]);
+
+        var options = {
+          chart: {
+            title: 'Previous 7 Days Lead Report',
+            subtitle: 'Lead Report ',
+          },
+          bars: 'horizontal' // Required for Material Bar Charts.
+        };
+
+        var chart = new google.charts.Bar(document.getElementById('barchart_material'));
+
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+      }
+    </script>
+
+<br>
+
+ <div  id="barchart_material" style="width: 90%; height:400px;margin-left:5%"></div>
+<hr>
+
+<div class="row justify-content-center">
+                    <div class="col-lg-4 col-sm-6 col-xs-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Total Money from Fit-Simran</h3>
+                            <ul class="list-inline two-part d-flex align-items-center mb-0">
+                                <li>
+                                    <div id="sparklinedash"><canvas width="67" height="30"
+                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
+                                    </div>
+                                </li>
+                                <li class="ml-auto"><span class="counter text-success">{{simran_total}}</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 col-xs-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Total Attended Clients</h3>
+                            <ul class="list-inline two-part d-flex align-items-center mb-0">
+                                <li>
+                                    <div id="sparklinedash2"><canvas width="67" height="30"
+                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
+                                    </div>
+                                </li>
+                                <li class="ml-auto"><span class="counter text-purple">{{simran_attended}}</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 col-xs-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Fit-Simran Unattended Clients</h3>
+                            <ul class="list-inline two-part d-flex align-items-center mb-0">
+                                <li>
+                                    <div id="sparklinedash3"><canvas width="67" height="30"
+                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
+                                    </div>
+                                </li>
+                                <li class="ml-auto"><span class="counter text-info">{{simran_unattended}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+<hr>
+
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <div id="chart_div"></div>
+
+<hr>
+
+<h2>Trainer Assigned Count</h2>
+ <div class="row justify-content-center">
+{%for key,item in trainer.items%}
+
+
+                    <div class="col-lg-4 col-sm-6 col-xs-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title"><b>{{key}}</b></h3>
+                            <ul class="list-inline two-part d-flex align-items-center mb-0">
+                                <li>
+                                    <div id="sparklinedash"><canvas width="67" height="30"
+                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
+                                    </div>
+                                </li>
+                                <li class="ml-auto"><span class="counter text-success"><b>{{item.trainer_count}}</b></span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+{%endfor%}
+                </div>
+
+
+
+
+
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <div id="chart_div"></div>
+
+{%endblock content%}
+
+                <!-- ============================================================== -->
+                <!-- Recent Comments -->
+                <!-- ============================================================== -->
+
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
+            <footer class="footer text-center">Wefit CRM presented by <a
+                    href="https://www.wefitnutrition.in/">wefitnutrition.in</a>
+            </footer>
+            <!-- ============================================================== -->
+            <!-- End footer -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page wrapper  -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script src="https://www.creativefuel.io/dashboard/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="https://www.creativefuel.io/dashboard/plugins/bower_components/popper.js/dist/umd/popper.min.js"></script>
+    <script src="https://www.creativefuel.io/dashboard/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="https://www.creativefuel.io/dashboard/js/app-style-switcher.js"></script>
+    <script src="https://www.creativefuel.io/dashboard/plugins/bower_components/jquery-sparkline/jquery.sparkline.min.js"></script>
+    <!--Wave Effects -->
+    <script src="https://www.creativefuel.io/dashboard/js/waves.js"></script>
+    <!--Menu sidebar -->
+    <script src="https://www.creativefuel.io/dashboard/js/sidebarmenu.js"></script>
+    <!--Custom JavaScript -->
+    <script src="https://www.creativefuel.io/dashboard/js/custom.js"></script>
+    <!--This page JavaScript -->
+    <!--chartis chart-->
+    <script src="https://www.creativefuel.io/dashboard/plugins/bower_components/chartist/dist/chartist.min.js"></script>
+    <script src="https://www.creativefuel.io/dashboard/plugins/bower_components/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
+    <script src="https://www.creativefuel.io/dashboard/js/pages/dashboards/dashboard1.js"></script>
+
+</body>
+
+</html>

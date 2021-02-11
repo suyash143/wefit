@@ -1,0 +1,397 @@
+{%extends 'dietitianpanel.html'%}
+{%block content%}
+{% load static %}
+
+<div class="page-wrapper">
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <div class="page-breadcrumb bg-white">
+                <div class="row align-items-center">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                        <h4 class="page-title text-uppercase font-medium font-14">Dashboard</h4>
+                    </div>
+                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                        <div class="d-md-flex">
+                            <ol class="breadcrumb ml-auto">
+                                <li><a href="#">Dashboard</a></li>
+                            </ol>
+                            <a href="#" target="_self"
+                                class="btn btn-danger  d-none d-md-block pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Send Email</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                <!-- Row -->
+                <div class="row">
+                    <!-- Column -->
+                    <div class="col-lg-4 col-xlg-3 col-md-12">
+                        <div class="white-box">
+                            <div class="user-bg"> <img width="100%" alt="user" src="https://www.nicepng.com/png/full/202-2022660_edit-user-profile-comments-edit-profile-icon-png.png">
+                                <div class="overlay-box">
+                                    <div class="user-content">
+                                        <a href="javascript:void(0)"><img src="https://cdn4.iconfinder.com/data/icons/instagram-ui-twotone/48/Paul-18-512.png"
+                                                class="thumb-lg img-circle" alt="img"></a>
+                                        <h4 class="text-white mt-2"><strong>{{name.name}} ({{name.gender}})</strong></h4>
+                                        <h5 class="text-white mt-2">{{name.email}}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="user-btm-box mt-5 d-md-flex">
+
+                                <div class="col-md-4 col-sm-4 text-center">
+                                    <h1>{{name.id}}</h1>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Column -->
+                    <!-- Column -->
+                    <div class="col-lg-8 col-xlg-9 col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <form class="form-horizontal form-material" method="POST" enctype="multipart/form-data">
+                                    {%csrf_token%}
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Contact Number</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                            <input style="font-weight: 900;font-size: xx-large;" type="text" placeholder="{{name.number}}"
+                                                class="form-control p-0 border-0"> </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">City - State</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                            <input type="text" placeholder="{{name.city}} - {{name.state}}"
+                                                class="form-control p-0 border-0"> </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Instagram Username</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                            <input type="text" placeholder="{{name.insta_user}}"
+                                                class="form-control p-0 border-0"> </div>
+                                    </div>
+
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">BMI (Height) Type</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                            <input type="text" placeholder="BMI-{{name.bmi|floatformat:3}} ( {{person_stat.feet}} {{person_stat.inch}}' ) Category{{person_stat.cls}}"
+                                                class="form-control p-0 border-0"> </div>
+                                    </div>
+
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Weight</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                            <input type="text" placeholder="{{name.weight}}"
+                                                class="form-control p-0 border-0"> </div>
+                                    </div>
+
+
+   <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Comment</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                           <input class="form-control p-0 border-0" type="text" name="comment"  id="comment" placeholder="comment">
+                                        </div>
+                                    </div>
+
+                                        <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Goal </label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                           <input class="form-control p-0 border-0" type="text" placeholder="{{name.goal}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Sports</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                           <input class="form-control p-0 border-0" type="text" placeholder="{{name.sports}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Supplements</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                           <input class="form-control p-0 border-0" type="text" placeholder="{{name.supplements}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Willing to Take Supplements</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                           <input class="form-control p-0 border-0" type="text" placeholder="{{name.supplement_wish}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Living Place</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                           <input class="form-control p-0 border-0" type="text" placeholder="{{name.place}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Diet</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                           <input class="form-control p-0 border-0" type="text" placeholder="{{name.diet}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Previous Workout</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                           <input class="form-control p-0 border-0" type="text" placeholder="{{name.previous_workout}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Disease/Allergy</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                           <input class="form-control p-0 border-0" type="text" placeholder="{{name.disease}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Meals Prepared By</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                           <input class="form-control p-0 border-0" type="text" placeholder="{{name.meal_prep}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Medication</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                           <input class="form-control p-0 border-0" type="text" placeholder="{{name.meds}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Equipments</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                           <input class="form-control p-0 border-0" type="text" placeholder="{{name.equipments}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Injury</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                           <input class="form-control p-0 border-0" type="text" placeholder="{{name.injury}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Workout Type</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                           <input class="form-control p-0 border-0" type="text" placeholder="{{name.workout}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Workout Time</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                           <input class="form-control p-0 border-0" type="text" placeholder="{{name.workout_time}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Telegram Number</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                           <input class="form-control p-0 border-0" type="text" placeholder="{{name.telegram}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Created Date</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                            <input type="text" placeholder="{{name.created}} "
+                                                class="form-control p-0 border-0"> </div>
+                                    </div>
+
+                                    {%if request.user.is_staff%}}
+                                    {%if start_of_plan%}
+                                    <div class="form-group mb-4">
+                                        <label for="rescheduled" class="col-md-12 p-0">Payment Date</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                            <input type="datetime-local"
+                                                class="form-control p-0 border-0" name="payment_date" id="rescheduled" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label for="rescheduled" class="col-md-12 p-0">Payment Method</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                            <select name="payment_method" required>
+                                                <option value="Bank Transfer">Bank Transfer</option>
+                                                <option value="Paytm">Paytm</option>
+                                                <option value="Phone Pay">Phone Pay</option>
+                                                <option value="Google Pay">Google Pay</option>
+                                                <option value="PayPal">PayPal</option>
+                                                <option value="Remitly">Remitly</option>
+                                                <option value="Others">Others</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label for="rescheduled" class="col-md-12 p-0">Payment Screenshot</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                            <input type="file" name="payment_screenshot">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group mb-4">
+                                        <label for="rescheduled" class="col-md-12 p-0">Start Of Plan</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                            <input type="datetime-local" value="{{name.start_of_plan}}"
+                                                class="form-control p-0 border-0" name="rescheduled" id="rescheduled" required>
+                                        </div>
+                                    </div>
+
+
+
+                                    {%else%}
+                                    <div class="form-group mb-4">
+                                        <label for="rescheduled" class="col-md-12 p-0">Payment Date</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                            <input type="text" placeholder="{{name.payment_date}}"
+                                                class="form-control p-0 border-0" id="rescheduled">
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label for="rescheduled" class="col-md-12 p-0">Payment Method</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                            <input type="text" placeholder="{{name.payment_method}}"
+                                                class="form-control p-0 border-0" >
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label for="rescheduled" class="col-md-12 p-0">Payment Screenshot</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                            <img src="{{name.payment_screenshot.url}}" width="30%" height="30%">
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label for="rescheduled" class="col-md-12 p-0">Start Of Plan</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                            <input type="text" placeholder="{{name.start_of_plan}}"
+                                                class="form-control p-0 border-0" name="rescheduled" id="rescheduled">
+                                        </div>
+                                    </div>
+                                    {%endif%}
+
+                                    {%else%}
+                                    <div class="form-group mb-4">
+                                        <label for="rescheduled" class="col-md-12 p-0">Start Of Plan</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                            <input type="text" placeholder="{{name.start_of_plan}}"
+                                                class="form-control p-0 border-0" name="rescheduled" id="rescheduled">
+                                        </div>
+                                    </div>
+                                    {%endif%}
+                                    {%if request.user.is_staff%}
+                                   <div class="form-group mb-4">
+                                        <label class="col-sm-12">Assigned</label>
+                                        <div class="col-sm-12 border-bottom">
+                                            <select class="form-control p-0 border-0" name="assigned" required >
+                                        <option value="{{user.assigned}}" selected disabled>{{user.assigned}}</option>
+                                                {%for user in users%}
+                                                {%if user.info.is_dietitian%}
+                                                <option value="{{user.pk}}" >{{user.username}}</option>
+                                                {%endif%}
+                                                {%endfor%}
+
+
+                                            </select>
+                                                </div></div>
+                                    {%else%}
+                                    <div class="form-group mb-4">
+                                        <label for="rescheduled" class="col-md-12 p-0">Assigned</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                            <input type="text" placeholder="{{name.assigned}}"
+                                                class="form-control p-0 border-0" name="r" id="rescheduled" >
+                                        </div>
+                                    </div>
+                                    {%endif%}
+                                    {%if request.user.is_staff%}
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Paid</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                            <input type="number" placeholder="{{name.paid}} "
+                                                class="form-control p-0 border-0" name="paid"> </div>
+                                    </div>
+                                    {%else%}
+                                    {%if request.user.is_simran%}
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Paid</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                            <input type="number" placeholder="{{name.paid}} "
+                                                class="form-control p-0 border-0" name="paid"> </div>
+                                    </div>
+                                    {%endif%}
+                                    {%if request.user.is_indian%}
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Paid</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                            <input type="number" placeholder="{{name.paid}} "
+                                                class="form-control p-0 border-0" name="paid"> </div>
+                                    </div>
+                                    {%endif%}
+                                    {%endif%}
+
+
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Telegram Photo Link(to be filled by trainer)</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                            <input type="text" placeholder="{{name.photo_link}} "
+                                                class="form-control p-0 border-0" name="photo_link"> </div>
+                                    </div>
+
+
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Images</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                        <img src="{{name.front_profile.url}}" width="30%" height="30%">
+                                            <img src="{{name.back_profile.url}}" width="30%" height="30%">
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label class="col-md-12 p-0">Images</label>
+                                        <div class="col-md-12 border-bottom p-0">
+                                        <img src="{{name.right_profile.url}}" width="30%" height="30%">
+                                            <img src="{{name.left_profile.url}}" width="30%" height="30%">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group mb-4">
+                                        <div class="col-sm-12">
+                                             <input class="btn btn-success" type="submit" onclick="myFunction()">
+                                        </div>
+                                    </div>
+                                        <script>
+                                    var form = document.getElementById('updateform');
+
+                                    function myFunction() {
+                                      if (form.checkValidity()) {
+                                        alert("Edited Successfully");
+                                      }
+                                    }
+                                    </script>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Column -->
+                </div>
+                <!-- Row -->
+                <!-- ============================================================== -->
+                <!-- End PAge Content -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Right sidebar -->
+                <!-- ============================================================== -->
+                <!-- .right-sidebar -->
+                <!-- ============================================================== -->
+                <!-- End Right sidebar -->
+                <!-- ============================================================== -->
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- footer -->
+            {%endblock content%}

@@ -1,10 +1,12 @@
 from django.db import models
 from accounts.models import *
+from django.contrib.auth.models import User
 from django.db.models.signals import post_save,post_delete
 from django.dispatch import receiver
+from cloudinary.models import CloudinaryField
 
 
-class information(models.Model):
+class Information(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
     number = models.IntegerField(null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
@@ -43,6 +45,11 @@ class information(models.Model):
     gym = models.CharField(null=True, blank=True, max_length=150)
     payment_method = models.CharField(max_length=120, null=True, blank=True)
     payment_date = models.DateTimeField(null=True, blank=True)
+    front_profile = CloudinaryField('Fimage', null=True)
+    left_profile = CloudinaryField('Limage', null=True)
+    back_profile = CloudinaryField('Bimage', null=True)
+    right_profile = CloudinaryField('Rimage', null=True)
+    payment_screenshot = CloudinaryField('screenshot', null=True, blank=True)
     client_secret = models.CharField(max_length=30, null=True, blank=True)
 
 

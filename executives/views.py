@@ -71,7 +71,10 @@ def login(request):
         user=auth.authenticate(username=username,password=password)
         if user is not None:
             auth.login(request,user)
-            return redirect('/dashboard')
+            if request.user.info.is_dietitian is True:
+                return redirect('/dietitian/dashboard')
+            else:
+                return redirect('/dashboard')
         else:
             messages.info(request,"invalid Credentials")
             return redirect('login')

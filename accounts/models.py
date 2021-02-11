@@ -81,6 +81,7 @@ class Info(models.Model):
     birthdate=models.DateField(null=True, blank=True)
     profile=models.CharField(max_length=400,null=True,blank=True)
     target_achieved=models.IntegerField(null=True,blank=True,default=0)
+    is_dietitian=models.BooleanField(default=False,null=True)
     date_start=models.DateField(null=True, blank=True,default=datetime.date.today()- datetime.timedelta(days=datetime.date.today().weekday()))
     date_end=models.DateField(null=True, blank=True,default=datetime.date.today()-datetime.timedelta(days=datetime.date.today().weekday())+datetime.timedelta(days=6))
 
