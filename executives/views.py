@@ -54,7 +54,7 @@ def employee_add(request):
 
                     print('user created')
 
-                    return redirect('login')
+                    return redirect('dashboard')
 
             else:
                 messages.info(request,'passoword incorrect')
@@ -128,3 +128,47 @@ def employee_profile(request):
         return render(request,'employee_profile.html',{'name':name})
     else:
         return HttpResponse("you Do Not have Permission")
+
+
+def dietitian_add(request):
+    if request.method=='POST':
+        first_name=request.POST['first_name']
+        last_name = request.POST['last_name']
+        username = request.POST['username']
+        number=request.POST['number']
+        password1 = request.POST['password1']
+        password2 = request.POST['password2']
+        email = request.POST['email']
+        if len(password1)<8:
+            messages.info(request,"Password Should be Atleast 8 character long")
+            return render(request,'employee_add.html')
+        else:
+            if password1==password2:
+                if User.objects.filter(username=username):
+                    messages.info(request,'Username Taken')
+                    return render(request,'employee_add.html')
+
+                elif User.objects.filter(email=email):
+                    messages.info(request,'Email Taken')
+                    return render(request,'employee_add.html')
+                else:
+                    user = User.objects.create_user(username=username,password=password1,email=email,first_name=first_name,last_name=last_name)
+                    user.save()
+                    user.info.mobile=number
+                    user.info.is_dietitian=True
+                    user.save()
+
+                    count= 0
+
+
+
+                    print('user created')
+
+                    return redirect('login')
+
+            else:
+                messages.info(request,'passoword incorrect')
+                return render(request,'employee_add.html')
+    else:
+        return render(request,'employee_add.html')
+

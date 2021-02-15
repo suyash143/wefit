@@ -53,12 +53,3 @@ class Information(models.Model):
     client_secret = models.CharField(max_length=30, null=True, blank=True)
 
 
-@receiver(post_save, sender=Final)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        information.objects.create(lead=instance)
-
-
-@receiver(post_save, sender=Final)
-def save_user_profile(sender, instance, **kwargs):
-    instance.information.save()

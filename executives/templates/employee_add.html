@@ -103,7 +103,7 @@ body {
 <body>
 <div class="signup-form">
 	{%if request.user.is_staff %}
-    <form action="register" method="POST">
+    <form  method="POST">
 		{%csrf_token%}
 		<h2>Sign Up</h2>
 		<p>Please fill in this form to create an account!</p>

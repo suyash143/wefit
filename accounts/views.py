@@ -807,7 +807,7 @@ def email_sender():
 
     email_from = settings.EMAIL_HOST_USER
     recipient_list = ['suyashpathak143@gmail.com']
-    send_mail(subject, message, email_from, recipient_list)
+
 
 
 
@@ -947,6 +947,7 @@ def dashboard_improvement_view(request):
         return redirect('dashboard_improvement_edit')
     return render(request,'dashboard_improvement.html',{'users':users})
 
+
 def dashboard_improvement_edit(request):
     id=request.session['id']
     name=models.Improvement.objects.get(pk=id)
@@ -961,3 +962,4 @@ def dashboard_improvement_edit(request):
         name.save()
         return redirect('dashboard_improvement')
     return render(request, 'dashboard_improvement_edit.html',{'name':name})
+

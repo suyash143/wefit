@@ -10,6 +10,7 @@ urlpatterns =[
     path('report',report,name="report"),
     path('download',export_csv,name='download'),
     path('employee',views.employee,name='employee'),
-    path('employee_profile',views.employee_profile,name='employee_profile')
+    path('employee_profile',views.employee_profile,name='employee_profile'),
+    path('dietitian_add',views.dietitian_add,name='dietitian_add')
 
     ]
