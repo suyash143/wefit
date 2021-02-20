@@ -166,6 +166,7 @@ def client_edit(request):
             start_of_plan = request.POST.get('start_of_plan', None)
             type_of_plan = request.POST.get('type_of_plan', None)
             updater.status=status
+            updater.paid_details=f'{time} : {paid}'
             updater.start_of_plan=start_of_plan
             updater.type_of_plan=type_of_plan
             updater.save()
@@ -250,3 +251,16 @@ def follow_up(request):
 def paid_details(request):
     id = request.session.get('id')
     updater=models.Information.objects.get(id=id)
+    name=models.Information.objects.get(id=id)
+
+    if request.POST and 'payment' in request.POST:
+        new_paid = request.POST.get('new_paid')
+        payment_date=request.POST.get('payment_date')
+        new=int(new_paid)-updater.paid
+        history=f'\n{updater.paid_details}\n{payment_date} : {new} ({new_paid})\n'
+        updater.paid_details = history
+        updater.paid=new_paid
+        updater.save()
+        return redirect('client_edit')
+    return render(request,'client_payment.html',{'name': name})
+

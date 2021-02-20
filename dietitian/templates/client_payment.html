@@ -2135,240 +2135,29 @@ p {
             </div>
             <div class="card-body">
 
-                <h6 class="heading-small text-muted mb-4">User information</h6>
-                <button class="btn btn-sm btn-info" onclick="document.getElementById('info').style.display='block'">Show Informations</button>
-                <div class="pl-lg-4" id="info" style="display:none">
-                  <div class="row">
-                    <div class="col-lg-6">
-                      <div class="form-group focused">
-                        <label class="form-control-label" for="input-username">Name</label>
-                        <input type="text" id="input-username" class="form-control form-control-alternative" placeholder="Username" value="{{name.name}}">
-                      </div>
-                    </div>
-                    <div class="col-lg-6">
-                      <div class="form-group">
-                        <label class="form-control-label" for="input-email">Email address</label>
-                        <input type="email" id="input-email" class="form-control form-control-alternative" placeholder="{{name.email}}" value="{{name.email}}">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-lg-6">
-                      <div class="form-group focused">
-                        <label class="form-control-label" for="input-first-name">City </label>
-                        <input type="text" id="input-first-name" class="form-control form-control-alternative" placeholder="City" value="{{name.city}}, {{name.state}}">
-                      </div>
-                    </div>
-                    <div class="col-lg-6">
-                      <div class="form-group focused">
-                        <label class="form-control-label" for="input-last-name">Country</label>
-                        <input type="text" id="input-last-name" class="form-control form-control-alternative" placeholder="State" value="{{name.country}}">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <hr class="my-4">
-                <!-- Address -->
-                <h6 class="heading-small text-muted mb-4">Other information</h6>
-              <button class="btn btn-sm btn-info" onclick="document.getElementById('details').style.display='block'">Show Informations</button>
-              <br>
-                <div class="pl-lg-4" id="details" style="display:none">
-                  <div class="row">
-                    <div class="col-md-12">
-                      <br>
 
-                      <div class="row">
-                    <div class="col-lg-4">
 
-                      <div class="form-group focused">
-
-                        <label class="form-control-label" for="input-city">Meals Prepared By</label>
-                        <input type="text" id="input-city" class="form-control form-control-alternative" placeholder="goal" value="{{name.meal_prep }}">
-                      </div>
-                    </div>
-
-                    <div class="col-lg-4">
-                      <div class="form-group focused">
-                        <label class="form-control-label" for="input-country">Diet</label>
-                        <input type="text" id="input-country" class="form-control form-control-alternative" placeholder="Country" value="{{name.diet}}">
-                      </div>
-                    </div>
-                    <div class="col-lg-4">
-                      <div class="form-group">
-                        <label class="form-control-label" for="input-country">Living Place</label>
-                        <input type="text" id="input-postal-code" class="form-control form-control-alternative" value="{{name.place}}">
-                      </div>
-                    </div>
-                  </div>
-                      <div class="form-group focused">
-                        <label class="form-control-label" for="input-address">Play any Sports</label>
-                        <input id="input-address" class="form-control form-control-alternative" placeholder="" value="{{name.sports}}" type="text">
-                      </div>
-                      <div class="form-group focused">
-                        <label class="form-control-label" for="input-address">Goal</label>
-                        <input id="input-address" class="form-control form-control-alternative" placeholder="" value="{{name.goal}}" type="text">
-                      </div>
-                       <div class="form-group focused">
-                        <label class="form-control-label" for="input-address">Daily Average Wakeup Time</label>
-                        <input id="input-address" class="form-control form-control-alternative" placeholder="Home Address" value="{{name.wakeup_time}}" type="text">
-                      </div>
-                      <div class="form-group focused">
-                        <label class="form-control-label" for="input-address">Preferred Daily Diet</label>
-                        <input id="input-address" class="form-control form-control-alternative" placeholder="Home Address" value="{{name.daily_diet}}" type="text">
-                      </div>
-                      <div class="form-group focused">
-                        <label class="form-control-label" for="input-address">Not preferred Food</label>
-                        <input id="input-address" class="form-control form-control-alternative" placeholder="Home Address" value="{{name.unliked_food}}" type="text">
-                      </div>
-                      <div class="form-group focused">
-                        <label class="form-control-label" for="input-address">Take any supplements</label>
-                        <input id="input-address" class="form-control form-control-alternative" placeholder="Home Address" value="{{name.supplements}}" type="text">
-                      </div>
-                       <div class="form-group focused">
-                        <label class="form-control-label" for="input-address">Willing to take Supplements</label>
-                        <input id="input-address" class="form-control form-control-alternative" placeholder="Home Address" value="{{name.supplements_wish}}" type="text">
-                      </div>
-                       <div class="form-group focused">
-                        <label class="form-control-label" for="input-address">Previous Workouts</label>
-                        <input id="input-address" class="form-control form-control-alternative" placeholder="Home Address" value="{{name.previous_workout}}" type="text">
-                      </div>
-                       <div class="form-group focused">
-                        <label class="form-control-label" for="input-address">Any Disease Or Allergy</label>
-                        <input id="input-address" class="form-control form-control-alternative" placeholder="Home Address" type="text" value="{{name.disease}}">
-                      </div>
-                      <div class="form-group focused">
-                        <label class="form-control-label" for="input-address">Under any Medication</label>
-                        <input id="input-address" class="form-control form-control-alternative" placeholder="Home Address" type="text" value="{{name.meds}}">
-                      </div>
-                      <div class="form-group focused">
-                        <label class="form-control-label" for="input-address">Any Injury or Surgery</label>
-                        <input id="input-address" class="form-control form-control-alternative" placeholder="Home Address" type="text" value="{{name.injury}}">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-lg-4">
-                      <div class="form-group focused">
-                        <label class="form-control-label" for="input-city">Workout Mode</label>
-                        <input type="text" id="input-city" class="form-control form-control-alternative" placeholder="City" value="{{name.workout}}">
-                      </div>
-                    </div>
-                    <div class="col-lg-4">
-                      <div class="form-group focused">
-                        <label class="form-control-label" for="input-country">Workout Time</label>
-                        <input type="text" id="input-country" class="form-control form-control-alternative" placeholder="Country" value="{{name.workout_time}}">
-                      </div>
-                    </div>
-                    <div class="col-lg-4">
-                      <div class="form-group">
-                        <label class="form-control-label" for="input-country">Available Equipments</label>
-                        <input type="text" id="input-postal-code" class="form-control form-control-alternative" placeholder="Postal code" value="{{name.equipments}}">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <hr class="my-4">
-              <h6 class="heading-small text-muted mb-4">Images</h6>
-              <button class="btn btn-sm btn-info" onclick="document.getElementById('images').style.display='block'">Show Images</button>
-                <div class="pl-lg-4" id="images" style="display:none">
-                  <div class="row">
-                    <div class="col-lg-6">
-                      <div class="form-group focused">
-                        <label class="form-control-label" for="input-username">Front Profile</label>
-                        <img src="{{name.front_profile.url}}" width="50%">
-                      </div>
-                    </div>
-                    <div class="col-lg-6">
-                      <div class="form-group">
-                        <label class="form-control-label" for="input-email">Back Profile</label>
-                        <img src="{{name.back_profile.url}}" width="50%">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-lg-6">
-                      <div class="form-group focused">
-                        <label class="form-control-label" for="input-first-name">Left Profile</label>
-                        <img src="{{name.left_profile.url}}" width="50%">
-                      </div>
-                    </div>
-                    <div class="col-lg-6">
-                      <div class="form-group focused">
-                        <label class="form-control-label" for="input-last-name">Right Profile</label>
-                        <img src="{{name.right_profile.url}}" width="50%">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              <hr class="my-4">
-                <!-- Description -->
               <form method="POST">
                 {%csrf_token%}
                 <h6 class="heading-small text-muted mb-4">Client Updates</h6>
                 <div class="pl-lg-4">
                   <div class="form-group focused">
-                    <label>Next Follow-up Date</label>
-                    <input id="follow_up_next" name="follow_up_next" class="form-control form-control-alternative" type="date">
+                    <label>Payment Date</label>
+                    <input id="payment_date" name="payment_date" class="form-control form-control-alternative" type="date">
                   </div>
-                   <script>
-                    document.getElementById("follow_up_next").defaultValue ="{{name.follow_up_next|date:'Y-m-d'}}"
-                </script>
+
                   <div class="form-group focused">
-                    <label>Comment</label>
-                    <textarea rows="4" name="comment" class="form-control form-control-alternative" placeholder="Comments about Follow-Up call"></textarea>
+                    <label>Previous Transactions</label>
+                    <textarea rows="4" name="transactions" class="form-control form-control-alternative" placeholder="Comments about Follow-Up call">{{name.paid_details}}</textarea>
                   </div>
-                  <div class="form-group focused">
-                    <label>New Weight</label>
-                  <input id="weight" name="weight" class="form-control form-control-alternative" placeholder="Home Address" type="number" value="{{name.weight}}">
-                    </div>
+
                    <div class="form-group focused">
-                    <label>Paid <a href="{%url 'paid_details'%}">Update Payment</a></label>
-                  <input id="paid" name="paid" class="form-control form-control-alternative" placeholder="Home Address" type="number" value="{{name.paid}}">
-                    </div>
-                  <div class="form-group focused">
-                    <label>End Of Plan</label>
-                  <input  class="form-control form-control-alternative" type="text" value="{{name.end_of_plan}}">
-                    </div>
-                  <div class="row">
-                    <div class="col-lg-4">
-
-                      <div class="form-group focused">
-
-                        <label class="form-control-label" for="input-city">Status</label>
-                        <select name="status"  id="input-city" class="form-control form-control-alternative" >
-                          <option selected value="{{name.status}}">{{name.status}}</option>
-                          <option value="Active">Active</option>
-                          <option value="On Hold">On Hold</option>
-                          <option value="Expired">Expired</option>
-                        </select>
-                      </div>
+                    <label>Paid</label>
+                  <input  name="new_paid" class="form-control form-control-alternative" placeholder="Home Address" type="number" value="{{name.paid}}">
                     </div>
 
-                    <div class="col-lg-4">
-                      <div class="form-group focused">
-                        <label class="form-control-label" for="input-country">Start Of Plan</label>
-                        <input id="start_of_plan" name="start_of_plan" class="form-control form-control-alternative" type="date">
-                      </div>
-                      <script>
-                    document.getElementById("start_of_plan").defaultValue ="{{name.start_of_plan|date:'Y-m-d'}}"
-                </script>
-                    </div>
-                    <div class="col-lg-4">
-                      <div class="form-group">
-                        <label class="form-control-label" for="input-country">Plan Type</label>
-                        <select name="type_of_plan"  id="input-city" class="form-control form-control-alternative" >
-                          <option selected value="{{name.type_of_plan}}">{{name.type_of_plan}}</option>
-                          <option value="4 Weeks">4 Weeks</option>
-                          <option value="8 Weeks">8 Weeks</option>
-                          <option value="100 Days">100 Days</option>
-                          <option value="4 Months">4 Months</option>
-                          <option value="6 Months">6 Months</option>
-                          <option value="12 Months">12 Months</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                  <input type="submit" class="btn btn-sm btn-info" style="background-color: #42ef11;" name="details">
+
+                  <input type="submit" class="btn btn-sm btn-info" style="background-color: #42ef11;" name="payment">
                 </div>
               </form>
             </div>
