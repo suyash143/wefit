@@ -809,10 +809,6 @@ def email_sender():
     recipient_list = ['suyashpathak143@gmail.com']
 
 
-
-
-
-
 def follow_up(request):
     if request.user.is_authenticated:
         today = datetime.date.today()

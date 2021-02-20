@@ -1,5 +1,5 @@
 {%extends 'dietitianpanel.html'%}
-{%block content%}
+{%block outer%}
 {% load static %}
 
 <div class="page-wrapper">
@@ -198,11 +198,15 @@
                                     <div class="form-group mb-4">
                                         <label class="col-md-12 p-0">Created Date</label>
                                         <div class="col-md-12 border-bottom p-0">
-                                            <input type="text" placeholder="{{name.created}} "
-                                                class="form-control p-0 border-0"> </div>
+                                            <input type="date" id="created" value="{{name.created|date:'Y-m-d'}} "
+                                                class="form-control p-0 border-0"  > </div>
                                     </div>
+                                    <script>
+                                        document.getElementById("created").defaultValue ="{{name.created|date:'Y-m-d'}}"
+                                    </script>
 
-                                    {%if request.user.is_staff%}}
+
+                                    {%if request.user.is_staff%}
                                     {%if start_of_plan%}
                                     <div class="form-group mb-4">
                                         <label for="rescheduled" class="col-md-12 p-0">Payment Date</label>
@@ -267,7 +271,7 @@
                                     <div class="form-group mb-4">
                                         <label for="rescheduled" class="col-md-12 p-0">Start Of Plan</label>
                                         <div class="col-md-12 border-bottom p-0">
-                                            <input type="text" placeholder="{{name.start_of_plan}}"
+                                            <input type="text" value="{{name.start_of_plan}}"
                                                 class="form-control p-0 border-0" name="rescheduled" id="rescheduled">
                                         </div>
                                     </div>
@@ -394,4 +398,4 @@
             <!-- ============================================================== -->
             <!-- ============================================================== -->
             <!-- footer -->
-            {%endblock content%}
+            {%endblock outer%}

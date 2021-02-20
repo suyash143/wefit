@@ -144,58 +144,109 @@ def client_edit(request):
     elif bmi >= 30:
         cls = "Obese"
     person_stat = {'feet': feet, 'inch': inch, 'cls': cls}
-    if request.method == "POST":
+    if request.method == "POST" and 'details' in request.POST:
 
         updater = models.Information.objects.get(id=id)
-        if updater.start_of_plan is None:
-            form = UpdatePicture(request.FILES, instance=updater)
-            if form.is_valid():
-                form.save()
+        if updater.paid == 0:
 
-            payment_screenshot = request.FILES.get('payment_screenshot', None)
-            rescheduled = request.POST.get('rescheduled', None)
-            payment_method = request.POST.get('payment_method', None)
-            payment_date = request.POST.get('payment_date', None)
             paid = request.POST.get('paid', 0)
             assigned_id = request.POST.get('assigned', None)
-            updater.payment_method = payment_method
-            updater.payment_date = payment_date
-            updater.payment_screenshot = payment_screenshot
-            updater.start_of_plan = rescheduled
+
+            updater.follow_up_next = request.POST.get('follow_up_next',None)
+            comment=request.POST.get('comment',None)
+            weight=request.POST.get('weight',None)
+            time = datetime.date.today()
+            follow_up_record=f"\n{time} - {comment}"+f"\n {updater.follow_up_record} "
+            updater.follow_up_record=follow_up_record
             updater.paid = paid
-            updater.assigned = User.objects.get(pk=assigned_id)
-            trainer = User.objects.get(pk=assigned_id)
+            new_weight=f"\n{time} - {weight}"+f"\n {updater.weight}"
+            updater.weight_record=new_weight
+            updater.weight=weight
+            status = request.POST.get('status', None)
+            start_of_plan = request.POST.get('start_of_plan', None)
+            type_of_plan = request.POST.get('type_of_plan', None)
+            updater.status=status
+            updater.start_of_plan=start_of_plan
+            updater.type_of_plan=type_of_plan
             updater.save()
 
-            '''subject = 'Welcome to Fit Simran Transformation plan'
-            data = models.Information.objects.get(id=id)
-            client_secret = data.client_secret
-            html_message = render_to_string('email.html',
-                                            {'data': data, 'trainer': trainer, 'client_secret': client_secret})
-            plain_message = strip_tags(html_message)
-            from_email = 'connect@fitsimran.com'
-            to = updater.email
+            date_changer = models.Information.objects.get(id=id)
 
-            mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)
-            
-            trainer_subject = 'New Client Alert !'
-            trainer_email = trainer.email
-            trainer_html_message = render_to_string('email_trainer.html')
-            trainer_plain_message = strip_tags(trainer_html_message)
-            mail.send_mail(trainer_subject, trainer_plain_message, from_email, [trainer_email],
-                           html_message=trainer_html_message)'''
+            if date_changer.end_of_plan is None:
+                if type_of_plan == '4 Weeks':
+                    date_changer.end_of_plan =time+datetime.timedelta(days = 28)
+                    date_changer.save()
+
+                elif type_of_plan == '8 Weeks':
+                    date_changer.end_of_plan =time+datetime.timedelta(days = 56)
+                    date_changer.save()
+
+                elif type_of_plan == '100 Days':
+                    date_changer.end_of_plan =time+datetime.timedelta(days = 100)
+                    date_changer.save()
+                elif type_of_plan == '4 Months':
+                    date_changer.end_of_plan =time+datetime.timedelta(days=121)
+                    date_changer.save()
+                elif type_of_plan == '6 Months':
+                    date_changer.end_of_plan =time+datetime.timedelta(days=182)
+                    date_changer.save()
+                elif type_of_plan == '12 Months':
+                    date_changer.end_of_plan =time+datetime.timedelta(days=365)
+                    date_changer.save()
+                date_changer.save()
+            else:
+                date_changer.end_of_plan = time
+
+            date_changer.save()
 
             return redirect('clients')
         else:
+
             assigned_id = request.POST.get('assigned', None)
-            updater.assigned = User.objects.get(pk=assigned_id)
+
+            updater.follow_up_next = request.POST.get('follow_up_next', None)
+            comment = request.POST.get('comment', None)
+            weight = request.POST.get('weight', None)
+            status=request.POST.get('status',None)
+
+            time = datetime.date.today()
+            follow_up_record = f"\n{time} - {comment}" + f"\n {updater.follow_up_record} "
+            updater.follow_up_record = follow_up_record
+            new_weight = f"\n{time} - {weight}" + f"\n {updater.weight_record}"
+            updater.weight_record = new_weight
+            updater.weight = weight
+            updater.status=status
+            updater.save()
             return redirect('clients')
     if name.start_of_plan is not None:
-        return render(request, 'client_edit.html',
+        return render(request, 'client_edit2.html',
                       {'name': name, 'users': users, 'person_stat': person_stat, 'start_of_plan': False})
-    return render(request, 'client_edit.html',
+    return render(request, 'client_edit2.html',
                   {'name': name, 'users': users, 'person_stat': person_stat, 'start_of_plan': True, 'form': form})
 
 
 def dietitian_dashboard(request):
     return render(request,'dietitian_dashboard.html')
+
+
+def follow_up(request):
+    today=datetime.date.today()
+
+    name = models.Information.objects.filter(follow_up_next__range=[today,"2100-01-31"],status='Active')
+    name_paginator = Paginator(name, 130)
+    page_num = request.GET.get('page')
+    page = name_paginator.get_page(page_num)
+    if request.method == "POST" and 'id' in request.POST:
+        id = request.POST.get('id')
+        name = models.Information.objects.get(id=id)
+
+        request.session['id'] = id
+
+        return redirect('client_edit')
+
+    return render(request, 'clients.html', {'page': page})
+
+
+def paid_details(request):
+    id = request.session.get('id')
+    updater=models.Information.objects.get(id=id)
