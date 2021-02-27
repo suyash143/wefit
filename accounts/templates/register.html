@@ -1,168 +1,152 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-	<title>Contact V17</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-<!--===============================================================================================-->
-	<link rel="icon" type="image/png" href="https://www.creativefuel.io/dashboard/register_form/images/icons/favicon.ico"/>
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="https://www.creativefuel.io/dashboard/register_form/vendor/bootstrap/css/bootstrap.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="https://www.creativefuel.io/dashboard/register_form/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="https://www.creativefuel.io/dashboard/register_form/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="https://www.creativefuel.io/dashboard/register_form/vendor/animate/animate.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="https://www.creativefuel.io/dashboard/register_form/vendor/css-hamburgers/hamburgers.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="https://www.creativefuel.io/dashboard/register_form/vendor/animsition/css/animsition.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="https://www.creativefuel.io/dashboard/register_form/vendor/select2/select2.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="https://www.creativefuel.io/dashboard/register_form/vendor/daterangepicker/daterangepicker.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="https://www.creativefuel.io/dashboard/register_form/css/util.css">
-	<link rel="stylesheet" type="text/css" href="https://www.creativefuel.io/dashboard/register_form/css/main.css">
-<!--===============================================================================================-->
+	<title>Form</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://www.creativefuel.io/dashboard/register_form/assets/css/index.css">
+	<script type="text/javascript" src="https://www.creativefuel.io/dashboard/register_form/assets/js/index.js"></script>
+
+	<!-- fontawesom -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!-- google fonts -->
+	<link href="https://fonts.googleapis.com/css2?family=Vidaloka&family=Lobster+Two&family=Merienda&family=Barlow+Condensed:ital,wght@1,500&display=swap" rel="stylesheet">
+
+
 </head>
 <body>
 
-
-	<div class="container-contact100" style="">
-		<div class="wrap-contact100">
-			<div class="contact100-more flex-col-c-m" style="background-image: url('https://www.creativefuel.io/dashboard/register_form/images/bg-01.jpg');">
-				<div class="flex-w size1 p-b-47">
-					<div class="txt1 p-r-25">
-						<br>
-						<br>
-						<br>
-						<br><br>
-						<br>
-						<br>
-						<br>
-
-						<br>
-						<br>
-
-												<br>
-
-												<br>
-
-												<br>
-						<br>
-
-												<br>
-
-												<br>
-
-					</div>
-
-					<div class="flex-col size2">
-
-					</div>
-				</div>
-
-				<div class="dis-flex size1 p-b-47">
-					<div class="txt1 p-r-25">
-
-					</div>
-
-					<div class="flex-col size2">
-
-					</div>
-				</div>
-
-				<div class="dis-flex size1 p-b-47">
-					<div class="txt1 p-r-25">
-
-					</div>
-
-					<div class="flex-col size2">
-
-					</div>
+		<div class="row no-gutters">
+			<div class="col-md-5 no-gutters">
+				<div class="left">
+						<!-- background image		 -->
 				</div>
 			</div>
-			<form class="contact100-form validate-form">
-				<span class="contact100-form-title">
-					Send Us A Message
-				</span>
+			<div class="col-md-7 no-gutters">
+				<div class="right p-5">
+					<!-- general -->
+					<div class="container p-5" id="general">
+					<h1 class="text-center mb-5" style="font-family: Brandon Grotesque Black;">General Informtion</h1>
+					<!-- form1 -->
+						<form  name="frm" id="form" onsubmit="ovalid()"  method="POST">
+							<!-- name -->
+						  <div class="form-group row my-2">
+						  	<label for="Uname" class="col-sm-3 col-form-label lsize">Name:</label>
+						    <div class="col-sm-9">
+						   	 <input type="text" name="name" value="" class="form-control" placeholder="Enter your Full Name" id="Uname" >
+						    </div>
+						  </div>
+						  <!-- email -->
+						  <div class="form-group row my-2">
+						  	<label for="email" class="col-sm-3 col-form-label lsize">Email:</label>
+						    <div class="col-sm-9">
+						   	 <input type="email" name="mail" value="" class="form-control" placeholder="Enter your email" id="email" >
+						    </div>
+						  </div>
+						  <!-- gender -->
+						  <div class="form-group row my-2 gender">
+						  	<label class="col-sm-3 col-form-label lsize">Gender:</label>
+						    <div class="col-sm-9">
+						    	<!-- male -->
+						   	 <div class="form-check form-check-inline">
+							  <input class="form-check-input" type="radio" name="Gender" id="male" value="Male">
+							  <i class="fa fa-mars mr-2"></i>
+							  <label name="Gender" class="form-check-label" for="male">Male</label>
+							</div>
+							<!-- female -->
+							<div class="form-check form-check-inline">
+							  <input class="form-check-input" type="radio" name="Gender" id="female" value="Female" >
+							  <i class="fa fa-venus mr-2"></i>
+							  <label name="Gender" class="form-check-label text-center" for="female">Female</label>
+							</div>
+						    </div>
+						  </div>
+						  <!-- contact -->
+						  <div class="form-group row my-2">
+						  	<label for="contact" class="col-sm-3 col-form-label lsize">Contact:</label>
+						    <div class="col-sm-9">
+						   	 <input type="number" name="phone" value="" class="form-control" placeholder="Enter your Mobile number" id="contact" >
+						    </div>
+						  </div>
+						  <!-- city -->
+						  <div class="form-group row my-2">
+						  	<label for="city" class="col-sm-3 col-form-label lsize">City:</label>
+						    <div class="col-sm-9">
+						   	 <input type="text" name="Ucity" value="" class="form-control" placeholder="Current City" id="city" >
+						    </div>
+						  </div>
+						  <!-- state -->
+						 <div class="form-group row my-2">
+						  	<label for="state" class="col-sm-3 col-form-label lsize">State:</label>
+						    <div class="col-sm-9">
+						   	 <input type="text" name="Ustate" value="" class="form-control" placeholder="State" id="state">
+						    </div>
+						  </div>
+						  <!-- button -->
+						  <button type="submit"  class="btn float-right mt-5 mb-3" onclick="return valid()">Next</button>
 
-				<label class="label-input100" for="first-name">Tell us your name *</label>
-				<div class="wrap-input100 rs1-wrap-input100 validate-input" data-validate="Type first name">
-					<input id="first-name" class="input100" type="text" name="first-name" placeholder="First name">
-					<span class="focus-input100"></span>
+					</div>
+					<!-- other -->
+					<div class="container other" id="other">
+					<h1 class="text-center mb-5">Other Informtion</h1>
+					<!-- form2 -->
+
+							{%csrf_token%}
+						  <!-- goal -->
+						  <div class="form-group my-2">
+						    <label class="lsize">Select your Goal:</label>
+						    <div class="goal">
+						    	<input type="radio" class="form-control" id="muscle" name="goal" value="muscle_gain" >
+  								<label for="muscle" class="mr-1">Muscle Gain</label>
+
+						    	<input type="radio" class="form-control" id="weight" name="goal" value="weight_loss">
+  								<label for="weight">Weight Loss</label>
+						    </div>
+						  </div>
+						  <!-- weight -->
+						  <div class="form-group my-2">
+						    <label class="lsize">Weight:</label>
+						    <div>
+						    	<input type="number" min="0"  class="form-control w-50"  name="weight" placeholder="Enter your weight in kg" required>
+						    </div>
+						  </div>
+						  <!-- Height -->
+						  <div class="form-group my-2">
+						    <label class="lsize">Height:</label>
+						    <div class="row">
+						    	<input type="number" class="form-control w-25 ml-3 height" name="foot" value="" placeholder="feet" min="0" required>
+						    	<input type="number" class="form-control w-25 ml-3 height" name="inch" value="" placeholder="inch" min="0" required>
+						    </div>
+						  </div>
+						  <!-- Pcontact -->
+						  <div class="form-group my-2">
+						    <label class="lsize">Prefered mode of contact:</label>
+						    <div class="prefer">
+						    	<input type="radio" class="form-control" id="call" name="prefered" value="Call" >
+  								<label for="call" class="mr-5">Call</label>
+
+						    	<input type="radio" class="form-control" id="whatsapp" name="prefered" value="Whatsapp">
+  								<label for="whatsapp">WhatsApp</label>
+						    </div>
+						  </div>
+						  <!-- button -->
+ 						 <input type="button" value="Back" class="back mt-5" onclick="history.go()">
+
+						  <!-- <button  class="float-left mt-5 mb-3 px-4 back" onclick="cancel()">Back</button> -->
+						  <button type="submit" class="btn btn-dark float-right mt-5" >Submit</button>
+						</form>
+					</div>
 				</div>
-				<div class="wrap-input100 rs2-wrap-input100 validate-input" data-validate="Type last name">
-					<input class="input100" type="text" name="last-name" placeholder="Last name">
-					<span class="focus-input100"></span>
-				</div>
-
-				<label class="label-input100" for="email">Enter your email *</label>
-				<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
-					<input id="email" class="input100" type="text" name="email" placeholder="Eg. example@email.com">
-					<span class="focus-input100"></span>
-				</div>
-
-				<label class="label-input100" for="phone">Enter phone number</label>
-				<div class="wrap-input100">
-					<input id="phone" class="input100" type="text" name="phone" placeholder="Eg. +1 800 000000">
-					<span class="focus-input100"></span>
-				</div>
-
-				<label class="label-input100" for="message">Message *</label>
-				<div class="wrap-input100 validate-input" data-validate = "Message is required">
-					<textarea id="message" class="input100" name="message" placeholder="Write us a message"></textarea>
-					<span class="focus-input100"></span>
-				</div>
-
-				<div class="container-contact100-form-btn">
-					<button class="contact100-form-btn">
-						Send Message
-					</button>
-				</div>
-			</form>
-
-
 		</div>
-	</div>
 
 
 
 
-	<div id="dropDownSelect1"></div>
-
-<!--===============================================================================================-->
-	<script src="https://www.creativefuel.io/dashboard/register_form/vendor/jquery/jquery-3.2.1.min.js"></script>
-<!--===============================================================================================-->
-	<script src="https://www.creativefuel.io/dashboard/register_form/vendor/animsition/js/animsition.min.js"></script>
-<!--===============================================================================================-->
-	<script src="https://www.creativefuel.io/dashboard/register_form/vendor/bootstrap/js/popper.js"></script>
-	<script src="https://www.creativefuel.io/dashboard/register_form/vendor/bootstrap/js/bootstrap.min.js"></script>
-<!--===============================================================================================-->
-	<script src="https://www.creativefuel.io/dashboard/register_form/vendor/select2/select2.min.js"></script>
-	<script>
-		$(".selection-2").select2({
-			minimumResultsForSearch: 20,
-			dropdownParent: $('#dropDownSelect1')
-		});
-	</script>
-<!--===============================================================================================-->
-	<script src="https://www.creativefuel.io/dashboard/register_form/vendor/daterangepicker/moment.min.js"></script>
-	<script src="https://www.creativefuel.io/dashboard/register_form/vendor/daterangepicker/daterangepicker.js"></script>
-<!--===============================================================================================-->
-	<script src="https://www.creativefuel.io/dashboard/register_form/vendor/countdowntime/countdowntime.js"></script>
-<!--===============================================================================================-->
-	<script src="https://www.creativefuel.io/dashboard/register_form/js/main.js"></script>
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
-	<script>
-	  window.dataLayer = window.dataLayer || [];
-	  function gtag(){dataLayer.push(arguments);}
-	  gtag('js', new Date());
-
-	  gtag('config', 'UA-23581568-13');
-	</script>
 </body>
 </html>

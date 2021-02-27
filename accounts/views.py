@@ -26,24 +26,26 @@ first = emp_name_handle.read()
 name_list = first.split()
 
 def register(request):
+
     if request.method == 'POST':
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
-        email = request.POST['email']
-        number = request.POST['number']
-        city = request.POST['city']
-        state = request.POST['state']
+        print(request.POST)
+        name = request.POST['name']
+
+        email = request.POST['mail']
+        number = request.POST['phone']
+        city = request.POST['Ucity']
+        state = request.POST['Ustate']
         weight = request.POST['weight']
         foot = request.POST.get('foot', 5)
         inch = request.POST.get('inch', 8)
-        gender = request.POST['gender']
-        mode = request.POST.get('mode', 'whatsapp')
+        gender = request.POST['Gender']
+        mode = request.POST.get('prefered', 'whatsapp')
         goal = request.POST.get('goal', 'weight_loss')
         instauser = request.POST.get('instauser', None)
 
         height = (((float(foot) * 12) + float(inch)) * 2.54) / 100
         bmi = float(weight) / (height * height)
-        name = first_name + ' ' + last_name
+
         IST = pytz.timezone('Asia/Kolkata')
 
         if models.Final.objects.filter(number=number).order_by('-id')[:100]:
@@ -52,7 +54,7 @@ def register(request):
                                                              state=state, weight=weight,
                                                              height=height, gender=gender,
 
-                                                             contact=mode, type=goal, insta_user=instauser, bmi=bmi,
+                                                             contact=mode, type=goal, insta_user='-', bmi=bmi,
                                                              created=datetime.datetime.now(), status='fresh')
 
         lead.save()
@@ -81,7 +83,7 @@ def register(request):
                                                                 state=state, weight=weight,
                                                                 height=height, gender=gender,
 
-                                                                contact=mode, type=goal, insta_user=instauser, bmi=bmi,
+                                                                contact=mode, type=goal, insta_user='-', bmi=bmi,
                                                                 created=datetime.datetime.now(), status='fresh',assigned=active_user[int(num)])
             lead3.save()
 
@@ -90,7 +92,7 @@ def register(request):
                                                             state=state, weight=weight,
                                                             height=height, gender=gender,
 
-                                                            contact=mode, type=goal, insta_user=instauser, bmi=bmi,
+                                                            contact=mode, type=goal, insta_user='-', bmi=bmi,
                                                             created=datetime.datetime.now(), status='fresh',assigned=active_user[int(num)])
             lead3.save()
             c = open(os.path.join(BASE, 'employee.txt'))
@@ -106,7 +108,7 @@ def register(request):
                                                                 state=state, weight=weight,
                                                                 height=height, gender=gender,
 
-                                                                contact=mode, type=goal, insta_user=instauser, bmi=bmi,
+                                                                contact=mode, type=goal, insta_user='-', bmi=bmi,
                                                                 created=datetime.datetime.now(), status='fresh')
             lead3.save()
 

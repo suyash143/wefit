@@ -4,10 +4,18 @@ from. models import *
 from. import add_admin_use
 
 
-admin.site.register(Info)
-admin.site.register(Record)
+class RecordOrder(admin.ModelAdmin):
+    list_display = ['user','start_date','end_date','achieved','username']
+
+class InfoOrder(admin.ModelAdmin):
+    list_display = ['user','mobile','address','target','birthdate','profile','target_achieved','is_dietitian', 'date_start' ,'date_end']
+
+admin.site.register(Info,InfoOrder)
+admin.site.register(Record,RecordOrder)
 admin.site.register(Questions)
 admin.site.register(Improvement)
+
+
 
 
 class OrderAdmin(admin.ModelAdmin):
