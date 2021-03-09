@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>Form</title>
+	<link rel="shortcut icon" type="image/jpg" href="https://www.creativefuel.io/dashboard/register_form/images/WEFITSQUAE.png"/>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta charset="utf-8">
@@ -16,23 +17,41 @@
 	<!-- fontawesom -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<!-- google fonts -->
-	<link href="https://fonts.googleapis.com/css2?family=Vidaloka&family=Lobster+Two&family=Merienda&family=Barlow+Condensed:ital,wght@1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Teko:wght@300&display=swap" rel="stylesheet">
 
 
 </head>
-<body>
+<body class="p-5">
 
-		<div class="row no-gutters">
-			<div class="col-md-5 no-gutters">
+		<!-- scroll btn -->
+	<div class="scroll">
+		<button class="btn btn-lg"><a href="#home"><i class="fa fa-arrow-down text-center"></i></a></button>
+	</div>
+	<div class="container my-5">
+		<div class="row">
+			<div class="col-lg-5 p-0" id="left">
 				<div class="left">
+
+					<div class="logo text-center">
+						<img src="https://www.creativefuel.io/dashboard/register_form/images/WEFITSQUAE.png" alt="logo">
+					</div>
 						<!-- background image		 -->
 				</div>
 			</div>
-			<div class="col-md-7 no-gutters">
-				<div class="right p-5">
+			<div class="col-lg-5 p-0" id="left_1">
+				<div class="left_1">
+
+					<div class="logo text-center">
+						<img src="https://www.creativefuel.io/dashboard/register_form/images/WEFITSQUAE.png" alt="logo">
+					</div>
+						<!-- background image		 -->
+				</div>
+			</div>
+			<div class="col-lg-7 p-0">
+				<div class="right">
 					<!-- general -->
 					<div class="container p-5" id="general">
-					<h1 class="text-center mb-5" style="font-family: Brandon Grotesque Black;">General Informtion</h1>
+					<h1 class="text-center mb-5">General Informtion</h1>
 					<!-- form1 -->
 						<form  name="frm" id="form" onsubmit="ovalid()"  method="POST">
 							<!-- name -->
@@ -55,7 +74,7 @@
 						    <div class="col-sm-9">
 						    	<!-- male -->
 						   	 <div class="form-check form-check-inline">
-							  <input class="form-check-input" type="radio" name="Gender" id="male" value="Male">
+							  <input class="form-check-input" type="radio" name="Gender" id="male" value="Male" >
 							  <i class="fa fa-mars mr-2"></i>
 							  <label name="Gender" class="form-check-label" for="male">Male</label>
 							</div>
@@ -71,7 +90,7 @@
 						  <div class="form-group row my-2">
 						  	<label for="contact" class="col-sm-3 col-form-label lsize">Contact:</label>
 						    <div class="col-sm-9">
-						   	 <input type="number" name="phone" value="" class="form-control" placeholder="Enter your Mobile number" id="contact" >
+						   	 <input type="number" name="phone" value="" class="form-control" placeholder="Enter Your Mobile Number" id="contact" >
 						    </div>
 						  </div>
 						  <!-- city -->
@@ -93,16 +112,17 @@
 
 					</div>
 					<!-- other -->
-					<div class="container other" id="other">
+					<div class="container middlesec p-5 " id="other">
 					<h1 class="text-center mb-5">Other Informtion</h1>
 					<!-- form2 -->
+						                                                        {%csrf_token%}
 
-							{%csrf_token%}
+
 						  <!-- goal -->
 						  <div class="form-group my-2">
 						    <label class="lsize">Select your Goal:</label>
 						    <div class="goal">
-						    	<input type="radio" class="form-control" id="muscle" name="goal" value="muscle_gain" >
+						    	<input type="radio" class="form-control" id="muscle" name="goal"  value="muscle_gain">
   								<label for="muscle" class="mr-1">Muscle Gain</label>
 
 						    	<input type="radio" class="form-control" id="weight" name="goal" value="weight_loss">
@@ -113,15 +133,15 @@
 						  <div class="form-group my-2">
 						    <label class="lsize">Weight:</label>
 						    <div>
-						    	<input type="number" min="0"  class="form-control w-50"  name="weight" placeholder="Enter your weight in kg" required>
+						    	<input type="number" min="0"  class="form-control weight"  name="weight" placeholder="Enter your weight in kg" required>
 						    </div>
 						  </div>
 						  <!-- Height -->
 						  <div class="form-group my-2">
 						    <label class="lsize">Height:</label>
 						    <div class="row">
-						    	<input type="number" class="form-control w-25 ml-3 height" name="foot" value="" placeholder="feet" min="0" required>
-						    	<input type="number" class="form-control w-25 ml-3 height" name="inch" value="" placeholder="inch" min="0" required>
+						    	<input type="number" class="form-control ml-3 height" name="foot" value="" placeholder="feet" min="0" required="">
+						    	<input type="number" class="form-control ml-3 height" name="inch" value="" placeholder="inch" min="0" required="">
 						    </div>
 						  </div>
 						  <!-- Pcontact -->
@@ -129,22 +149,31 @@
 						    <label class="lsize">Prefered mode of contact:</label>
 						    <div class="prefer">
 						    	<input type="radio" class="form-control" id="call" name="prefered" value="Call" >
-  								<label for="call" class="mr-5">Call</label>
+  								<label for="call" class="mr-1">Call</label>
 
 						    	<input type="radio" class="form-control" id="whatsapp" name="prefered" value="Whatsapp">
   								<label for="whatsapp">WhatsApp</label>
 						    </div>
 						  </div>
 						  <!-- button -->
- 						 <input type="button" value="Back" class="back mt-5" onclick="history.go()">
+						  		<div class="row">
+						  			<div class="col-md-6">
 
-						  <!-- <button  class="float-left mt-5 mb-3 px-4 back" onclick="cancel()">Back</button> -->
-						  <button type="submit" class="btn btn-dark float-right mt-5" >Submit</button>
+						  				<input type="button" value="Back" class="back mt-3" onclick="history.go()">
+						  			</div>
+						  			<div class="col-md-6">
+
+						  				<button type="submit" class="btn btn-dark mt-3"  >Submit</button>
+						  			</div>
+						  		</div>
+						  		<!-- <input type="button" value="Back" class="back mt-3 mb-2" onclick="history.go()"> -->
+
+
 						</form>
 					</div>
 				</div>
-		</div>
-
+			</div>
+	</div>
 
 
 
