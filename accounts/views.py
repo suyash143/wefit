@@ -133,6 +133,7 @@ def all(request):
         follow_up = 0
         acknowledged = 0
         pending_cancelled = 0
+        secondary_fresh=0
         unassigned = 0
 
         user = request.user
@@ -166,6 +167,9 @@ def all(request):
                 acknowledged += 1
             elif item.status == 'pending_cancelled':
                 pending_cancelled += 1
+            elif item.status =="Secondary Fresh":
+                secondary_fresh+=1
+
 
             else:
                 other += 1
@@ -261,6 +265,16 @@ def all(request):
                                   {'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
                                    'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0,
                                    'pending_cancelled': pending_cancelled,'page':page})
+                elif filter_value == "Secondary Fresh":
+                    name = models.Final.objects.raw(
+                        'select * from accounts_final where (created between "' + startdate + '" and "' + todate + '") and status ="' + filter_value + '" ')
+                    name_paginator = Paginator(name, 100)
+                    page_num = request.GET.get('page')
+                    page = name_paginator.get_page(page_num)
+                    return render(request, 'dashboard_lead.html',
+                                  {'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
+                                   'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0,
+                                   'pending_cancelled' : 0,'secondary_fresh':secondary_fresh, 'page':page})
                 else:
                     name = models.Final.objects.raw(
                         'select * from accounts_final where created between "' + startdate + '" and "' + todate + '"')
@@ -349,6 +363,17 @@ def all(request):
                                   {'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
                                    'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0,
                                    'pending_cancelled': pending_cancelled,'page':page})
+                elif filter_value == "Secondary Fresh":
+                    name = models.Final.objects.raw(
+                        'select * from accounts_final where (created between "' + startdate + '" and "' + todate + '") and status ="' + filter_value + '" and assigned_id="' + str(
+                            user_id) + '" ')
+                    name_paginator = Paginator(name, 100)
+                    page_num = request.GET.get('page')
+                    page = name_paginator.get_page(page_num)
+                    return render(request, 'dashboard_lead.html',
+                                  {'name': name, "fresh": 0, "cancelled": 0, "closed": 0, "other": other,
+                                   'rescheduled': 0, 'follow_up': 0, 'acknowledged': 0,
+                                   'pending_cancelled': 0,'secondary_fresh':secondary_fresh, 'page': page})
 
                 else:
                     name = models.Final.objects.all().filter(assigned=user)
@@ -363,7 +388,7 @@ def all(request):
 
         context = {'name': name, "fresh": fresh, "cancelled": cancelled, "closed": closed, "other": other, 'al': al,
                    'rescheduled': rescheduled, 'follow_up': follow_up, 'acknowledged': acknowledged,
-                   'pending_cancelled': pending_cancelled, 'unassigned': unassigned,'page':page}
+                   'pending_cancelled': pending_cancelled,'secondary_fresh':secondary_fresh, 'unassigned': unassigned,'page':page}
 
         return render(request, 'dashboard_lead.html', context)
     else:
@@ -426,7 +451,20 @@ def edit_employee(request):
                 target_updater=models.Info.objects.get(user_id=assigned)
 
                 target_updater.target_achieved=int(target_updater.target_achieved)+int(paid)
+
+                percentage=(target_updater.target_achieved/target_updater.target)*100
+                if 85<=percentage<100:
+                    target_updater.incentive=5*target_updater.target/100
+                elif 100<=percentage<150:
+                    target_updater.incentive=10*target_updater.target/100
+                elif 150<=percentage<=200:
+                    target_updater.incentive=15*target_updater.target/100
+                elif percentage>200:
+                    target_updater.incentive=20*target_updater.target/100
+                else:
+                    pass
                 target_updater.save()
+
             else:
                 previous_paid=updater.paid
                 updater.paid=paid
@@ -435,9 +473,18 @@ def edit_employee(request):
                 assigned=updater.assigned.pk
                 target_updater=models.Info.objects.get(user_id=assigned)
                 target_updater.target_achieved=int(target_updater.target_achieved)+int(money_acquired)
+                percentage = (target_updater.target_achieved / target_updater.target) * 100
+                if 85 <= percentage < 100:
+                    target_updater.incentive = 5 * target_updater.target / 100
+                elif 100 <= percentage < 150:
+                    target_updater.incentive = 10 * target_updater.target / 100
+                elif 150 <= percentage <= 200:
+                    target_updater.incentive = 15 * target_updater.target / 100
+                elif percentage > 200:
+                    target_updater.incentive = 20 * target_updater.target / 100
+                else:
+                    pass
                 target_updater.save()
-
-
 
         return redirect('all')
     return render(request, 'dashboard_edit_employee.html',
@@ -689,6 +736,7 @@ def dashboard(request):
     else:
         return HttpResponse('Please Log In to View Your Data')
 
+
 def profile(request):
     return render(request,'profile.html')
 
@@ -731,13 +779,19 @@ def target_reset(request):
             id=item.pk
             target=item.info.target
             achieved=item.info.target_achieved
+            try:
+                percentage=achieved/target*100
+            except ZeroDivisionError:
+                percentage=0
             username=item.username
+            incentive=item.info.incentive
 
-            mod, created = models.Record.objects.get_or_create(start_date=start_date,end_date=end_date,target=target,achieved=achieved,user_id=id,username=username)
+            mod, created = models.Record.objects.get_or_create(start_date=start_date,end_date=end_date,target=target,achieved=achieved,user_id=id,username=username,incentive_achieved=incentive,percentage_achieved=percentage)
             mod.save()
             changer=item.info
             changer.target=target
             changer.target_achieved=0
+            changer.incentive=0
             changer.date_start=next_monday
             changer.date_end=next_6
             changer.save()
@@ -961,3 +1015,27 @@ def dashboard_improvement_edit(request):
         return redirect('dashboard_improvement')
     return render(request, 'dashboard_improvement_edit.html',{'name':name})
 
+
+def status_changer(request):
+    all=models.Final.objects.filter(status='acknowledged').union(models.Final.objects.filter(status='follow_up'))
+    for items in all:
+        items.status='Secondary Fresh'
+        items.substatus=None
+        items.save()
+    return HttpResponse(f'{all}')
+
+
+def lead_request(request):
+    all=models.Final.objects.filter(status='Secondary Fresh',assigned=None).reverse()[:10]
+    for items in all:
+        items.assigned=request.user
+        items.save()
+        print(items)
+    return redirect('all')
+
+def record_display(request):
+    if request.user.is_staff:
+        records=models.Record.objects.all().order_by('-pk')
+    else:
+        records=models.Record.objects.filter(user=request.user).reverse()
+    return render(request,'dashboard_record.html',{'records':records})

@@ -27,6 +27,9 @@ urlpatterns = [
 	path('dashboard_improvement_add',views.dashboard_improvement_add,name="dashboard_improvement_add"),
 	path('dashboard_improvement',views.dashboard_improvement_view,name='dashboard_improvement'),
 	path('dashboard_improvement_edit',views.dashboard_improvement_edit,name='dashboard_improvement_edit'),
+	path('status_changer',views.status_changer,name='status_changer'),
+	path('lead_request',views.lead_request,name='lead_request'),
+	path('record_display',views.record_display,name='record_display'),
 
 
 

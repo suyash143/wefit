@@ -181,6 +181,14 @@
                                 <span class="hide-menu">Script</span>
                             </a>
                         </li>
+
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'record_display'%}"
+                                aria-expanded="false">
+                                <i class='bx bx-table'></i>
+                                <span class="hide-menu">Previous Records</span>
+                            </a>
+                        </li>
                         {%if request.user.is_staff%}
                         <li class="sidebar-item pt-2">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{%url 'target'%}"

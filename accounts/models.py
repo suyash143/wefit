@@ -84,6 +84,7 @@ class Info(models.Model):
     is_dietitian=models.BooleanField(default=False,null=True)
     date_start=models.DateField(null=True, blank=True,default=datetime.date.today()- datetime.timedelta(days=datetime.date.today().weekday()))
     date_end=models.DateField(null=True, blank=True,default=datetime.date.today()-datetime.timedelta(days=datetime.date.today().weekday())+datetime.timedelta(days=6))
+    incentive=models.IntegerField(null=True,blank=True,default=0)
 
 
 @receiver(post_save, sender=User)
@@ -104,6 +105,8 @@ class Record(models.Model):
     target=models.IntegerField(null=True,blank=True)
     achieved=models.IntegerField(null=True,blank=True)
     username=models.CharField(null=True,blank=True,max_length=200)
+    percentage_achieved=models.IntegerField(null=True,blank=True)
+    incentive_achieved=models.IntegerField(null=True,blank=True)
 
 
 class Questions(models.Model):

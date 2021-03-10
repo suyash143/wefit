@@ -146,46 +146,35 @@
 
                     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-                    <script>
+            <script>
 window.onload = function () {
 
 var chart = new CanvasJS.Chart("chartContainer", {
 	animationEnabled: true,
-	theme: "light2", //"light1", "dark1", "dark2"
+
 	title:{
-		text: "Employee Achievement"
+		text:"Employee Performance"
 	},
-	axisY:{
-		interval: 10,
-		suffix: "%"
+	axisX:{
+		interval: 1
 	},
-	toolTip:{
-		shared: true
+	axisY2:{
+		interlacedColor: "rgba(1,77,101,.2)",
+		gridColor: "rgba(1,77,101,.1)",
+		title: "Percentage Achieved"
 	},
-	data:[{
-		type: "stackedBar100",
-		toolTipContent: "{label}<br><b>{name}:</b> {y} (#percent%)",
-		showInLegend: true,
-		name: "Achieved",
+	data: [{
+		type: "bar",
+		name: "companies",
+		axisYType: "secondary",
+		color: "#014D65",
 		dataPoints: [
-		{%for item in names%}
-			{ y: {% widthratio item.info.target_achieved item.info.target 100 %}, label: "{{item.username}}" },
+            {%for item in names%}
+			{ y: {% widthratio item.info.target_achieved item.info.target 100 %}, label: "{{item.username}}( {% widthratio item.info.target_achieved item.info.target 100 %}%)" },
 			{%endfor%}
 
 		]
-		},
-		{
-			type: "stackedBar100",
-			toolTipContent: "<b>{name}:</b> {y} (#percent%)",
-			showInLegend: true,
-			name: "remaining",
-			dataPoints: [
-				{%for item in names%}
-			{ y: 100, label: "{{item.first_name}}" },
-			{%endfor%}
-			]
-		}
-		]
+	}]
 });
 chart.render();
 
@@ -193,7 +182,8 @@ chart.render();
 </script>
 
 
-                    <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+
+<div id="chartContainer" style="height: 300px; width: 100%;"></div>
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
                 <!-- ============================================================== -->
@@ -204,7 +194,7 @@ chart.render();
                 <!-- ============================================================== -->
                 <!-- Three charts -->
                 <!-- ============================================================== -->
-
+<hr>
                 <div class="row justify-content-center">
                     <div class="col-lg-4 col-sm-6 col-xs-12">
                         <div class="white-box analytics-info">

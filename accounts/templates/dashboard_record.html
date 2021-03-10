@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+{%extends 'blank.html'%}
+{% load static %}
+{%block content%}        <!-- ============================================================== -->
+        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Page wrapper  -->
+        <!-- ============================================================== -->
+
+                <!-- ============================================================== -->
+                <!-- RECENT SALES -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-md-12 col-lg-12 col-sm-12">
+                        <div class="white-box">
+                            <div class="d-md-flex mb-3">
+                                <h3 class="box-title mb-0">Employee Records</h3>
+                                <div class="col-md-3 col-sm-4 col-xs-6 ml-auto">
+                                    <select class="form-control row border-top">
+                                        <option>{{today}}</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table no-wrap">
+                                    <thead>
+                                        <tr>
+                                            <th class="border-top-0">#</th>
+                                            <th class="border-top-0">Employee Name</th>
+                                            <th class="border-top-0">Start Date</th>
+                                            <th class="border-top-0">End Date</th>
+                                            <th class="border-top-0">Target</th>
+                                            <th class="border-top-0">Achieved</th>
+                                            <th class="border-top-0">Percentage</th>
+                                            <th class="border-top-0">Incentive Achieved</th>
+
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+
+                                    {%for obj in records%}
+                                        <tr>
+                                            <td><form method="POST">{%csrf_token%} <input type="submit" value="{{obj.pk}}" name="id"></form></td>
+                                            <td class="txt-oflo">{{obj.username}}</td>
+                                            <td>{{obj.start_date}}</td>
+                                            <td class="txt-oflo">{{obj.end_date}}</td>
+                                            <td><span class="text-success">{{obj.target}}</span></td>
+                                            <td class="txt-oflo">{{obj.achieved}}</td>
+                                            <td class="txt-oflo">{{obj.percentage_achieved}}</td>
+                                            <td class="txt-oflo">{{obj.incentive_achieved}}</td>
+                                        </tr>
+                                    {%endfor%}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- Recent Comments -->
+                <!-- ============================================================== -->
+
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
+        {%endblock content%}
