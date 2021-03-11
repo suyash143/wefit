@@ -93,12 +93,13 @@
                         <!-- ============================================================== -->
                         <!-- Search -->
                         <!-- ============================================================== -->
-                        <li class=" in">
-                            <form role="search" class="app-search d-none d-md-block mr-3">
-                                <input type="text" placeholder="Search..." class="form-control mt-0">
-                                <a href="" class="active">
+                     <li class=" in">
+                            <form class="app-search d-none d-md-block mr-3" id="myform" name="myform" method="GET" action="{% url 'search' %}">
+                                {% csrf_token %}
+                                <input type="text" onchange="this.form.submit()" name="search" placeholder="Search" class="form-control mt-0">
+
                                     <i class="bx bx-search"></i>
-                                </a>
+
                             </form>
                         </li>
                         <!-- ============================================================== -->

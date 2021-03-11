@@ -1039,3 +1039,31 @@ def record_display(request):
     else:
         records=models.Record.objects.filter(user=request.user).reverse()
     return render(request,'dashboard_record.html',{'records':records})
+
+
+def search(request):
+
+    if request.method == 'GET':  # this will be GET now
+        query = request.GET.get('search')
+
+        chat = models.Final.objects.filter(
+            number__icontains=query) | models.Final.objects.filter(name__icontains=query)
+
+        return render(request, "dashboard_search_result.html", {"chat":chat})
+
+    else:
+
+        if request.method == "POST" and 'chat' in request.POST:
+            id = request.POST.get('chat')
+            print(id)
+            request.session['id'] = id
+
+            return redirect('edit_employee')
+
+        elif request.method == "POST" and "clients" in request.POST:
+            id = request.POST.get('clients')
+
+            request.session['id'] = id
+
+            return redirect('edit_simran_lead')
+

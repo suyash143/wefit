@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+{%extends 'blank.html'%}
+{% load static %}
+{%block content%}
+            <!-- ============================================================== -->
+            <!-- End Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+
+                <!-- ============================================================== -->
+                <!-- Three charts -->
+                <!-- ============================================================== -->
+
+                <!-- ============================================================== -->
+                <!-- RECENT SALES -->
+                <!-- ============================================================== -->
+
+                <div class="row">
+                    <div class="col-md-12 col-lg-12 col-sm-12">
+                        <div class="white-box">
+                            <div class="d-md-flex mb-3">
+                                <h3 class="box-title mb-0">Lead Details</h3>
+                                <div class="col-md-9 col-sm-15 col-xs-24 ml-auto">
+                                    <select class="form-control row border-top">
+                                        <option>{{today}}</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table no-wrap">
+                                    <thead>
+                                        <tr>
+                                            <th class="border-top-0">#</th>
+                                            <th class="border-top-0">Created</th>
+                                            <th class="border-top-0">Name</th>
+                                            <th class="border-top-0">Number</th>
+                                            <th class="border-top-0">Assigened</th>
+                                            <th class="border-top-0">Status</th>
+                                            <th class="border-top-0">Substatus</th>
+                                            <th class="border-top-0">Rescheduled</th>
+
+
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+
+                                    {%for obj in chat%}
+                                        <tr>
+                                            <td><form method="POST">{%csrf_token%} <input type="submit" value="{{obj.pk}}" name="chat"></form></td>
+                                            <td >{{obj.created}}</td>
+                                            <td class="txt-oflo">{{obj.name}}</td>
+                                            <td class="txt-oflo">{{obj.number}}</td>
+                                            <td class="txt-oflo">{{obj.assigned}}</td>
+                                            <td class="txt-oflo">{{obj.status}}</td>
+                                            <td class="txt-oflo">{{obj.substatus}}</td>
+                                            <td class="txt-oflo">{{obj.rescheduled}}</td>
+
+                                        </tr>
+                                    {%endfor%}
+
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+                            <h3 class="box-title mb-0">Client Details</h3>
+
+                            <div class="table-responsive">
+                                <table class="table no-wrap">
+                                    <thead>
+                                        <tr>
+                                            <th class="border-top-0">#</th>
+                                            <th class="border-top-0">Created</th>
+                                            <th class="border-top-0">Name</th>
+                                            <th class="border-top-0">Assigened</th>
+                                            <th class="border-top-0">Instagram Username</th>
+                                            <th class="border-top-0">City</th>
+                                            <th class="border-top-0">Number</th>
+
+
+
+                                            <th class="border-top-0">Paid</th>
+                                            <th class="border-top-0">Client Secret</th>
+
+
+
+
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+
+                                    {%for obj in clients%}
+                                        <tr>
+                                            <td><form method="POST">{%csrf_token%} <input type="submit" value="{{obj.pk}}" name="clients"></form></td>
+                                            <td >{{obj.created}}</td>
+                                            <td class="txt-oflo">{{obj.name}}</td>
+                                            <td class="txt-oflo">{{obj.assigned}}</td>
+                                            <td class="txt-oflo">{{obj.insta_user}}</td>
+                                            <td class="txt-oflo">{{obj.city}}</td>
+                                            <td>{{obj.number}}</td>
+
+
+                                            <td class="txt-oflo">{{obj.paid}}</td>
+
+                                            <td>{{obj.client_secret}}</td>
+
+
+
+                                        </tr>
+                                    {%endfor%}
+
+
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- Recent Comments -->
+                <!-- ============================================================== -->
+
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
+            {%endblock content%}

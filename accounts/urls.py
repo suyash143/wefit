@@ -30,6 +30,7 @@ urlpatterns = [
 	path('status_changer',views.status_changer,name='status_changer'),
 	path('lead_request',views.lead_request,name='lead_request'),
 	path('record_display',views.record_display,name='record_display'),
+	path('search',views.search,name='search'),
 
 
 
