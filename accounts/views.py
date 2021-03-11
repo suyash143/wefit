@@ -740,9 +740,25 @@ def dashboard(request):
             total_target+=objs.info.target
             total_target_achieved+=objs.info.target_achieved
         total_target_remaining=abs(total_target-total_target_achieved)
+        percentage = (request.user.info.target_achieved / request.user.info.target) * 100
+        if 0<= percentage <40 :
+            performance={'grade':'Bad','color':'red'}
+        elif 40 <= percentage < 80:
+            performance={'grade':'Good','color':'yellow'}
+        elif 80 <= percentage <= 120:
+            performance={'grade':'Excellent','color':'green'}
+        elif percentage > 120:
+            performance = {'grade': 'Outstanding', 'color': 'gold'}
+        else:
+            pass
 
-        return render(request,'dashboard.html',{'week_assigned':week_assigned,'week_cancelled':week_cancelled,'week_closed':week_closed,'total_target':total_target,'total_target_achieved':total_target_achieved,
-                                                'total_target_remaining':total_target_remaining,'active_complaints':active_complaints,'names':names,'remaining':remaining,'today':today,'this_day':this_day,'man':man})
+        return render(request,'dashboard.html',{'week_assigned':week_assigned,'week_cancelled':week_cancelled,
+                                                'week_closed':week_closed,'total_target':total_target,
+                                                'total_target_achieved':total_target_achieved,
+                                                'total_target_remaining':total_target_remaining,
+                                                'active_complaints':active_complaints,'names':names,
+                                                'remaining':remaining,'today':today,'this_day':this_day,'man':man,
+                                                'performance':performance})
     else:
         return HttpResponse('Please Log In to View Your Data')
 
