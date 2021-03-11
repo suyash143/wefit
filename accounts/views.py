@@ -397,6 +397,7 @@ def all(request):
 
 def edit_employee(request):
     id = request.session.get('id')
+    users=User.objects.filter(is_staff=0)
     name = models.Final.objects.get(id=id)
     request.session['id'] = id
     current_user = request.user.get_short_name()
@@ -423,7 +424,8 @@ def edit_employee(request):
     elif bmi >= 30:
         cls = "Obese"
     person_stat = {'feet': feet, 'inch': inch, 'cls': cls}
-    if request.method == "POST":
+    if request.method == "POST" and "update" in request.POST:
+        print(request.POST)
         updater = models.Final.objects.get(id=id)
 
         status = request.POST.get('status', "acknowledged")
@@ -487,9 +489,17 @@ def edit_employee(request):
                 target_updater.save()
 
         return redirect('all')
+    elif request.method == "POST" and "assign" in request.POST:
+        pk=request.POST.get('user',None)
+        assigned=User.objects.get(pk=int(pk))
+        id = request.session.get('id')
+        name = models.Final.objects.get(id=id)
+        name.assigned=assigned
+        name.save()
+        return redirect("edit_employee")
     return render(request, 'dashboard_edit_employee.html',
                   {'id': id,  'name': name,
-                   'current_user': current_user, 'person_stat': person_stat})
+                   'current_user': current_user, 'person_stat': person_stat,'users':users})
 
 
 def report(request):
@@ -1047,7 +1057,7 @@ def search(request):
         query = request.GET.get('search')
 
         chat = models.Final.objects.filter(
-            number__icontains=query) | models.Final.objects.filter(name__icontains=query)
+            number__icontains=query) | models.Final.objects.filter(name__icontains=query)| models.Final.objects.filter()
 
         return render(request, "dashboard_search_result.html", {"chat":chat})
 
@@ -1065,5 +1075,5 @@ def search(request):
 
             request.session['id'] = id
 
-            return redirect('edit_simran_lead')
+            return redirect('edit_employee')
 

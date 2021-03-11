@@ -62,6 +62,19 @@
                     <div class="col-lg-8 col-xlg-9 col-md-12">
                         <div class="card">
                             <div class="card-body">
+                                {%if request.user.is_staff%}
+                                <form method="POST">
+                                    {%csrf_token%}
+                                    <select class="form-control row border-top" name="user">
+                                        <option value="{{name.assigned.pk}}">{{name.assigned}}({{name.assigned.pk}})</option>
+                                        {%for user in users%}
+
+                                        <option value="{{user.pk}}">{{user.username}}({{user.pk}})</option>
+                                        {%endfor%}
+                                    </select>
+                                    <input type="submit" name="assign">
+                                </form>
+                                {%endif%}
                                 <form class="form-horizontal form-material" method="POST">
                                     {%csrf_token%}
                                     <div class="form-group mb-4">
@@ -288,7 +301,7 @@ function checkclosed(val)
                                     </div>
                                     <div class="form-group mb-4">
                                         <div class="col-sm-12">
-                                             <input class="btn btn-success" type="submit" onclick="myFunction()">
+                                             <input class="btn btn-success" type="submit"  name="update" onclick="myFunction()">
                                         </div>
                                     </div>
                                         <script>
